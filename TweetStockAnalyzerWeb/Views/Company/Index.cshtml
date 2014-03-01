@@ -1,0 +1,40 @@
+﻿@model TweetStockAnalyzerWeb.ViewModel.CompanyIndexViewModel
+
+@{
+    ViewBag.Title = "Company";
+}
+
+<h2>Company</h2>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>CompanyId</th>
+            <th>CompanyName</th>
+            <th>ParentComapnyName</th>
+            <th>Detail</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 1;
+            foreach (var company in Model.Companies)
+            {
+                <tr>
+                    <td>count</td>
+                    <td>@company.CompanyId</td>
+                    <td>@company.CompanyName</td>
+                    <td>
+                        @if (company.ParentCompanyId != null)
+                        {
+                            @Model.Companies.Single(c => c.CompanyId == company.ParentCompanyId).CompanyName
+                        }
+                    </td>
+                </tr>
+                        count++;
+            }
+        }
+    </tbody>
+</table>
