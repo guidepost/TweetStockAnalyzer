@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace TweetStockAnalyzer.Twitter
 {
-    class Class1
+    public class TwitterAuthenticator
     {
+        public bool Authenticate()
+        {
+
+        }
     }
 }
