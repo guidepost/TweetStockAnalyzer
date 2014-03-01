@@ -100,7 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.local.config" />
-    <None Include="App.config" />
     <EntityDeploy Include="Model\TweetStockAnalyzerModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TweetStockAnalyzerModel.Designer.cs</LastGenOutput>
