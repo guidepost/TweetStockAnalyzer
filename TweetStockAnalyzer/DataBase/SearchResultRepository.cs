@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 
 namespace TweetStockAnalyzer.DataBase
@@ -12,6 +13,7 @@ namespace TweetStockAnalyzer.DataBase
     {
         SearchResult Create(SearchWord searchWord, Product product, long tweetCount, long lastTweetId, DateTime date);
     }
+    [AutoRegist(typeof(ISearchResultRepository))]
     public class SearchResultRepository : RepositoryBase<SearchResult> , ISearchResultRepository
     {
         protected override DbSet<SearchResult> DbSet
