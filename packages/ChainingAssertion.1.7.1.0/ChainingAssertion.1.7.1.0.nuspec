@@ -10,6 +10,8 @@
     <projectUrl>http://chainingassertion.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Method Chaining base UnitTesting Extension Methods and Dynamic Private Accessor for MSTest. This provides only single .cs file.</description>
+    <releaseNotes />
+    <copyright />
     <language>en-US</language>
     <tags>test unittest mstest</tags>
     <frameworkAssemblies>
