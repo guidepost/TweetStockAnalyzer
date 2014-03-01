@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataBase\AggregateHistoryRepository.cs" />
     <Compile Include="DataBase\BussinessCategoryRepository.cs" />
     <Compile Include="DataBase\CompanyRepository.cs" />
     <Compile Include="DataBase\IRepository.cs" />
