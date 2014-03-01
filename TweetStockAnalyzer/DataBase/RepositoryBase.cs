@@ -20,7 +20,6 @@ namespace TweetStockAnalyzer.DataBase
         protected abstract DbSet<T> DbSet { get; }
         public abstract void Update(T value);
 
-        public abstract T Create();
         
         public virtual T Read(int id)
         {
@@ -31,7 +30,7 @@ namespace TweetStockAnalyzer.DataBase
             return DbSet;
         }
 
-        public virtual void Delte(int id)
+        public virtual T Delte(int id)
         {
             var entity = Read(id);
             if (entity != null)
@@ -39,6 +38,7 @@ namespace TweetStockAnalyzer.DataBase
                 DbSet.Remove(entity);
                 Entities.SaveChanges();
             }
+            return entity;
         }
     }
 }
