@@ -8,6 +8,7 @@ namespace TweetStockAnalyzer.Tests
 {
     public class Class1
     {
+        //test
 
     }
 }
