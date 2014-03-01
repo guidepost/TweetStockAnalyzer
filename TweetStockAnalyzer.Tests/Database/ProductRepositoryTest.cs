@@ -11,6 +11,16 @@ namespace TweetStockAnalyzer.Tests.Database
     [TestClass]
     public class ProductRepositoryTest
     {
+        [TestCleanup]
+        public void Cleanup()
+        {
+            var repository = new ProductRepository();
+            foreach (var product in repository.ReadAll().ToList())
+            {
+                repository.Delete(product.ProductId);
+            }
+        }
+
         [TestMethod]
         public void Create()
         {
