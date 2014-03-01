@@ -11,6 +11,6 @@ namespace TweetStockAnalyzer.DataBase
         T Read(int id);
         IEnumerable<T> ReadAll();
         void Update(T value);
-        T Delte(int id);
+        T Delete(int id);
     }
 }

@@ -20,9 +20,9 @@ namespace TweetStockAnalyzer.Model
         }
     
         public int SearchWordId { get; set; }
-        public string SearchWord1 { get; set; }
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public string Word { get; set; }
     
         public virtual Product Product { get; set; }
         public virtual ICollection<SearchResult> SearchResult { get; set; }

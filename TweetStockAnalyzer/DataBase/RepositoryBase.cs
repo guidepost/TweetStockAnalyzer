@@ -30,7 +30,7 @@ namespace TweetStockAnalyzer.DataBase
             return DbSet;
         }
 
-        public virtual T Delte(int id)
+        public virtual T Delete(int id)
         {
             var entity = Read(id);
             if (entity != null)
