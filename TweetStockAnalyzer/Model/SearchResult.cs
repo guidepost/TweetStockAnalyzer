@@ -15,6 +15,8 @@ namespace TweetStockAnalyzer.Model
     public partial class SearchResult
     {
         public int SearchResultId { get; set; }
+        public int ProductId { get; set; }
+        public int SearchWordId { get; set; }
         public long TweetCount { get; set; }
         public long LastTweetId { get; set; }
         public System.DateTime SearchDate { get; set; }

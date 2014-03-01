@@ -22,6 +22,8 @@ namespace TweetStockAnalyzer.Model
     
         public int StockId { get; set; }
         public string StockCode { get; set; }
+        public int CompanyId { get; set; }
+        public int BussinessCategoryId { get; set; }
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
     

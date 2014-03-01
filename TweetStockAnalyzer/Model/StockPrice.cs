@@ -15,6 +15,7 @@ namespace TweetStockAnalyzer.Model
     public partial class StockPrice
     {
         public long StockPriceId { get; set; }
+        public int StockId { get; set; }
         public System.DateTime Date { get; set; }
         public long Dealings { get; set; }
         public double ClosingPrice { get; set; }

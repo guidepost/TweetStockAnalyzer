@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="TweetStockAnalyzerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="TweetStockAnalyzerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AggregateHistory">
           <Key>
             <PropertyRef Name="AggregateHistoryId" />
@@ -258,7 +258,8 @@
             <End Role="StockPrice" EntitySet="StockPrice" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TweetStockAnalyzerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -267,6 +268,7 @@
             <PropertyRef Name="AggregateHistoryId" />
           </Key>
           <Property Name="AggregateHistoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StockId" Type="Int32" Nullable="false" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
@@ -327,6 +329,8 @@
             <PropertyRef Name="SearchResultId" />
           </Key>
           <Property Name="SearchResultId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="SearchWordId" Type="Int32" Nullable="false" />
           <Property Name="TweetCount" Type="Int64" Nullable="false" />
           <Property Name="LastTweetId" Type="Int64" Nullable="false" />
           <Property Name="SearchDate" Type="DateTime" Nullable="false" Precision="7" />
@@ -340,11 +344,12 @@
             <PropertyRef Name="SearchWordId" />
           </Key>
           <Property Name="SearchWordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Word" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <NavigationProperty Name="Product" Relationship="Self.FK_SearchWord_Product" FromRole="SearchWord" ToRole="Product" />
           <NavigationProperty Name="SearchResult" Relationship="Self.FK_SearchResult_SearchWord" FromRole="SearchWord" ToRole="SearchResult" />
-          <Property Name="Word" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" Type="String" />
         </EntityType>
         <EntityType Name="Stock">
           <Key>
@@ -352,6 +357,8 @@
           </Key>
           <Property Name="StockId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StockCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="BussinessCategoryId" Type="Int32" Nullable="false" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <NavigationProperty Name="AggregateHistory" Relationship="Self.FK_AggregateHistory_Stock" FromRole="Stock" ToRole="AggregateHistory" />
@@ -364,6 +371,7 @@
             <PropertyRef Name="StockPriceId" />
           </Key>
           <Property Name="StockPriceId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StockId" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="Dealings" Type="Int64" Nullable="false" />
           <Property Name="ClosingPrice" Type="Double" Nullable="false" />
@@ -374,10 +382,26 @@
         <Association Name="FK_AggregateHistory_Stock">
           <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
           <End Role="AggregateHistory" Type="Self.AggregateHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="StockId" />
+            </Principal>
+            <Dependent Role="AggregateHistory">
+              <PropertyRef Name="StockId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="FK_Stock_BussinessCategory">
           <End Role="BussinessCategory" Type="Self.BussinessCategory" Multiplicity="1" />
           <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BussinessCategory">
+              <PropertyRef Name="BussinessCategoryId" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="BussinessCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="FK_CompanyProductRelation_Company">
           <End Role="Company" Type="Self.Company" Multiplicity="1" />
@@ -394,6 +418,14 @@
         <Association Name="FK_Stock_Company">
           <End Role="Company" Type="Self.Company" Multiplicity="1" />
           <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="FK_CompanyProductRelation_Product">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
@@ -410,20 +442,52 @@
         <Association Name="FK_SearchResult_Product">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="SearchResult" Type="Self.SearchResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="SearchResult">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="FK_SearchWord_Product">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="SearchWord" Type="Self.SearchWord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="SearchWord">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="FK_SearchResult_SearchWord">
           <End Role="SearchWord" Type="Self.SearchWord" Multiplicity="1" />
           <End Role="SearchResult" Type="Self.SearchResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SearchWord">
+              <PropertyRef Name="SearchWordId" />
+            </Principal>
+            <Dependent Role="SearchResult">
+              <PropertyRef Name="SearchWordId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="FK_StockPrice_Stock">
           <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
           <End Role="StockPrice" Type="Self.StockPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="StockId" />
+            </Principal>
+            <Dependent Role="StockPrice">
+              <PropertyRef Name="StockId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="TweetStockAnalyzerEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="TweetStockAnalyzerEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AggregateHistory" EntityType="Self.AggregateHistory" />
           <EntitySet Name="BussinessCategory" EntityType="Self.BussinessCategory" />
           <EntitySet Name="Company" EntityType="Self.Company" />
@@ -475,11 +539,12 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="TweetStockAnalyzerModelStoreContainer" CdmEntityContainer="TweetStockAnalyzerEntities">
+        <EntityContainerMapping StorageEntityContainer="TweetStockAnalyzerModelStoreContainer" CdmEntityContainer="TweetStockAnalyzerEntities1">
           <EntitySetMapping Name="AggregateHistory">
             <EntityTypeMapping TypeName="TweetStockAnalyzerModel.AggregateHistory">
               <MappingFragment StoreEntitySet="AggregateHistory">
                 <ScalarProperty Name="AggregateHistoryId" ColumnName="AggregateHistoryId" />
+                <ScalarProperty Name="StockId" ColumnName="StockId" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
@@ -535,6 +600,8 @@
             <EntityTypeMapping TypeName="TweetStockAnalyzerModel.SearchResult">
               <MappingFragment StoreEntitySet="SearchResult">
                 <ScalarProperty Name="SearchResultId" ColumnName="SearchResultId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="SearchWordId" ColumnName="SearchWordId" />
                 <ScalarProperty Name="TweetCount" ColumnName="TweetCount" />
                 <ScalarProperty Name="LastTweetId" ColumnName="LastTweetId" />
                 <ScalarProperty Name="SearchDate" ColumnName="SearchDate" />
@@ -546,8 +613,9 @@
           <EntitySetMapping Name="SearchWord">
             <EntityTypeMapping TypeName="TweetStockAnalyzerModel.SearchWord">
               <MappingFragment StoreEntitySet="SearchWord">
-                <ScalarProperty Name="Word" ColumnName="Word" />
                 <ScalarProperty Name="SearchWordId" ColumnName="SearchWordId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Word" ColumnName="Word" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
               </MappingFragment>
@@ -558,6 +626,8 @@
               <MappingFragment StoreEntitySet="Stock">
                 <ScalarProperty Name="StockId" ColumnName="StockId" />
                 <ScalarProperty Name="StockCode" ColumnName="StockCode" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="BussinessCategoryId" ColumnName="BussinessCategoryId" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
               </MappingFragment>
@@ -567,6 +637,7 @@
             <EntityTypeMapping TypeName="TweetStockAnalyzerModel.StockPrice">
               <MappingFragment StoreEntitySet="StockPrice">
                 <ScalarProperty Name="StockPriceId" ColumnName="StockPriceId" />
+                <ScalarProperty Name="StockId" ColumnName="StockId" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Dealings" ColumnName="Dealings" />
                 <ScalarProperty Name="ClosingPrice" ColumnName="ClosingPrice" />
@@ -575,62 +646,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="FK_AggregateHistory_Stock" TypeName="TweetStockAnalyzerModel.FK_AggregateHistory_Stock" StoreEntitySet="AggregateHistory">
-            <EndProperty Name="Stock">
-              <ScalarProperty Name="StockId" ColumnName="StockId" />
-            </EndProperty>
-            <EndProperty Name="AggregateHistory">
-              <ScalarProperty Name="AggregateHistoryId" ColumnName="AggregateHistoryId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_Stock_BussinessCategory" TypeName="TweetStockAnalyzerModel.FK_Stock_BussinessCategory" StoreEntitySet="Stock">
-            <EndProperty Name="BussinessCategory">
-              <ScalarProperty Name="BussinessCategoryId" ColumnName="BussinessCategoryId" />
-            </EndProperty>
-            <EndProperty Name="Stock">
-              <ScalarProperty Name="StockId" ColumnName="StockId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_Stock_Company" TypeName="TweetStockAnalyzerModel.FK_Stock_Company" StoreEntitySet="Stock">
-            <EndProperty Name="Company">
-              <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-            </EndProperty>
-            <EndProperty Name="Stock">
-              <ScalarProperty Name="StockId" ColumnName="StockId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_SearchResult_Product" TypeName="TweetStockAnalyzerModel.FK_SearchResult_Product" StoreEntitySet="SearchResult">
-            <EndProperty Name="Product">
-              <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-            </EndProperty>
-            <EndProperty Name="SearchResult">
-              <ScalarProperty Name="SearchResultId" ColumnName="SearchResultId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_SearchWord_Product" TypeName="TweetStockAnalyzerModel.FK_SearchWord_Product" StoreEntitySet="SearchWord">
-            <EndProperty Name="Product">
-              <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-            </EndProperty>
-            <EndProperty Name="SearchWord">
-              <ScalarProperty Name="SearchWordId" ColumnName="SearchWordId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_SearchResult_SearchWord" TypeName="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" StoreEntitySet="SearchResult">
-            <EndProperty Name="SearchWord">
-              <ScalarProperty Name="SearchWordId" ColumnName="SearchWordId" />
-            </EndProperty>
-            <EndProperty Name="SearchResult">
-              <ScalarProperty Name="SearchResultId" ColumnName="SearchResultId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_StockPrice_Stock" TypeName="TweetStockAnalyzerModel.FK_StockPrice_Stock" StoreEntitySet="StockPrice">
-            <EndProperty Name="Stock">
-              <ScalarProperty Name="StockId" ColumnName="StockId" />
-            </EndProperty>
-            <EndProperty Name="StockPrice">
-              <ScalarProperty Name="StockPriceId" ColumnName="StockPriceId" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -646,7 +661,7 @@
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
