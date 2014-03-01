@@ -13,10 +13,10 @@ namespace TweetStockAnalyzer.Model
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TweetStockAnalyzerEntities1 : DbContext
+    public partial class TweetStockAnalyzerEntities : DbContext
     {
-        public TweetStockAnalyzerEntities1()
-            : base("name=TweetStockAnalyzerEntities1")
+        public TweetStockAnalyzerEntities()
+            : base("name=TweetStockAnalyzerEntities")
         {
         }
     
