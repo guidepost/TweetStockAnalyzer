@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataBase\BussinessCategoryRepository.cs" />
     <Compile Include="DataBase\CompanyRepository.cs" />
     <Compile Include="DataBase\IRepository.cs" />
     <Compile Include="DataBase\ProductRepository.cs" />
