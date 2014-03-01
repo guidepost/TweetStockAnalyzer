@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataBase\IRepository.cs" />
+    <Compile Include="DataBase\ProductRepository.cs" />
     <Compile Include="DataBase\RepositoryBase.cs" />
     <Compile Include="DataBase\SearchResultRepository.cs" />
     <Compile Include="DataBase\StockRepository.cs" />

@@ -20,13 +20,8 @@ namespace TweetStockAnalyzer.DataBase
         protected abstract DbSet<T> DbSet { get; }
         public abstract void Update(T value);
 
-        public virtual T Create()
-        {
-            var entity = new T();
-            DbSet.Add(entity);
-            Entities.SaveChanges();
-            return entity;
-        }
+        public abstract T Create();
+        
         public virtual T Read(int id)
         {
             return DbSet.Find(id);
