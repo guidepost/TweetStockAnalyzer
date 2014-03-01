@@ -15,10 +15,11 @@ namespace TweetStockAnalyzer.Tests.Database
         public void Create()
         {
             var repository = new ProductRepository();
-            var result = repository.Create();
+            var result = repository.Create("test", new DateTime(2000, 7, 7));
             result.IsNotNull();
             result = repository.Read(result.ProductId);
-            result.IsNotNull();
+            result.ProductName.Is("test");
+            result.ServiceStartDate.Is(new DateTime(2000, 7, 7));
         }
     }
 }

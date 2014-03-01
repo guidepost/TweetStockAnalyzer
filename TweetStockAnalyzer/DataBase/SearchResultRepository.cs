@@ -19,10 +19,5 @@ namespace TweetStockAnalyzer.DataBase
         {
             throw new NotImplementedException();
         }
-
-        public override SearchResult Create()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
