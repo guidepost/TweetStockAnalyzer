@@ -10,8 +10,9 @@ namespace TweetStockAnalyzerWeb.Controllers
     {
         public ActionResult Index()
         {
-
-            return View();
+            var worker = new WorkerService.CompanyWorkerService();
+            var model = worker.GetIndexViewModel();
+            return View(model);
         }
 
         public ActionResult Create()

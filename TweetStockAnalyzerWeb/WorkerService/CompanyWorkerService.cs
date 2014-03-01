@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Practices.Unity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,14 +13,14 @@ namespace TweetStockAnalyzerWeb.WorkerService
     {
         public CompanyIndexViewModel GetIndexViewModel()
         {
-            //using (var repository = new CompanyRepository())
-            //{
-            //    return new CompanyIndexViewModel
-            //    {
-            //        Companies = repository.ReadAll()
-            //    };
-            //}
-            return null;
+            var container = new UnityContainer();
+            using (var repository = container.Resolve<ICompanyRepository>())
+            {
+                return new CompanyIndexViewModel
+                {
+                    Companies = repository.ReadAll()
+                };
+            }
         }
     }
 }
