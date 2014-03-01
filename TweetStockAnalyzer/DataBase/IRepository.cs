@@ -8,9 +8,9 @@ namespace TweetStockAnalyzer.DataBase
 {
     public interface IRepository<T>
     {
-        T Create();
         T Read(int id);
-        void Update(T valud);
-        void Delte(int id);
+        IEnumerable<T> ReadAll();
+        void Update(T value);
+        T Delete(int id);
     }
 }
