@@ -22,7 +22,7 @@ namespace TweetStockAnalyzer.Model
     
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
-        public int ParentCompanyId { get; set; }
+        public Nullable<int> ParentCompanyId { get; set; }
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
     

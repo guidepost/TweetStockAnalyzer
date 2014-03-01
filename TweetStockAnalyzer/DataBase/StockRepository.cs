@@ -4,11 +4,18 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 
 namespace TweetStockAnalyzer.DataBase
 {
-    public class StockRepository : RepositoryBase<Stock>
+    public interface IStockRepository : IRepository<Stock>
+    {
+        Stock Create(Company company, BussinessCategory category, string stockCode);
+    }
+
+    [AutoRegist(typeof(IStockRepository))]
+    public class StockRepository : RepositoryBase<Stock> , IStockRepository
     {
         protected override DbSet<Stock> DbSet
         {
@@ -19,8 +26,16 @@ namespace TweetStockAnalyzer.DataBase
         {
             var entity = Read(value.StockId);
             entity.StockCode = value.StockCode;
-            entity.StockPrice = value.StockPrice;
             Entities.SaveChanges();
+        }
+
+        public Stock Create(Company company, BussinessCategory category, string stockCode)
+        {
+            var entity = new Stock();
+            entity.StockCode = stockCode;
+            DbSet.Add(entity);
+            Entities.SaveChanges();
+            return entity;
         }
     }
 }

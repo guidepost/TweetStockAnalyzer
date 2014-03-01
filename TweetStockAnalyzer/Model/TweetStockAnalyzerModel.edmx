@@ -290,7 +290,7 @@
           </Key>
           <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CompanyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ParentCompanyId" Type="Int32" Nullable="false" />
+          <Property Name="ParentCompanyId" Type="Int32" Nullable="true" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <NavigationProperty Name="CompanyProductRelation" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="Company" ToRole="CompanyProductRelation" />

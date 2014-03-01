@@ -65,12 +65,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataBase\CompanyRepository.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="DataBase\IRepository.cs" />
     <Compile Include="DataBase\ProductRepository.cs" />
     <Compile Include="DataBase\RepositoryBase.cs" />
     <Compile Include="DataBase\SearchResultRepository.cs" />
     <Compile Include="DataBase\StockRepository.cs" />
+    <Compile Include="Infrastructure\Dependency\AutoRegisterAttribute.cs" />
+    <Compile Include="Infrastructure\Dependency\AutoRegisterExtension.cs" />
     <Compile Include="Model\AggregateHistory.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
@@ -138,9 +139,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
