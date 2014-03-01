@@ -15,6 +15,15 @@ namespace TweetStockAnalyzer.DataBase
             get { return Entities.Stock; }
         }
 
+        public override Stock Create()
+        {
+            var entity = new Stock();
+            entity.StockCode = "";
+            DbSet.Add(entity);
+            Entities.SaveChanges();
+            return entity;
+        }
+
         public override void Update(Stock value)
         {
             throw new NotImplementedException();
