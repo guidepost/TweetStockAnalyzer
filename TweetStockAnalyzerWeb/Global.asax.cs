@@ -19,7 +19,10 @@ namespace TweetStockAnalyzerWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var container = new UnityContainer().AddExtension(new AutoRegisterExtension(typeof(AutoRegistAttribute).Assembly));
+            var container = DependencyContainer.Instance;
+            container.AddExtension(new AutoRegisterExtension(typeof(AutoRegistAttribute).Assembly));
+            IDependencyResolver resolver = new UnityDependencyResolver(container);
+            DependencyResolver.SetResolver(resolver);
         }
     }
 }

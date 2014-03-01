@@ -75,6 +75,7 @@
     <Compile Include="DataBase\StockRepository.cs" />
     <Compile Include="Infrastructure\Dependency\AutoRegisterAttribute.cs" />
     <Compile Include="Infrastructure\Dependency\AutoRegisterExtension.cs" />
+    <Compile Include="Infrastructure\Dependency\DependencyContainer.cs" />
     <Compile Include="Model\AggregateHistory.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
