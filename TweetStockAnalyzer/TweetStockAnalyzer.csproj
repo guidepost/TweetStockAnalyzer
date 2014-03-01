@@ -39,6 +39,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,11 +49,81 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="DataBase\Class1.cs" />
+    <Compile Include="Model\Class1.cs" />
+    <Compile Include="DataBase\IRepository.cs" />
+    <Compile Include="DataBase\RepositoryBase.cs" />
+    <Compile Include="DataBase\StockRepository.cs" />
+    <Compile Include="Model\AggregateHistory.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BussinessCategory.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Company.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\CompanyProductRelation.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Product.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\SearchResult.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\SearchWord.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Stock.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StockPrice.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TweetStockAnalyzerModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TweetStockAnalyzerModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TweetStockAnalyzerModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TweetStockAnalyzerModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TweetStockAnalyzerModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Twitter\Class1.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.local.config" />
     <None Include="App.config" />
+    <EntityDeploy Include="Model\TweetStockAnalyzerModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TweetStockAnalyzerModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Model\TweetStockAnalyzerModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TweetStockAnalyzerModel.edmx</DependentUpon>
+      <LastGenOutput>TweetStockAnalyzerModel.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Model\TweetStockAnalyzerModel.edmx.diagram">
+      <DependentUpon>TweetStockAnalyzerModel.edmx</DependentUpon>
+    </None>
+    <None Include="Model\TweetStockAnalyzerModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TweetStockAnalyzerModel.edmx</DependentUpon>
+      <LastGenOutput>TweetStockAnalyzerModel.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,658 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TweetStockAnalyzerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AggregateHistory">
+          <Key>
+            <PropertyRef Name="AggregateHistoryId" />
+          </Key>
+          <Property Name="AggregateHistoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StockId" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="EndDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BussinessCategory">
+          <Key>
+            <PropertyRef Name="BussinessCategoryId" />
+          </Key>
+          <Property Name="BussinessCategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BussinessCategoryCode" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="BussinessCategoryName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ParentCompanyId" Type="int" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CompanyProductRelation">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ServiceStartDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="ServiceEndDate" Type="datetime2" Precision="7" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SearchResult">
+          <Key>
+            <PropertyRef Name="SearchResultId" />
+          </Key>
+          <Property Name="SearchResultId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="SearchWordId" Type="int" Nullable="false" />
+          <Property Name="TweetCount" Type="bigint" Nullable="false" />
+          <Property Name="LastTweetId" Type="bigint" Nullable="false" />
+          <Property Name="SearchDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SearchWord">
+          <Key>
+            <PropertyRef Name="SearchWordId" />
+          </Key>
+          <Property Name="SearchWordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="SearchWord" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="StockId" />
+          </Key>
+          <Property Name="StockId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StockCode" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="BussinessCategoryId" Type="int" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockPrice">
+          <Key>
+            <PropertyRef Name="StockPriceId" />
+          </Key>
+          <Property Name="StockPriceId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StockId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="Dealings" Type="bigint" Nullable="false" />
+          <Property Name="ClosingPrice" Type="float" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AggregateHistory_Stock">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+          <End Role="AggregateHistory" Type="Self.AggregateHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="StockId" />
+            </Principal>
+            <Dependent Role="AggregateHistory">
+              <PropertyRef Name="StockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyProductRelation_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="CompanyProductRelation" Type="Self.CompanyProductRelation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="CompanyProductRelation">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyProductRelation_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="CompanyProductRelation" Type="Self.CompanyProductRelation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="CompanyProductRelation">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SearchResult_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="SearchResult" Type="Self.SearchResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="SearchResult">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SearchResult_SearchWord">
+          <End Role="SearchWord" Type="Self.SearchWord" Multiplicity="1" />
+          <End Role="SearchResult" Type="Self.SearchResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SearchWord">
+              <PropertyRef Name="SearchWordId" />
+            </Principal>
+            <Dependent Role="SearchResult">
+              <PropertyRef Name="SearchWordId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SearchWord_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="SearchWord" Type="Self.SearchWord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="SearchWord">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_BussinessCategory">
+          <End Role="BussinessCategory" Type="Self.BussinessCategory" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BussinessCategory">
+              <PropertyRef Name="BussinessCategoryId" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="BussinessCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockPrice_Stock">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+          <End Role="StockPrice" Type="Self.StockPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="StockId" />
+            </Principal>
+            <Dependent Role="StockPrice">
+              <PropertyRef Name="StockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TweetStockAnalyzerModelStoreContainer">
+          <EntitySet Name="AggregateHistory" EntityType="Self.AggregateHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BussinessCategory" EntityType="Self.BussinessCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompanyProductRelation" EntityType="Self.CompanyProductRelation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SearchResult" EntityType="Self.SearchResult" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SearchWord" EntityType="Self.SearchWord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockPrice" EntityType="Self.StockPrice" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AggregateHistory_Stock" Association="Self.FK_AggregateHistory_Stock">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="AggregateHistory" EntitySet="AggregateHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyProductRelation_Company" Association="Self.FK_CompanyProductRelation_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="CompanyProductRelation" EntitySet="CompanyProductRelation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyProductRelation_Product" Association="Self.FK_CompanyProductRelation_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="CompanyProductRelation" EntitySet="CompanyProductRelation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SearchResult_Product" Association="Self.FK_SearchResult_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="SearchResult" EntitySet="SearchResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SearchResult_SearchWord" Association="Self.FK_SearchResult_SearchWord">
+            <End Role="SearchWord" EntitySet="SearchWord" />
+            <End Role="SearchResult" EntitySet="SearchResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SearchWord_Product" Association="Self.FK_SearchWord_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="SearchWord" EntitySet="SearchWord" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_BussinessCategory" Association="Self.FK_Stock_BussinessCategory">
+            <End Role="BussinessCategory" EntitySet="BussinessCategory" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_Company" Association="Self.FK_Stock_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockPrice_Stock" Association="Self.FK_StockPrice_Stock">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="StockPrice" EntitySet="StockPrice" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TweetStockAnalyzerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AggregateHistory">
+          <Key>
+            <PropertyRef Name="AggregateHistoryId" />
+          </Key>
+          <Property Name="AggregateHistoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Stock" Relationship="Self.FK_AggregateHistory_Stock" FromRole="AggregateHistory" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="BussinessCategory">
+          <Key>
+            <PropertyRef Name="BussinessCategoryId" />
+          </Key>
+          <Property Name="BussinessCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BussinessCategoryCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BussinessCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Stock" Relationship="Self.FK_Stock_BussinessCategory" FromRole="BussinessCategory" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ParentCompanyId" Type="Int32" Nullable="false" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="CompanyProductRelation" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="Company" ToRole="CompanyProductRelation" />
+          <NavigationProperty Name="Stock" Relationship="Self.FK_Stock_Company" FromRole="Company" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="CompanyProductRelation">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Company" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="CompanyProductRelation" ToRole="Company" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="CompanyProductRelation" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ServiceStartDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ServiceEndDate" Type="DateTime" Precision="7" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="CompanyProductRelation" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="Product" ToRole="CompanyProductRelation" />
+          <NavigationProperty Name="SearchResult" Relationship="Self.FK_SearchResult_Product" FromRole="Product" ToRole="SearchResult" />
+          <NavigationProperty Name="SearchWord" Relationship="Self.FK_SearchWord_Product" FromRole="Product" ToRole="SearchWord" />
+        </EntityType>
+        <EntityType Name="SearchResult">
+          <Key>
+            <PropertyRef Name="SearchResultId" />
+          </Key>
+          <Property Name="SearchResultId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TweetCount" Type="Int64" Nullable="false" />
+          <Property Name="LastTweetId" Type="Int64" Nullable="false" />
+          <Property Name="SearchDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_SearchResult_Product" FromRole="SearchResult" ToRole="Product" />
+          <NavigationProperty Name="SearchWord" Relationship="Self.FK_SearchResult_SearchWord" FromRole="SearchResult" ToRole="SearchWord" />
+        </EntityType>
+        <EntityType Name="SearchWord">
+          <Key>
+            <PropertyRef Name="SearchWordId" />
+          </Key>
+          <Property Name="SearchWordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SearchWord1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_SearchWord_Product" FromRole="SearchWord" ToRole="Product" />
+          <NavigationProperty Name="SearchResult" Relationship="Self.FK_SearchResult_SearchWord" FromRole="SearchWord" ToRole="SearchResult" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="StockId" />
+          </Key>
+          <Property Name="StockId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StockCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="AggregateHistory" Relationship="Self.FK_AggregateHistory_Stock" FromRole="Stock" ToRole="AggregateHistory" />
+          <NavigationProperty Name="BussinessCategory" Relationship="Self.FK_Stock_BussinessCategory" FromRole="Stock" ToRole="BussinessCategory" />
+          <NavigationProperty Name="Company" Relationship="Self.FK_Stock_Company" FromRole="Stock" ToRole="Company" />
+          <NavigationProperty Name="StockPrice" Relationship="Self.FK_StockPrice_Stock" FromRole="Stock" ToRole="StockPrice" />
+        </EntityType>
+        <EntityType Name="StockPrice">
+          <Key>
+            <PropertyRef Name="StockPriceId" />
+          </Key>
+          <Property Name="StockPriceId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Dealings" Type="Int64" Nullable="false" />
+          <Property Name="ClosingPrice" Type="Double" Nullable="false" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Stock" Relationship="Self.FK_StockPrice_Stock" FromRole="StockPrice" ToRole="Stock" />
+        </EntityType>
+        <Association Name="FK_AggregateHistory_Stock">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+          <End Role="AggregateHistory" Type="Self.AggregateHistory" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_Stock_BussinessCategory">
+          <End Role="BussinessCategory" Type="Self.BussinessCategory" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_CompanyProductRelation_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="CompanyProductRelation" Type="Self.CompanyProductRelation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="CompanyProductRelation">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_CompanyProductRelation_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="CompanyProductRelation" Type="Self.CompanyProductRelation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="CompanyProductRelation">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SearchResult_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="SearchResult" Type="Self.SearchResult" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_SearchWord_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="SearchWord" Type="Self.SearchWord" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_SearchResult_SearchWord">
+          <End Role="SearchWord" Type="Self.SearchWord" Multiplicity="1" />
+          <End Role="SearchResult" Type="Self.SearchResult" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_StockPrice_Stock">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+          <End Role="StockPrice" Type="Self.StockPrice" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="TweetStockAnalyzerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AggregateHistory" EntityType="Self.AggregateHistory" />
+          <EntitySet Name="BussinessCategory" EntityType="Self.BussinessCategory" />
+          <EntitySet Name="Company" EntityType="Self.Company" />
+          <EntitySet Name="CompanyProductRelation" EntityType="Self.CompanyProductRelation" />
+          <EntitySet Name="Product" EntityType="Self.Product" />
+          <EntitySet Name="SearchResult" EntityType="Self.SearchResult" />
+          <EntitySet Name="SearchWord" EntityType="Self.SearchWord" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" />
+          <EntitySet Name="StockPrice" EntityType="Self.StockPrice" />
+          <AssociationSet Name="FK_AggregateHistory_Stock" Association="Self.FK_AggregateHistory_Stock">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="AggregateHistory" EntitySet="AggregateHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_BussinessCategory" Association="Self.FK_Stock_BussinessCategory">
+            <End Role="BussinessCategory" EntitySet="BussinessCategory" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyProductRelation_Company" Association="Self.FK_CompanyProductRelation_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="CompanyProductRelation" EntitySet="CompanyProductRelation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_Company" Association="Self.FK_Stock_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyProductRelation_Product" Association="Self.FK_CompanyProductRelation_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="CompanyProductRelation" EntitySet="CompanyProductRelation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SearchResult_Product" Association="Self.FK_SearchResult_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="SearchResult" EntitySet="SearchResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SearchWord_Product" Association="Self.FK_SearchWord_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="SearchWord" EntitySet="SearchWord" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SearchResult_SearchWord" Association="Self.FK_SearchResult_SearchWord">
+            <End Role="SearchWord" EntitySet="SearchWord" />
+            <End Role="SearchResult" EntitySet="SearchResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockPrice_Stock" Association="Self.FK_StockPrice_Stock">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="StockPrice" EntitySet="StockPrice" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TweetStockAnalyzerModelStoreContainer" CdmEntityContainer="TweetStockAnalyzerEntities">
+          <EntitySetMapping Name="AggregateHistory">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.AggregateHistory">
+              <MappingFragment StoreEntitySet="AggregateHistory">
+                <ScalarProperty Name="AggregateHistoryId" ColumnName="AggregateHistoryId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BussinessCategory">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.BussinessCategory">
+              <MappingFragment StoreEntitySet="BussinessCategory">
+                <ScalarProperty Name="BussinessCategoryId" ColumnName="BussinessCategoryId" />
+                <ScalarProperty Name="BussinessCategoryCode" ColumnName="BussinessCategoryCode" />
+                <ScalarProperty Name="BussinessCategoryName" ColumnName="BussinessCategoryName" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Company">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="ParentCompanyId" ColumnName="ParentCompanyId" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompanyProductRelation">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.CompanyProductRelation">
+              <MappingFragment StoreEntitySet="CompanyProductRelation">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ServiceStartDate" ColumnName="ServiceStartDate" />
+                <ScalarProperty Name="ServiceEndDate" ColumnName="ServiceEndDate" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SearchResult">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.SearchResult">
+              <MappingFragment StoreEntitySet="SearchResult">
+                <ScalarProperty Name="SearchResultId" ColumnName="SearchResultId" />
+                <ScalarProperty Name="TweetCount" ColumnName="TweetCount" />
+                <ScalarProperty Name="LastTweetId" ColumnName="LastTweetId" />
+                <ScalarProperty Name="SearchDate" ColumnName="SearchDate" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SearchWord">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.SearchWord">
+              <MappingFragment StoreEntitySet="SearchWord">
+                <ScalarProperty Name="SearchWordId" ColumnName="SearchWordId" />
+                <ScalarProperty Name="SearchWord1" ColumnName="SearchWord" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stock">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.Stock">
+              <MappingFragment StoreEntitySet="Stock">
+                <ScalarProperty Name="StockId" ColumnName="StockId" />
+                <ScalarProperty Name="StockCode" ColumnName="StockCode" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockPrice">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.StockPrice">
+              <MappingFragment StoreEntitySet="StockPrice">
+                <ScalarProperty Name="StockPriceId" ColumnName="StockPriceId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Dealings" ColumnName="Dealings" />
+                <ScalarProperty Name="ClosingPrice" ColumnName="ClosingPrice" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FK_AggregateHistory_Stock" TypeName="TweetStockAnalyzerModel.FK_AggregateHistory_Stock" StoreEntitySet="AggregateHistory">
+            <EndProperty Name="Stock">
+              <ScalarProperty Name="StockId" ColumnName="StockId" />
+            </EndProperty>
+            <EndProperty Name="AggregateHistory">
+              <ScalarProperty Name="AggregateHistoryId" ColumnName="AggregateHistoryId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_Stock_BussinessCategory" TypeName="TweetStockAnalyzerModel.FK_Stock_BussinessCategory" StoreEntitySet="Stock">
+            <EndProperty Name="BussinessCategory">
+              <ScalarProperty Name="BussinessCategoryId" ColumnName="BussinessCategoryId" />
+            </EndProperty>
+            <EndProperty Name="Stock">
+              <ScalarProperty Name="StockId" ColumnName="StockId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_Stock_Company" TypeName="TweetStockAnalyzerModel.FK_Stock_Company" StoreEntitySet="Stock">
+            <EndProperty Name="Company">
+              <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+            </EndProperty>
+            <EndProperty Name="Stock">
+              <ScalarProperty Name="StockId" ColumnName="StockId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_SearchResult_Product" TypeName="TweetStockAnalyzerModel.FK_SearchResult_Product" StoreEntitySet="SearchResult">
+            <EndProperty Name="Product">
+              <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            </EndProperty>
+            <EndProperty Name="SearchResult">
+              <ScalarProperty Name="SearchResultId" ColumnName="SearchResultId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_SearchWord_Product" TypeName="TweetStockAnalyzerModel.FK_SearchWord_Product" StoreEntitySet="SearchWord">
+            <EndProperty Name="Product">
+              <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            </EndProperty>
+            <EndProperty Name="SearchWord">
+              <ScalarProperty Name="SearchWordId" ColumnName="SearchWordId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_SearchResult_SearchWord" TypeName="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" StoreEntitySet="SearchResult">
+            <EndProperty Name="SearchWord">
+              <ScalarProperty Name="SearchWordId" ColumnName="SearchWordId" />
+            </EndProperty>
+            <EndProperty Name="SearchResult">
+              <ScalarProperty Name="SearchResultId" ColumnName="SearchResultId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_StockPrice_Stock" TypeName="TweetStockAnalyzerModel.FK_StockPrice_Stock" StoreEntitySet="StockPrice">
+            <EndProperty Name="Stock">
+              <ScalarProperty Name="StockId" ColumnName="StockId" />
+            </EndProperty>
+            <EndProperty Name="StockPrice">
+              <ScalarProperty Name="StockPriceId" ColumnName="StockPriceId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
