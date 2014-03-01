@@ -56,8 +56,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.local.config" />
     <None Include="App.config" />
+    <None Include="App.local.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

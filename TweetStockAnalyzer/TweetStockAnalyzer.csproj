@@ -99,8 +99,8 @@
     <Compile Include="Twitter\TwitterAuthenticator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.local.config" />
     <None Include="App.config" />
+    <None Include="App.local.config" />
     <EntityDeploy Include="Model\TweetStockAnalyzerModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TweetStockAnalyzerModel.Designer.cs</LastGenOutput>
