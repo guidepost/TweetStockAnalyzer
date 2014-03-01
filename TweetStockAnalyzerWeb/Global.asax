@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="TweetStockAnalyzerWeb.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="TweetStockAnalyzerWeb.MvcApplication" Language="C#" %>
