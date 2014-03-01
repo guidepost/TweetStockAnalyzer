@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using TweetStockAnalyzer.Model;
 
 namespace TweetStockAnalyzer.DataBase
 {
-    public abstract class RepositoryBase<T> : IRepository<T>
+    public abstract class RepositoryBase<T> : IRepository<T> where T : class, new()
     {
         protected TweetStockAnalyzerEntities Entities { get; private set; }
 
@@ -16,9 +17,33 @@ namespace TweetStockAnalyzer.DataBase
             Entities = new TweetStockAnalyzerEntities();
         }
 
-        public abstract T Create();
-        public abstract T Read(int id);
-        public abstract void Update(T valud);
-        public abstract void Delte(int id);
+        protected abstract DbSet<T> DbSet { get; }
+        public abstract void Update(T value);
+
+        public virtual T Create()
+        {
+            var entity = new T();
+            DbSet.Add(entity);
+            Entities.SaveChanges();
+            return entity;
+        }
+        public virtual T Read(int id)
+        {
+            return DbSet.Find(id);
+        }
+        public virtual IEnumerable<T> ReadAll()
+        {
+            return DbSet;
+        }
+
+        public virtual void Delte(int id)
+        {
+            var entity = Read(id);
+            if (entity != null)
+            {
+                DbSet.Remove(entity);
+                Entities.SaveChanges();
+            }
+        }
     }
 }

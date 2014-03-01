@@ -19,5 +19,13 @@ namespace TweetStockAnalyzer.Tests.Database
             var result = repository.Read(notFoundKey);
             Assert.IsNull(result);
         }
+
+        [TestMethod]
+        public void Create()
+        {
+            var repository = new StockRepository();
+            var result = repository.Create();
+            Assert.AreNotEqual(0, result.StockId);
+        }
     }
 }

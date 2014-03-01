@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TweetStockAnalyzer.DataBase
 {
-    class Class1
+    class SearchResultRepository
     {
     }
 }
