@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,29 +10,14 @@ namespace TweetStockAnalyzer.DataBase
 {
     public class StockRepository : RepositoryBase<Stock>
     {
-        public override Stock Create()
+        protected override DbSet<Stock> DbSet
         {
-            var stock = new Stock();
-            Entities.Stock.Add(stock);
-            Entities.SaveChanges();
-            return stock;
+            get { return Entities.Stock; }
         }
 
-        public override Stock Read(int id)
-        {
-            return Entities.Stock.Find(id);
-        }
-
-        public override void Update(Stock valud)
+        public override void Update(Stock value)
         {
             throw new NotImplementedException();
-        }
-
-        public override void Delte(int id)
-        {
-            var stock = Entities.Stock.Find(id);
-            Entities.Stock.Remove(stock);
-            Entities.SaveChanges();
         }
     }
 }

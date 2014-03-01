@@ -58,9 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBase\Class1.cs" />
     <Compile Include="DataBase\IRepository.cs" />
     <Compile Include="DataBase\RepositoryBase.cs" />
+    <Compile Include="DataBase\SearchResultRepository.cs" />
     <Compile Include="DataBase\StockRepository.cs" />
     <Compile Include="Model\AggregateHistory.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
@@ -136,8 +136,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Library\EntityFramework.dll" />
-    <Content Include="Library\EntityFramework.SqlServer.dll" />
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
