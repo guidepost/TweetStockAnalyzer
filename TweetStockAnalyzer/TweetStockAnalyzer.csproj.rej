@@ -1,0 +1,9 @@
+diff a/TweetStockAnalyzer/TweetStockAnalyzer.csproj b/TweetStockAnalyzer/TweetStockAnalyzer.csproj	(rejected hunks)
+@@ -64,6 +64,7 @@
+      </Reference>
+    </ItemGroup>
+    <ItemGroup>
+++<<<<<<< HEAD
+ +    <Compile Include="DataBase\CompanyRepository.cs" />
+ +=======
+      <Compile Include="Class1.cs" />
