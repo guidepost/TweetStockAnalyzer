@@ -21,7 +21,7 @@ namespace TweetStockAnalyzer.DataBase
         public abstract void Update(T value);
 
         
-        public virtual T Read(int id)
+        public virtual T Read(object id)
         {
             return DbSet.Find(id);
         }
@@ -39,6 +39,11 @@ namespace TweetStockAnalyzer.DataBase
                 Entities.SaveChanges();
             }
             return entity;
+        }
+
+        public void Dispose()
+        {
+            Entities.Dispose();
         }
     }
 }

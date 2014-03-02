@@ -15,6 +15,7 @@ namespace TweetStockAnalyzer.Model
     public partial class AggregateHistory
     {
         public int AggregateHistoryId { get; set; }
+        public int StockId { get; set; }
         public System.DateTime StartDate { get; set; }
         public System.DateTime EndDate { get; set; }
         public System.DateTime RegisterDate { get; set; }

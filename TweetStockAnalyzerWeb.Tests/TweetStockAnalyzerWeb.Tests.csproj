@@ -62,12 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TweetStockAnalyzerWeb\TweetStockAnalyzerWeb.csproj">
-      <Project>{F194A171-5CF2-4E9C-8DF1-3BACC11F5E22}</Project>
-      <Name>TweetStockAnalyzerWeb</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

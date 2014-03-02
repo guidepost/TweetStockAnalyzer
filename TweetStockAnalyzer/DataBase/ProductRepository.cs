@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 
 namespace TweetStockAnalyzer.DataBase
@@ -12,6 +13,7 @@ namespace TweetStockAnalyzer.DataBase
     {
         Product Create(string name, DateTime serviceStartDate);
     }
+    [AutoRegist(typeof(IProductRepository))]
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {
         protected override DbSet<Product> DbSet
