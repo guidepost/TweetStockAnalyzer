@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TweetSharp;
 
-namespace TweetStockAnalyzer.Twitter
+namespace TweetStockAnalyzer.Domain.Twitter
 {
     public interface ITwitterService
     {

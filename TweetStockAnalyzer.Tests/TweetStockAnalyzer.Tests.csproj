@@ -72,13 +72,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChainingAssertion.MSTest.cs" />
+    <Compile Include="Domain\Stock\StockServiceProviderTest.cs" />
     <Compile Include="TestHost.cs" />
     <Compile Include="Database\ProductRepositoryTest.cs" />
     <Compile Include="Database\SearchWordRepositoryTest.cs" />
     <Compile Include="Database\StockRepositoryTest.cs" />
     <Compile Include="Infrastructure\Dependency\AutoRegisterExtensionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Twitter\TwitterServiceProviderTest.cs" />
+    <Compile Include="Domain\Twitter\TwitterServiceProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

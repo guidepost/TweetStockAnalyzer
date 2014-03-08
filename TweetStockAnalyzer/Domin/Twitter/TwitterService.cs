@@ -8,7 +8,7 @@ using TweetSharp;
 using TweetStockAnalyzer.DataBase;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 
-namespace TweetStockAnalyzer.Twitter
+namespace TweetStockAnalyzer.Domain.Twitter
 {
     [AutoRegist(typeof(ITwitterService))]
     public class TwitterService : ITwitterService

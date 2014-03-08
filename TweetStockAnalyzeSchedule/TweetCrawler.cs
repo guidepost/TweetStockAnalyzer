@@ -8,19 +8,19 @@ using TweetStockAnalyzer.DataBase;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using Microsoft.Practices.Unity;
 using TweetStockAnalyzer.Model;
-using TweetStockAnalyzer.Twitter;
+using TweetStockAnalyzer.Domain.Twitter;
 
 namespace TweetStockAnalyzeSchedule
 {
-    public class StockCrawler
+    public class TweetCrawler
     {
         private readonly int _requestCount;
 
-        public StockCrawler() : this(100)
+        public TweetCrawler() : this(100)
         {
         }
 
-        public StockCrawler(int requestCount)
+        public TweetCrawler(int requestCount)
         {
             _requestCount = requestCount;
         }
@@ -40,7 +40,7 @@ namespace TweetStockAnalyzeSchedule
         }
         private Task<long> GetTweetCountAsync(SearchWord searchWord)
         {
-            var service = new TwitterServiceProvider().GetAuthenticatedService();
+            var service = new TwitterServiceProvider().GetService();
             var option = new SearchOptions()
             {
                 Q = searchWord.Word,
