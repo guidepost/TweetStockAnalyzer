@@ -297,7 +297,7 @@
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Stock" Relationship="Self.FK_AggregateHistory_Stock" FromRole="AggregateHistory" ToRole="Stock" />
         </EntityType>
         <EntityType Name="BussinessCategory">
