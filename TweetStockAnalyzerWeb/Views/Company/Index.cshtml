@@ -8,7 +8,7 @@
     .bottom-margin {
         margin-top: 10px;
         margin-bottom: 10px;
-        padding:10px;
+        padding: 10px;
     }
 
     .border-box {
@@ -16,7 +16,7 @@
     }
 
     .align-right {
-        float:right;
+        float: right;
     }
 </style>
 
@@ -32,14 +32,15 @@
             <p>
                 <b>@company.CompanyName</b>
                 <span>(9999)</span>
-                <button type="button" class="btn btn-danger align-right" onclick="location.href='@Url.Action("Delete")'">
-                    <span class="glyphicon glyphicon-remove"></span>Delete
-                </button>
-                <button type="button" class="btn btn-info align-right" onclick="location.href='@Url.Action("Detail")'">
-                    <span class="glyphicon glyphicon-remove"></span>Detail
-                </button>
-                <a class="align-right" href='@Url.Action("Detail")'>Detail</a>
-                
+                <span class="align-right">
+                    @Html.ActionLink("Modify", "Update")
+                    |
+                    @Html.ActionLink(
+                    "Delete",
+                    "Delete",
+                    new { companyId = company.CompanyId },
+                    new { onclick = "return confirm('Are you sure you wish to delete this company?');" })
+                </span>
             </p>
             <p>
                 <div>

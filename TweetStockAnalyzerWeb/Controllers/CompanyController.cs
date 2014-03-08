@@ -63,9 +63,16 @@ namespace TweetStockAnalyzerWeb.Controllers
             return View();
         }
 
-        public ActionResult Delete()
+        [HttpPost]
+        public ActionResult Update(int companyId)
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int companyId)
+        {
+            return RedirectToAction("Index");
         }
     }
 }
