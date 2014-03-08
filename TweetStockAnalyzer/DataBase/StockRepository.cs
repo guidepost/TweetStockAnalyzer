@@ -34,8 +34,8 @@ namespace TweetStockAnalyzer.DataBase
         {
             var entity = new Stock();
             entity.StockCode = stockCode;
-            entity.Company = company;
-            entity.BussinessCategory = category;
+            entity.CompanyId = company.CompanyId;
+            entity.BussinessCategoryId = category.BussinessCategoryId;
             DbSet.Add(entity);
             Entities.SaveChanges();
             return entity;

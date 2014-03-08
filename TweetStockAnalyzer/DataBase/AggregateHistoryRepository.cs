@@ -33,7 +33,7 @@ namespace TweetStockAnalyzer.DataBase
         public AggregateHistory Create(Stock stock, DateTime startDate, DateTime endDate)
         {
             var entity = new AggregateHistory();
-            entity.Stock = stock;
+            entity.StockId = stock.StockId;
             entity.StartDate = startDate;
             entity.EndDate = endDate;
             DbSet.Add(entity);
