@@ -26,6 +26,7 @@ namespace TweetStockAnalyzer.Model
         public int BussinessCategoryId { get; set; }
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual ICollection<AggregateHistory> AggregateHistory { get; set; }
         public virtual BussinessCategory BussinessCategory { get; set; }

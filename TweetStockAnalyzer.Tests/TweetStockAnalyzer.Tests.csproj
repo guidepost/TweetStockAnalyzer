@@ -74,6 +74,7 @@
     <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Database\ProductRepositoryTest.cs" />
+    <Compile Include="Database\SearchWordRepositoryTest.cs" />
     <Compile Include="Database\StockRepositoryTest.cs" />
     <Compile Include="Infrastructure\Dependency\AutoRegisterExtensionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

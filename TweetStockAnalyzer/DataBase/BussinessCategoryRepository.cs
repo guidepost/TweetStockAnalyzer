@@ -26,6 +26,7 @@ namespace TweetStockAnalyzer.DataBase
             var entity = Read(value.BussinessCategoryId);
             entity.BussinessCategoryCode = value.BussinessCategoryCode;
             entity.BussinessCategoryName = value.BussinessCategoryName;
+            entity.IsDeleted = value.IsDeleted;
             Entities.SaveChanges();
         }
 

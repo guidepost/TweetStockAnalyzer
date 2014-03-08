@@ -26,6 +26,7 @@ namespace TweetStockAnalyzer.DataBase
         {
             var entity = Read(value.StockId);
             entity.StockCode = value.StockCode;
+            entity.IsDeleted = value.IsDeleted;
             Entities.SaveChanges();
         }
 
@@ -33,6 +34,8 @@ namespace TweetStockAnalyzer.DataBase
         {
             var entity = new Stock();
             entity.StockCode = stockCode;
+            entity.Company = company;
+            entity.BussinessCategory = category;
             DbSet.Add(entity);
             Entities.SaveChanges();
             return entity;

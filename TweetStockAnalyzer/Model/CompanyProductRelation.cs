@@ -18,6 +18,7 @@ namespace TweetStockAnalyzer.Model
         public int ProductId { get; set; }
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual Company Company { get; set; }
         public virtual Product Product { get; set; }

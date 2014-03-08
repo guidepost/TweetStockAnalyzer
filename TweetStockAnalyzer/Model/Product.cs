@@ -27,6 +27,7 @@ namespace TweetStockAnalyzer.Model
         public Nullable<System.DateTime> ServiceEndDate { get; set; }
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual ICollection<CompanyProductRelation> CompanyProductRelation { get; set; }
         public virtual ICollection<SearchResult> SearchResult { get; set; }
