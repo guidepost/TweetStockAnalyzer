@@ -17,7 +17,7 @@ namespace TweetStockAnalyzer.Model
         public Company()
         {
             this.CompanyProductRelation = new HashSet<CompanyProductRelation>();
-            this.Stock = new HashSet<Stock>();
+            this.Stocks = new HashSet<Stock>();
         }
     
         public int CompanyId { get; set; }
@@ -28,6 +28,6 @@ namespace TweetStockAnalyzer.Model
         public bool IsDeleted { get; set; }
     
         public virtual ICollection<CompanyProductRelation> CompanyProductRelation { get; set; }
-        public virtual ICollection<Stock> Stock { get; set; }
+        private ICollection<Stock> Stocks { get; set; }
     }
 }
