@@ -16,7 +16,8 @@ namespace TweetStockAnalyzeSchedule.Test
     public class StockCrawlerTest
     {
         private SearchWord _searchWord;
-        private Mock<IProductRepository> _mockRepository;
+        private Mock<ISearchWordRepository> _mockRepository;
+        private Mock<ISearchResultRepository> _mockResultRepository;
         private Mock<ITwitterService> _mockTwitter;
         [TestInitialize]
         public void Initialize()
@@ -26,17 +27,20 @@ namespace TweetStockAnalyzeSchedule.Test
                 Task.Factory.StartNew(()=>
                 {
                     var result = new TwitterSearchResult();
-                    result.Statuses = new List<TwitterStatus>();
+                    result.Statuses = new List<TwitterStatus>{new TwitterStatus() };
                     return result;
                 }));
-            _mockRepository = new Mock<IProductRepository>();
+            _mockRepository = new Mock<ISearchWordRepository>();
             _searchWord = new SearchWord { LastTweetId = 100, Word = Guid.NewGuid().ToString()};
+            _searchWord.Product = new Product();
             _mockRepository.Setup(p => p.ReadAll()).Returns(() =>
             {
-                Product[] products = {new Product {SearchWord = {_searchWord}}};
+                SearchWord[] products = {_searchWord};
                 return products;
             } );
+            _mockResultRepository = new Mock<ISearchResultRepository>();
             DependencyContainer.Instance.RegisterInstance(_mockRepository.Object);
+            DependencyContainer.Instance.RegisterInstance(_mockResultRepository.Object);
             DependencyContainer.Instance.RegisterInstance(_mockTwitter.Object);
         }
 
@@ -49,6 +53,8 @@ namespace TweetStockAnalyzeSchedule.Test
             _mockTwitter.Verify(
                 p => p.SearchAsync(
                     It.Is<SearchOptions>(it=> it.Q == _searchWord.Word && it.SinceId == _searchWord.LastTweetId)));
+            _mockResultRepository.Verify(p => p.Create(It.IsAny<SearchWord>(), It.IsAny<Product>(), 1, It.IsAny<DateTime>()));
+            _mockRepository.Verify(p => p.Update(It.IsAny<SearchWord>()));
         }
     }
 }

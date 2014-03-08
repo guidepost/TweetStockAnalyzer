@@ -12,7 +12,7 @@ namespace TweetStockAnalyzer.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class SearchResult
+    public partial class SearchResult : IEntity
     {
         public int SearchResultId { get; set; }
         public int ProductId { get; set; }

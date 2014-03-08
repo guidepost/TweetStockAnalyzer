@@ -27,7 +27,7 @@ namespace TweetStockAnalyzer.DataBase
             var entity = Read(value.StockPriceId);
             entity.Date = value.Date;
             entity.IsDeleted = value.IsDeleted;
-            Entities.SaveChanges();
+            base.Update(entity);
         }
 
         public StockPrice Create(Stock stock, DateTime date, long dealings, float closingPrice)

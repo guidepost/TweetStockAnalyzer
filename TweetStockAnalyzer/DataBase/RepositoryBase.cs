@@ -8,7 +8,7 @@ using TweetStockAnalyzer.Model;
 
 namespace TweetStockAnalyzer.DataBase
 {
-    public abstract class RepositoryBase<T> : IRepository<T> where T : class, new()
+    public abstract class RepositoryBase<T> : IRepository<T> where T : class,IEntity, new()
     {
         protected TweetStockAnalyzerEntities Entities { get; private set; }
 
@@ -18,8 +18,12 @@ namespace TweetStockAnalyzer.DataBase
         }
 
         protected abstract DbSet<T> DbSet { get; }
-        public abstract void Update(T value);
 
+        public virtual void Update(T value)
+        {
+            value.UpdateDate = DateTime.Now;
+            Entities.SaveChanges();
+        }
         
         public virtual T Read(object id)
         {
@@ -29,6 +33,8 @@ namespace TweetStockAnalyzer.DataBase
         {
             return DbSet;
         }
+
+
 
         public virtual T Delete(int id)
         {

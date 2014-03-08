@@ -26,7 +26,7 @@ namespace TweetStockAnalyzer.DataBase
             var entity = Read(value.CompanyScoreId);
             entity.Score = value.Score;
             entity.IsDeleted = value.IsDeleted;
-            Entities.SaveChanges();
+            base.Update(entity);
         }
 
         public CompanyScore Create(Company company, int score)

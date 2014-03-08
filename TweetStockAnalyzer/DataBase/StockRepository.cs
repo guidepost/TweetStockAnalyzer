@@ -27,7 +27,7 @@ namespace TweetStockAnalyzer.DataBase
             var entity = Read(value.StockId);
             entity.StockCode = value.StockCode;
             entity.IsDeleted = value.IsDeleted;
-            Entities.SaveChanges();
+            base.Update(entity);
         }
 
         public Stock Create(Company company, BussinessCategory category, string stockCode)

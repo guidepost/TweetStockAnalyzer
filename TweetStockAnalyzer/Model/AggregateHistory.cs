@@ -12,7 +12,7 @@ namespace TweetStockAnalyzer.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class AggregateHistory
+    public partial class AggregateHistory : IEntity
     {
         public int AggregateHistoryId { get; set; }
         public int StockId { get; set; }

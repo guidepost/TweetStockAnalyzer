@@ -27,7 +27,7 @@ namespace TweetStockAnalyzer.DataBase
             entity.ProductName = value.ProductName;
             entity.ServiceStartDate = value.ServiceStartDate;
             entity.IsDeleted = value.IsDeleted;
-            Entities.SaveChanges();
+            base.Update(entity);
         }
 
         public Product Create(string name, DateTime serviceStartDate)

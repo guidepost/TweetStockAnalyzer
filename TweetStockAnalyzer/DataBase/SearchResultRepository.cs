@@ -11,7 +11,7 @@ namespace TweetStockAnalyzer.DataBase
 {
     public interface ISearchResultRepository : IRepository<SearchResult>
     {
-        SearchResult Create(SearchWord searchWord, Product product, long tweetCount, long lastTweetId, DateTime date);
+        SearchResult Create(SearchWord searchWord, Product product, long tweetCount, DateTime date);
     }
     [AutoRegist(typeof(ISearchResultRepository))]
     public class SearchResultRepository : RepositoryBase<SearchResult> , ISearchResultRepository
@@ -27,10 +27,11 @@ namespace TweetStockAnalyzer.DataBase
             entity.TweetCount = value.TweetCount;
             entity.SearchDate = value.SearchDate;
             entity.IsDeleted = value.IsDeleted;
-            Entities.SaveChanges();
+
+            base.Update(entity);
         }
 
-        public SearchResult Create(SearchWord searchWord, Product product, long tweetCount, long lastTweetId, DateTime date)
+        public SearchResult Create(SearchWord searchWord, Product product, long tweetCount, DateTime date)
         {
             var entity = new SearchResult();
             entity.SearchWord = searchWord;
