@@ -33,7 +33,7 @@ namespace TweetStockAnalyzer.DataBase
         {
             var entity = new CompanyScore();
             entity.Score = score;
-            entity.Company = company;
+            entity.CompanyId = company.CompanyId;
             DbSet.Add(entity);
             Entities.SaveChanges();
             return entity;

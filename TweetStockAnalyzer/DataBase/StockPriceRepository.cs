@@ -36,7 +36,7 @@ namespace TweetStockAnalyzer.DataBase
             entity.Date = date;
             entity.Dealings = dealings;
             entity.ClosingPrice = closingPrice;
-            entity.Stock = stock;
+            entity.StockId = stock.StockId;
             DbSet.Add(entity);
             return entity;
         }
