@@ -20,7 +20,7 @@ namespace TweetStockAnalyzer.Tests.Twitter
 
             var result = service.SearchAsync(new SearchOptions()
             {
-                Q = "ハピプリ"
+                Q = "test"
             });
 
             result.Result.Statuses.Any().IsTrue();
