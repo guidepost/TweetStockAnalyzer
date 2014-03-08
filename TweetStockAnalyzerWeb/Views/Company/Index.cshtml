@@ -47,7 +47,7 @@
                     <span>(@company.Stock.StockCode)</span>
                 }
                 <span class="align-right">
-                    @Html.ActionLink("Modify", "Update")
+                    @Html.ActionLink("Modify", "Update", new { companyId = company.CompanyId})
                     |
                     @Html.ActionLink(
                     "Delete",

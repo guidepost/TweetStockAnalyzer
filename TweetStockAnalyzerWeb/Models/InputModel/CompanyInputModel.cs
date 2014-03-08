@@ -11,11 +11,11 @@ namespace TweetStockAnalyzerWeb.Models.InputModel
 {
     public class CompanyInputModel
     {
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
 
         [Required]
         public string CompanyName { get; set; }
-        public int ParentCompanyId { get; set; }
+        public int? ParentCompanyId { get; set; }
         public string StockCode { get; set; }
         public string BussinessCategoryId { get; set; }
     }

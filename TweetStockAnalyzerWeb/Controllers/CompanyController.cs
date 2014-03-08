@@ -51,9 +51,26 @@ namespace TweetStockAnalyzerWeb.Controllers
             return RedirectToIndex(string.Format("{0} is created!", companyInputModel.CompanyName));
         }
 
-        public ActionResult Update()
+        public ActionResult Update(int companyId)
         {
-            return View();
+            using (var repository = _container.Resolve<ICompanyRepository>())
+            {
+                var company = repository.Read(companyId);
+
+                var model = new CompanyInputModel();
+
+                model.CompanyId = companyId;
+                model.ParentCompanyId = company.ParentCompanyId;
+                model.CompanyName = company.CompanyName;
+                if (company.Stock != null)
+                {
+                    model.StockCode = company.Stock.StockCode;
+
+                    model.BussinessCategoryId = company.Stock.BussinessCategoryId.ToString();
+                }
+
+                return View(model);
+            }
         }
 
         [HttpPost]

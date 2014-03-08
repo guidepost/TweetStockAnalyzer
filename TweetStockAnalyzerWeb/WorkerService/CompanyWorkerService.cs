@@ -78,16 +78,38 @@ namespace TweetStockAnalyzerWeb.WorkerService
         public void UpdateCompany(CompanyInputModel companyInputModel)
         {
             using (var companyRepository = _container.Resolve<ICompanyRepository>())
-            using(var stockRepository = _container.Resolve<IStockRepository>())
+            using (var stockRepository = _container.Resolve<IStockRepository>())
+            using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
             {
-                var targetCompany = companyRepository.Read( companyInputModel.CompanyId);
+                var targetCompany = companyRepository.Read(companyInputModel.CompanyId);
                 targetCompany.CompanyName = companyInputModel.CompanyName;
                 targetCompany.ParentCompanyId = companyInputModel.ParentCompanyId;
-                //targetCompany.Stock = stockRepository.Read()
+
+                if (targetCompany.Stock == null || targetCompany.Stock.IsDeleted)
+                {
+                    if (!string.IsNullOrEmpty(companyInputModel.StockCode))
+                    {
+                        var bussinessCategory = bussinessCategoryRepository.ReadAll()
+                                                                           .FirstOrDefault(c => c.BussinessCategoryId.ToString() == companyInputModel.BussinessCategoryId);
+                        stockRepository.Create(targetCompany, bussinessCategory, companyInputModel.StockCode);
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(companyInputModel.StockCode))
+                    {
+                        targetCompany.Stock.IsDeleted = true;
+                    }
+                    else
+                    {
+                        var stock = targetCompany.Stock;
+                        stock.StockCode = companyInputModel.StockCode;
+                        stockRepository.Update(stock);
+                    }
+                }
+
                 companyRepository.Update(targetCompany);
             }
-
-            throw new NotImplementedException();
         }
     }
 }
