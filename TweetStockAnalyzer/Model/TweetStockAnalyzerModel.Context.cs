@@ -34,5 +34,6 @@ namespace TweetStockAnalyzer.Model
         public virtual DbSet<SearchWord> SearchWord { get; set; }
         public virtual DbSet<Stock> Stock { get; set; }
         public virtual DbSet<StockPrice> StockPrice { get; set; }
+        public virtual DbSet<CompanyScore> CompanyScore { get; set; }
     }
 }

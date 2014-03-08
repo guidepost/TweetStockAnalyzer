@@ -12,24 +12,15 @@ namespace TweetStockAnalyzer.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Company
+    public partial class CompanyScore
     {
-        public Company()
-        {
-            this.CompanyProductRelation = new HashSet<CompanyProductRelation>();
-            this.Stocks = new HashSet<Stock>();
-            this.CompanyScore = new HashSet<CompanyScore>();
-        }
-    
+        public int CompanyScoreId { get; set; }
+        public int Score { get; set; }
         public int CompanyId { get; set; }
-        public string CompanyName { get; set; }
-        public Nullable<int> ParentCompanyId { get; set; }
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        public virtual ICollection<CompanyProductRelation> CompanyProductRelation { get; set; }
-        private ICollection<Stock> Stocks { get; set; }
-        public virtual ICollection<CompanyScore> CompanyScore { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

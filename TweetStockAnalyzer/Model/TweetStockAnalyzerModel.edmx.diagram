@@ -23,6 +23,8 @@
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_SearchWord_Product" ManuallyRouted="false" />
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_StockPrice_Stock" ManuallyRouted="false" />
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" />
+        <EntityTypeShape EntityType="TweetStockAnalyzerModel.CompanyScore" Width="1.5" PointX="3" PointY="16" />
+        <AssociationConnector Association="TweetStockAnalyzerModel.FK_CompanyScore_Company" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

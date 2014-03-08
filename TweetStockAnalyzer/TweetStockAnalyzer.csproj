@@ -67,6 +67,7 @@
     <Compile Include="DataBase\AggregateHistoryRepository.cs" />
     <Compile Include="DataBase\BussinessCategoryRepository.cs" />
     <Compile Include="DataBase\CompanyRepository.cs" />
+    <Compile Include="DataBase\CompanyScoreRepository.cs" />
     <Compile Include="DataBase\IRepository.cs" />
     <Compile Include="DataBase\ProductRepository.cs" />
     <Compile Include="DataBase\RepositoryBase.cs" />
@@ -87,6 +88,9 @@
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\CompanyProductRelation.cs">
+      <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\CompanyScore.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Product.cs">
