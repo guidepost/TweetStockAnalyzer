@@ -13,7 +13,6 @@ namespace TweetStockAnalyzer.Infrastructure.Dependency
         public static IUnityContainer Instance
         {
             get { return _container;}
-            set { _container = value; }
         }
     }
 }
