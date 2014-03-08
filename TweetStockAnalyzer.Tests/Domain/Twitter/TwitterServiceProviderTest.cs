@@ -9,7 +9,7 @@ namespace TweetStockAnalyzer.Tests.Domain.Twitter
     public class TwitterServiceProviderTest
     {
         [TestMethod]
-        public void GetAuthenticatedService()
+        public void GetService()
         {
             var provider = new TwitterServiceProvider();
             var service = provider.GetService();

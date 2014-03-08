@@ -13,14 +13,35 @@ namespace TweetStockAnalyzer.Domin.Stock
     [AutoRegist(typeof(IStockService))]
     public class YahooFinanceStockService : IStockService
     {
-        public IEnumerable<StockPrice> Load(Model.Stock stock)
+        public IEnumerable<StockPrice> Load(Model.Stock stock,DateTime startDate,DateTime endDate)
         {
-            throw new NotImplementedException();
+            foreach (var stockPrice1 in LoadStock(stock, startDate, endDate, 0))
+            {
+                yield return stockPrice1;
+            }
         }
 
+        private IEnumerable<StockPrice> LoadStock(Model.Stock stock, DateTime startDate, DateTime endDate, int page)
+        {
+            var document = LoadHtml(stock.StockCode, startDate, endDate, page);
+            var node = GetTargetTableNode(document);
+            if (node != null)
+            {
+                var result = ExtractStockPriceFromHtml(stock, node);
+                foreach (var stockPrice in result)
+                {
+                    yield return stockPrice;
+                }
 
+                int nextPage = page + 1;
+                foreach (var stockPrice in LoadStock(stock, startDate, endDate, nextPage))
+                {
+                    yield return stockPrice;
+                }
+            }
+        }
 
-        public static IEnumerable<StockPrice> ExtractStockPriceFromHtml(Model.Stock stock, HtmlNode tableBodyNode)
+        private IEnumerable<StockPrice> ExtractStockPriceFromHtml(Model.Stock stock, HtmlNode tableBodyNode)
         {
             return tableBodyNode.ChildNodes
                                 .Skip(1)
@@ -34,7 +55,17 @@ namespace TweetStockAnalyzer.Domin.Stock
                                 });
         }
 
-        public static HtmlNode GetTargetTableNode(string stockCode, DateTime startDate, DateTime endDate, int page)
+        private HtmlNode GetTargetTableNode(HtmlDocument document)
+        {
+            var tableBodyNode = document.DocumentNode.SelectSingleNode("//div[@id=\"main\"]/div[5]/table");
+            if (tableBodyNode == null || tableBodyNode.ChildNodes.Count < 2)
+            {
+                return null;
+            }
+            return tableBodyNode;
+        }
+
+        private HtmlDocument LoadHtml(string stockCode, DateTime startDate, DateTime endDate, int page)
         {
             string url = GetRequestUrl(stockCode, startDate, endDate, page);
             var wc = new WebClient();
@@ -42,28 +73,21 @@ namespace TweetStockAnalyzer.Domin.Stock
             string html = wc.DownloadString(url);
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
-
-            var tableBodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@id=\"main\"]/div[5]/table");
-            if (tableBodyNode == null || tableBodyNode.ChildNodes.Count < 2)
-            {
-                return null;
-            }
-
-            return tableBodyNode;
+            return htmlDoc;
         }
 
-        private static double ConvertPriceStr(string priceStr)
+        private double ConvertPriceStr(string priceStr)
         {
             return double.Parse(priceStr.Replace(",", ""));
         }
 
-        private static int ConvertDealingStr(string dealingStr)
+        private int ConvertDealingStr(string dealingStr)
         {
             return int.Parse(dealingStr.Replace(",", ""));
         }
 
-        private static readonly string BaseUrl = "http://info.finance.yahoo.co.jp/history/?code={0}&sy={1}&sm={2}&sd={3}&ey={4}&em={5}&ed={6}&tm=d&p={7}";
-        private static string GetRequestUrl(string stockCode, DateTime startDate, DateTime endDate, int page)
+        private readonly string BaseUrl = "http://info.finance.yahoo.co.jp/history/?code={0}&sy={1}&sm={2}&sd={3}&ey={4}&em={5}&ed={6}&tm=d&p={7}";
+        private string GetRequestUrl(string stockCode, DateTime startDate, DateTime endDate, int page)
         {
             return string.Format(BaseUrl, stockCode, startDate.Year, startDate.Month, startDate.Day, endDate.Year, endDate.Month, endDate.Day, page);
         }
