@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AnalyzedCompany.cs" />
+    <Compile Include="Models\DropdownListItems.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InputModel\CompanyInputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -236,6 +237,8 @@
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\Company\Detail.cshtml" />
     <Content Include="Views\Company\Create.cshtml" />
+    <Content Include="Views\Company\Update.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CompanyInputModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

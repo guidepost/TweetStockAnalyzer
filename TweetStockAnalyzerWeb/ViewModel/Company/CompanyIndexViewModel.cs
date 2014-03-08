@@ -9,5 +9,7 @@ namespace TweetStockAnalyzerWeb.ViewModel.Company
     public class CompanyIndexViewModel
     {
         public IEnumerable<TweetStockAnalyzer.Model.Company> Companies { get; set; }
+
+        public string SuccessMessage { get; set; }
     }
 }

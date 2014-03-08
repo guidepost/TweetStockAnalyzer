@@ -21,6 +21,17 @@
 </style>
 
 <h2>Company</h2>
+@if (!string.IsNullOrEmpty(@Model.SuccessMessage))
+{
+    <div id="successMessage" class="alert alert-success">
+        @Model.SuccessMessage
+    </div>
+    @section scripts{
+        <script type="text/javascript">
+            $("#successMessage").animate({ opacity: 0 }, 3000, function () { $("#successMessage").slideUp(1000); });
+        </script>
+    }
+}
 <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Create")'">
     <span class="glyphicon glyphicon-plus"></span>Add
 </button>
@@ -30,8 +41,11 @@
     {
         <div class="border-box bottom-margin">
             <p>
-                <b>@company.CompanyName</b>
-                <span>(9999)</span>
+                <b>@Html.ActionLink(company.CompanyName, "Detail", new { companyId = company.CompanyId })</b>
+                @if (company.Stock != null)
+                {
+                    <span>(@company.Stock.StockCode)</span>
+                }
                 <span class="align-right">
                     @Html.ActionLink("Modify", "Update")
                     |

@@ -6,6 +6,7 @@ using System.Web;
 using TweetStockAnalyzer.DataBase;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
+using TweetStockAnalyzerWeb.Models.InputModel;
 using TweetStockAnalyzerWeb.ViewModel.Company;
 
 namespace TweetStockAnalyzerWeb.WorkerService
@@ -15,6 +16,10 @@ namespace TweetStockAnalyzerWeb.WorkerService
         CompanyIndexViewModel GetIndexViewModel();
 
         CompanyDetailViewModel GetDetailViewModel();
+
+        void CreateCompany(CompanyInputModel companyInputModel);
+
+        void UpdateCompany(CompanyInputModel companyInputModel);
     }
 
     [AutoRegist(typeof(ICompanyWorkerService))]
@@ -50,6 +55,39 @@ namespace TweetStockAnalyzerWeb.WorkerService
             }
 
             return viewModel;
+        }
+
+        public void CreateCompany(CompanyInputModel companyInputModel)
+        {
+            using (var companyRepository = _container.Resolve<ICompanyRepository>())
+            using (var stockRepository = _container.Resolve<IStockRepository>())
+            using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
+            {
+                var parentCompany = companyRepository.Read(companyInputModel.ParentCompanyId);
+                var insertedCompany = companyRepository.Create(companyInputModel.CompanyName, parentCompany);
+
+                if (!string.IsNullOrEmpty(companyInputModel.StockCode))
+                {
+                    var bussinessCategory = bussinessCategoryRepository.ReadAll()
+                                                                       .FirstOrDefault(c => c.BussinessCategoryId.ToString() == companyInputModel.BussinessCategoryId);
+                    stockRepository.Create(insertedCompany, bussinessCategory, companyInputModel.StockCode);
+                }
+            }
+        }
+
+        public void UpdateCompany(CompanyInputModel companyInputModel)
+        {
+            using (var companyRepository = _container.Resolve<ICompanyRepository>())
+            using(var stockRepository = _container.Resolve<IStockRepository>())
+            {
+                var targetCompany = companyRepository.Read( companyInputModel.CompanyId);
+                targetCompany.CompanyName = companyInputModel.CompanyName;
+                targetCompany.ParentCompanyId = companyInputModel.ParentCompanyId;
+                //targetCompany.Stock = stockRepository.Read()
+                companyRepository.Update(targetCompany);
+            }
+
+            throw new NotImplementedException();
         }
     }
 }
