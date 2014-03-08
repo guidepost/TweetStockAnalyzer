@@ -4,10 +4,10 @@ using System.Linq;
 using System.Web;
 using TweetStockAnalyzer.Model;
 
-namespace TweetStockAnalyzerWeb.ViewModel
+namespace TweetStockAnalyzerWeb.ViewModel.Company
 {
     public class CompanyIndexViewModel
     {
-        public IEnumerable<Company> Companies { get; set; }
+        public IEnumerable<TweetStockAnalyzer.Model.Company> Companies { get; set; }
     }
 }
