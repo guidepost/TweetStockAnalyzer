@@ -81,7 +81,6 @@
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="SearchWordId" Type="int" Nullable="false" />
           <Property Name="TweetCount" Type="bigint" Nullable="false" />
-          <Property Name="LastTweetId" Type="bigint" Nullable="false" />
           <Property Name="SearchDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
@@ -97,6 +96,7 @@
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="LastTweetId" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="Stock">
           <Key>
@@ -392,7 +392,6 @@
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="SearchWordId" Type="Int32" Nullable="false" />
           <Property Name="TweetCount" Type="Int64" Nullable="false" />
-          <Property Name="LastTweetId" Type="Int64" Nullable="false" />
           <Property Name="SearchDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
@@ -412,6 +411,7 @@
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Product" Relationship="Self.FK_SearchWord_Product" FromRole="SearchWord" ToRole="Product" />
           <NavigationProperty Name="SearchResult" Relationship="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" FromRole="SearchWord" ToRole="SearchResult" />
+          <Property Name="LastTweetId" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="Stock">
           <Key>
@@ -719,7 +719,6 @@
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="SearchWordId" ColumnName="SearchWordId" />
                 <ScalarProperty Name="TweetCount" ColumnName="TweetCount" />
-                <ScalarProperty Name="LastTweetId" ColumnName="LastTweetId" />
                 <ScalarProperty Name="SearchDate" ColumnName="SearchDate" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -730,6 +729,7 @@
           <EntitySetMapping Name="SearchWord">
             <EntityTypeMapping TypeName="TweetStockAnalyzerModel.SearchWord">
               <MappingFragment StoreEntitySet="SearchWord">
+                <ScalarProperty Name="LastTweetId" ColumnName="LastTweetId" />
                 <ScalarProperty Name="SearchWordId" ColumnName="SearchWordId" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="Word" ColumnName="Word" />
