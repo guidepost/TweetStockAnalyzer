@@ -24,33 +24,14 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
         public CompanyIndexViewModel GetIndexViewModel()
         {
+            var viewModel = new CompanyIndexViewModel();
+
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                //return new CompanyIndexViewModel
-                //{
-                //    Companies = repository.ReadAll()
-                //};
-
-                return new CompanyIndexViewModel
-                {
-                    Companies = new Company[] {
-                        new Company {
-                            CompanyId = 1,
-                            CompanyName = "companyName",
-                            RegisterDate = DateTime.Now,
-                            UpdateDate = DateTime.Now},
-                        new Company {
-                            CompanyId = 2,
-                            CompanyName = "companyName",
-                            RegisterDate = DateTime.Now,
-                            UpdateDate = DateTime.Now},
-                        new Company {
-                            CompanyId = 3,
-                            CompanyName = "companyName",
-                            RegisterDate = DateTime.Now,
-                            UpdateDate = DateTime.Now}}
-                };
+                viewModel.Companies = repository.ReadAll().ToArray();
             }
+
+            return viewModel;
         }
 
         public CompanyDetailViewModel GetDetailViewModel()

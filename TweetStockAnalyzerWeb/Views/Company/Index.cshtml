@@ -1,34 +1,51 @@
 ﻿@model TweetStockAnalyzerWeb.ViewModel.Company.CompanyIndexViewModel
 
 @{
-    ViewBag.Title = "Company";
+    ViewBag.Title = "CompanyList";
 }
 
 <style type="text/css">
     .bottom-margin {
-        margin-bottom: 2em;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding:10px;
     }
 
     .border-box {
         border: 1px solid #ddd;
     }
+
+    .align-right {
+        float:right;
+    }
 </style>
 
 <h2>Company</h2>
 <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Create")'">
-    <span class="glyphicon-plus"></span>Add
+    <span class="glyphicon glyphicon-plus"></span>Add
 </button>
 
 @{
     foreach (var company in Model.Companies)
     {
-        <div>
-            <b>@company.CompanyName</b><span>(9999)</span><a href='@Url.Action("Detail")'>Detail</a><br />
-            <div class="border-box bottom-margin">
+        <div class="border-box bottom-margin">
+            <p>
+                <b>@company.CompanyName</b>
+                <span>(9999)</span>
+                <button type="button" class="btn btn-danger align-right" onclick="location.href='@Url.Action("Delete")'">
+                    <span class="glyphicon glyphicon-remove"></span>Delete
+                </button>
+                <button type="button" class="btn btn-info align-right" onclick="location.href='@Url.Action("Detail")'">
+                    <span class="glyphicon glyphicon-remove"></span>Detail
+                </button>
+                <a class="align-right" href='@Url.Action("Detail")'>Detail</a>
+                
+            </p>
+            <p>
                 <div>
                     Chart
                 </div>
-            </div>
+            </p>
         </div>
     }
 }
