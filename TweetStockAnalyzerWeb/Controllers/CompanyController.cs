@@ -25,6 +25,12 @@ namespace TweetStockAnalyzerWeb.Controllers
             return View(model);
         }
 
+        public ActionResult Detail(int companyId)
+        {
+            var model = _workerService.GetDetailViewModel();
+            return View(model);
+        }
+
         public ActionResult Create()
         {
             return View();
