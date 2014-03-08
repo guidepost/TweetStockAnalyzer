@@ -28,6 +28,6 @@ namespace TweetStockAnalyzer.Model
         public bool IsDeleted { get; set; }
     
         public virtual ICollection<CompanyProductRelation> CompanyProductRelation { get; set; }
-        public virtual ICollection<Stock> Stocks { get; set; }
+        private ICollection<Stock> Stocks { get; set; }
     }
 }

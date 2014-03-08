@@ -323,7 +323,7 @@
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CompanyProductRelation" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="Company" ToRole="CompanyProductRelation" />
-          <NavigationProperty Name="Stocks" Relationship="Self.FK_Stock_Company" FromRole="Company" ToRole="Stock" />
+          <NavigationProperty Name="Stocks" Relationship="Self.FK_Stock_Company" FromRole="Company" ToRole="Stock" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
         </EntityType>
         <EntityType Name="CompanyProductRelation">
           <Key>
