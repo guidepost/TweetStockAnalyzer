@@ -26,13 +26,14 @@ namespace TweetStockAnalyzer.DataBase
             var entity = Read(value.AggregateHistoryId);
             entity.StartDate = value.StartDate;
             entity.EndDate = value.EndDate;
+            entity.IsDeleted = value.IsDeleted;
             Entities.SaveChanges();
         }
 
         public AggregateHistory Create(Stock stock, DateTime startDate, DateTime endDate)
         {
             var entity = new AggregateHistory();
-            stock.AggregateHistory.Add(entity);
+            entity.Stock = stock;
             entity.StartDate = startDate;
             entity.EndDate = endDate;
             DbSet.Add(entity);

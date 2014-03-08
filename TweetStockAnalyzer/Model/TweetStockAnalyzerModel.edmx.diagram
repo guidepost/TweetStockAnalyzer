@@ -4,16 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="bc42f5e2b08d47d2bdd3490955701c83" Name="Diagram1">
-        <EntityTypeShape EntityType="TweetStockAnalyzerModel.AggregateHistory" Width="1.5" PointX="8.25" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TweetStockAnalyzerModel.BussinessCategory" Width="1.5" PointX="3.75" PointY="2" IsExpanded="true" />
+      <Diagram DiagramId="7486406241614cd4bd23fd0955679a6c" Name="Diagram1">
+        <EntityTypeShape EntityType="TweetStockAnalyzerModel.AggregateHistory" Width="1.5" PointX="8.25" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TweetStockAnalyzerModel.BussinessCategory" Width="1.5" PointX="3.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="TweetStockAnalyzerModel.Company" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
         <EntityTypeShape EntityType="TweetStockAnalyzerModel.CompanyProductRelation" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="TweetStockAnalyzerModel.Product" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TweetStockAnalyzerModel.SearchResult" Width="1.5" PointX="5.25" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TweetStockAnalyzerModel.SearchWord" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TweetStockAnalyzerModel.SearchResult" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TweetStockAnalyzerModel.SearchWord" Width="1.5" PointX="3" PointY="12.375" IsExpanded="true" />
         <EntityTypeShape EntityType="TweetStockAnalyzerModel.Stock" Width="1.5" PointX="6" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="TweetStockAnalyzerModel.StockPrice" Width="1.5" PointX="8.25" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TweetStockAnalyzerModel.StockPrice" Width="1.5" PointX="8.25" PointY="6.5" IsExpanded="true" />
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_AggregateHistory_Stock" ManuallyRouted="false" />
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_Stock_BussinessCategory" ManuallyRouted="false" />
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_CompanyProductRelation_Company" ManuallyRouted="false" />
@@ -21,8 +21,8 @@
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_CompanyProductRelation_Product" ManuallyRouted="false" />
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_SearchResult_Product" ManuallyRouted="false" />
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_SearchWord_Product" ManuallyRouted="false" />
-        <AssociationConnector Association="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" ManuallyRouted="false" />
         <AssociationConnector Association="TweetStockAnalyzerModel.FK_StockPrice_Stock" ManuallyRouted="false" />
+        <AssociationConnector Association="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

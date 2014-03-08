@@ -20,6 +20,7 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime EndDate { get; set; }
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual Stock Stock { get; set; }
     }

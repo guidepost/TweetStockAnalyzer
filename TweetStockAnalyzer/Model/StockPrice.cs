@@ -21,6 +21,7 @@ namespace TweetStockAnalyzer.Model
         public double ClosingPrice { get; set; }
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual Stock Stock { get; set; }
     }

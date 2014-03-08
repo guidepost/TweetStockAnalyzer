@@ -26,6 +26,7 @@ namespace TweetStockAnalyzer.DataBase
             var entity = Read(value.CompanyId);
             entity.CompanyName = value.CompanyName;
             entity.ParentCompanyId = value.ParentCompanyId;
+            entity.IsDeleted = value.IsDeleted;
             Entities.SaveChanges();
         }
 

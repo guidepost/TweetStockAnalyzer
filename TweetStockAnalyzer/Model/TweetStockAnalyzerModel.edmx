@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TweetStockAnalyzerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="TweetStockAnalyzerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AggregateHistory">
           <Key>
             <PropertyRef Name="AggregateHistoryId" />
@@ -15,6 +15,7 @@
           <Property Name="EndDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="BussinessCategory">
           <Key>
@@ -25,6 +26,7 @@
           <Property Name="BussinessCategoryName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Company">
           <Key>
@@ -35,6 +37,7 @@
           <Property Name="ParentCompanyId" Type="int" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CompanyProductRelation">
           <Key>
@@ -45,6 +48,7 @@
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -56,6 +60,7 @@
           <Property Name="ServiceEndDate" Type="datetime2" Precision="7" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SearchResult">
           <Key>
@@ -69,6 +74,7 @@
           <Property Name="SearchDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SearchWord">
           <Key>
@@ -79,6 +85,7 @@
           <Property Name="Word" Type="nvarchar(max)" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Stock">
           <Key>
@@ -90,6 +97,7 @@
           <Property Name="BussinessCategoryId" Type="int" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="StockPrice">
           <Key>
@@ -102,9 +110,12 @@
           <Property Name="ClosingPrice" Type="float" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_AggregateHistory_Stock">
-          <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="AggregateHistory" Type="Self.AggregateHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Stock">
@@ -116,7 +127,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CompanyProductRelation_Company">
-          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Company" Type="Self.Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="CompanyProductRelation" Type="Self.CompanyProductRelation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Company">
@@ -128,7 +141,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CompanyProductRelation_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="CompanyProductRelation" Type="Self.CompanyProductRelation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -140,7 +155,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SearchResult_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SearchResult" Type="Self.SearchResult" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -164,7 +181,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SearchWord_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SearchWord" Type="Self.SearchWord" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -176,7 +195,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Stock_BussinessCategory">
-          <End Role="BussinessCategory" Type="Self.BussinessCategory" Multiplicity="1" />
+          <End Role="BussinessCategory" Type="Self.BussinessCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="BussinessCategory">
@@ -188,7 +209,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Stock_Company">
-          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Company" Type="Self.Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Company">
@@ -200,7 +223,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StockPrice_Stock">
-          <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="StockPrice" Type="Self.StockPrice" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Stock">
@@ -258,8 +283,7 @@
             <End Role="StockPrice" EntitySet="StockPrice" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TweetStockAnalyzerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -273,6 +297,7 @@
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Stock" Relationship="Self.FK_AggregateHistory_Stock" FromRole="AggregateHistory" ToRole="Stock" />
         </EntityType>
         <EntityType Name="BussinessCategory">
@@ -284,6 +309,7 @@
           <Property Name="BussinessCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Stock" Relationship="Self.FK_Stock_BussinessCategory" FromRole="BussinessCategory" ToRole="Stock" />
         </EntityType>
         <EntityType Name="Company">
@@ -295,6 +321,7 @@
           <Property Name="ParentCompanyId" Type="Int32" Nullable="true" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CompanyProductRelation" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="Company" ToRole="CompanyProductRelation" />
           <NavigationProperty Name="Stock" Relationship="Self.FK_Stock_Company" FromRole="Company" ToRole="Stock" />
         </EntityType>
@@ -307,6 +334,7 @@
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Company" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="CompanyProductRelation" ToRole="Company" />
           <NavigationProperty Name="Product" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="CompanyProductRelation" ToRole="Product" />
         </EntityType>
@@ -320,6 +348,7 @@
           <Property Name="ServiceEndDate" Type="DateTime" Precision="7" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CompanyProductRelation" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="Product" ToRole="CompanyProductRelation" />
           <NavigationProperty Name="SearchResult" Relationship="Self.FK_SearchResult_Product" FromRole="Product" ToRole="SearchResult" />
           <NavigationProperty Name="SearchWord" Relationship="Self.FK_SearchWord_Product" FromRole="Product" ToRole="SearchWord" />
@@ -336,8 +365,9 @@
           <Property Name="SearchDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Product" Relationship="Self.FK_SearchResult_Product" FromRole="SearchResult" ToRole="Product" />
-          <NavigationProperty Name="SearchWord" Relationship="Self.FK_SearchResult_SearchWord" FromRole="SearchResult" ToRole="SearchWord" />
+          <NavigationProperty Name="SearchWord" Relationship="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" FromRole="SearchResult" ToRole="SearchWord" />
         </EntityType>
         <EntityType Name="SearchWord">
           <Key>
@@ -348,8 +378,9 @@
           <Property Name="Word" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Product" Relationship="Self.FK_SearchWord_Product" FromRole="SearchWord" ToRole="Product" />
-          <NavigationProperty Name="SearchResult" Relationship="Self.FK_SearchResult_SearchWord" FromRole="SearchWord" ToRole="SearchResult" />
+          <NavigationProperty Name="SearchResult" Relationship="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" FromRole="SearchWord" ToRole="SearchResult" />
         </EntityType>
         <EntityType Name="Stock">
           <Key>
@@ -361,6 +392,7 @@
           <Property Name="BussinessCategoryId" Type="Int32" Nullable="false" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AggregateHistory" Relationship="Self.FK_AggregateHistory_Stock" FromRole="Stock" ToRole="AggregateHistory" />
           <NavigationProperty Name="BussinessCategory" Relationship="Self.FK_Stock_BussinessCategory" FromRole="Stock" ToRole="BussinessCategory" />
           <NavigationProperty Name="Company" Relationship="Self.FK_Stock_Company" FromRole="Stock" ToRole="Company" />
@@ -377,10 +409,13 @@
           <Property Name="ClosingPrice" Type="Double" Nullable="false" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Stock" Relationship="Self.FK_StockPrice_Stock" FromRole="StockPrice" ToRole="Stock" />
         </EntityType>
         <Association Name="FK_AggregateHistory_Stock">
-          <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="AggregateHistory" Type="Self.AggregateHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Stock">
@@ -392,7 +427,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Stock_BussinessCategory">
-          <End Role="BussinessCategory" Type="Self.BussinessCategory" Multiplicity="1" />
+          <End Role="BussinessCategory" Type="Self.BussinessCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="BussinessCategory">
@@ -404,7 +441,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CompanyProductRelation_Company">
-          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Company" Type="Self.Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="CompanyProductRelation" Type="Self.CompanyProductRelation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Company">
@@ -416,7 +455,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Stock_Company">
-          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Company" Type="Self.Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Company">
@@ -428,7 +469,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CompanyProductRelation_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="CompanyProductRelation" Type="Self.CompanyProductRelation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -440,7 +483,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SearchResult_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SearchResult" Type="Self.SearchResult" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -452,7 +497,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SearchWord_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SearchWord" Type="Self.SearchWord" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
@@ -463,20 +510,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SearchResult_SearchWord">
-          <End Role="SearchWord" Type="Self.SearchWord" Multiplicity="1" />
-          <End Role="SearchResult" Type="Self.SearchResult" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SearchWord">
-              <PropertyRef Name="SearchWordId" />
-            </Principal>
-            <Dependent Role="SearchResult">
-              <PropertyRef Name="SearchWordId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_StockPrice_Stock">
-          <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="StockPrice" Type="Self.StockPrice" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Stock">
@@ -487,7 +524,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="TweetStockAnalyzerEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="TweetStockAnalyzerEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AggregateHistory" EntityType="Self.AggregateHistory" />
           <EntitySet Name="BussinessCategory" EntityType="Self.BussinessCategory" />
           <EntitySet Name="Company" EntityType="Self.Company" />
@@ -525,21 +562,33 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="SearchWord" EntitySet="SearchWord" />
           </AssociationSet>
-          <AssociationSet Name="FK_SearchResult_SearchWord" Association="Self.FK_SearchResult_SearchWord">
-            <End Role="SearchWord" EntitySet="SearchWord" />
-            <End Role="SearchResult" EntitySet="SearchResult" />
-          </AssociationSet>
           <AssociationSet Name="FK_StockPrice_Stock" Association="Self.FK_StockPrice_Stock">
             <End Role="Stock" EntitySet="Stock" />
             <End Role="StockPrice" EntitySet="StockPrice" />
           </AssociationSet>
+          <AssociationSet Name="FK_SearchResult_SearchWord" Association="TweetStockAnalyzerModel.FK_SearchResult_SearchWord">
+            <End Role="SearchWord" EntitySet="SearchWord" />
+            <End Role="SearchResult" EntitySet="SearchResult" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_SearchResult_SearchWord">
+          <End Type="TweetStockAnalyzerModel.SearchWord" Role="SearchWord" Multiplicity="1" />
+          <End Type="TweetStockAnalyzerModel.SearchResult" Role="SearchResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SearchWord">
+              <PropertyRef Name="SearchWordId" />
+            </Principal>
+            <Dependent Role="SearchResult">
+              <PropertyRef Name="SearchWordId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="TweetStockAnalyzerModelStoreContainer" CdmEntityContainer="TweetStockAnalyzerEntities1">
+        <EntityContainerMapping StorageEntityContainer="TweetStockAnalyzerModelStoreContainer" CdmEntityContainer="TweetStockAnalyzerEntities">
           <EntitySetMapping Name="AggregateHistory">
             <EntityTypeMapping TypeName="TweetStockAnalyzerModel.AggregateHistory">
               <MappingFragment StoreEntitySet="AggregateHistory">
@@ -549,6 +598,7 @@
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -560,6 +610,7 @@
                 <ScalarProperty Name="BussinessCategoryName" ColumnName="BussinessCategoryName" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -571,6 +622,7 @@
                 <ScalarProperty Name="ParentCompanyId" ColumnName="ParentCompanyId" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -581,6 +633,7 @@
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -593,6 +646,7 @@
                 <ScalarProperty Name="ServiceEndDate" ColumnName="ServiceEndDate" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -607,6 +661,7 @@
                 <ScalarProperty Name="SearchDate" ColumnName="SearchDate" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -618,6 +673,7 @@
                 <ScalarProperty Name="Word" ColumnName="Word" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -630,6 +686,7 @@
                 <ScalarProperty Name="BussinessCategoryId" ColumnName="BussinessCategoryId" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -643,6 +700,7 @@
                 <ScalarProperty Name="ClosingPrice" ColumnName="ClosingPrice" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

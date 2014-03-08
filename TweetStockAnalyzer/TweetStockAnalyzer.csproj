@@ -71,6 +71,7 @@
     <Compile Include="DataBase\ProductRepository.cs" />
     <Compile Include="DataBase\RepositoryBase.cs" />
     <Compile Include="DataBase\SearchResultRepository.cs" />
+    <Compile Include="DataBase\SearchWordRepository.cs" />
     <Compile Include="DataBase\StockPriceRepository.cs" />
     <Compile Include="DataBase\StockRepository.cs" />
     <Compile Include="Infrastructure\Dependency\AutoRegisterAttribute.cs" />

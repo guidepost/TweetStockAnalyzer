@@ -23,18 +23,19 @@ namespace TweetStockAnalyzer.DataBase
 
         public override void Update(SearchResult value)
         {
-            var result = Read(value.SearchResultId);
-            result.TweetCount = value.TweetCount;
-            result.LastTweetId = value.LastTweetId;
-            result.SearchDate = value.SearchDate;
+            var entity = Read(value.SearchResultId);
+            entity.TweetCount = value.TweetCount;
+            entity.LastTweetId = value.LastTweetId;
+            entity.SearchDate = value.SearchDate;
+            entity.IsDeleted = value.IsDeleted;
             Entities.SaveChanges();
         }
 
         public SearchResult Create(SearchWord searchWord, Product product, long tweetCount, long lastTweetId, DateTime date)
         {
             var entity = new SearchResult();
-            searchWord.SearchResult.Add(entity);
-            product.SearchResult.Add(entity);
+            entity.SearchWord = searchWord;
+            entity.Product = product;
             entity.TweetCount = tweetCount;
             entity.LastTweetId = lastTweetId;
             entity.SearchDate = date;
