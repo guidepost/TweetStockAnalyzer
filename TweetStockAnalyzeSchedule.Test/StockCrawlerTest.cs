@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -36,7 +37,7 @@ namespace TweetStockAnalyzeSchedule.Test
             _mockRepository.Setup(p => p.ReadAll()).Returns(() =>
             {
                 SearchWord[] products = {_searchWord};
-                return products;
+                return products.AsQueryable();
             } );
             _mockResultRepository = new Mock<ISearchResultRepository>();
             DependencyContainer.Instance.RegisterInstance(_mockRepository.Object);
