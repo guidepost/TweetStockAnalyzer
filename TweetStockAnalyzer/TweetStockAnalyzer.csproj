@@ -79,6 +79,12 @@
     <Compile Include="DataBase\SearchWordRepository.cs" />
     <Compile Include="DataBase\StockPriceRepository.cs" />
     <Compile Include="DataBase\StockRepository.cs" />
+    <Compile Include="Domin\Stock\IStockService.cs" />
+    <Compile Include="Domin\Stock\StockServiceProvider.cs" />
+    <Compile Include="Domin\Stock\YahooFinanceStockService.cs" />
+    <Compile Include="Domin\Twitter\ITwitterService.cs" />
+    <Compile Include="Domin\Twitter\TwitterService.cs" />
+    <Compile Include="Domin\Twitter\TwitterServiceProvider.cs" />
     <Compile Include="Infrastructure\Dependency\AutoRegisterAttribute.cs" />
     <Compile Include="Infrastructure\Dependency\AutoRegisterExtension.cs" />
     <Compile Include="Infrastructure\Dependency\DependencyContainer.cs" />
@@ -153,10 +159,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domin\Stock\" />
-    <Folder Include="Domin\Twitter\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
