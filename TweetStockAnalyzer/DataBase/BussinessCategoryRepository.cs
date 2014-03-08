@@ -27,7 +27,7 @@ namespace TweetStockAnalyzer.DataBase
             entity.BussinessCategoryCode = value.BussinessCategoryCode;
             entity.BussinessCategoryName = value.BussinessCategoryName;
             entity.IsDeleted = value.IsDeleted;
-            Entities.SaveChanges();
+            base.Update(entity);
         }
 
         public BussinessCategory Create(string name, string code)

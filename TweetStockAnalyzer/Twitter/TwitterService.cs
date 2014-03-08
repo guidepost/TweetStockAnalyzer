@@ -30,6 +30,7 @@ namespace TweetStockAnalyzer.Twitter
         public Task<TwitterSearchResult> SearchAsync(SearchOptions option)
         {
             var taskSource = new TaskCompletionSource<TwitterSearchResult>();
+         
             _service.Search(option, new Action<TwitterSearchResult, TwitterResponse>((result, reponse) =>
             {
                 taskSource.SetResult(result);

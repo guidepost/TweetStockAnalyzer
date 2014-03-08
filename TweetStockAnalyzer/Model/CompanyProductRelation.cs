@@ -12,7 +12,7 @@ namespace TweetStockAnalyzer.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class CompanyProductRelation
+    public partial class CompanyProductRelation : IEntity
     {
         public int CompanyId { get; set; }
         public int ProductId { get; set; }

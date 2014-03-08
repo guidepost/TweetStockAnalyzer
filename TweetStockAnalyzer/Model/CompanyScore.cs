@@ -12,7 +12,7 @@ namespace TweetStockAnalyzer.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class CompanyScore
+    public partial class CompanyScore : IEntity
     {
         public int CompanyScoreId { get; set; }
         public int Score { get; set; }

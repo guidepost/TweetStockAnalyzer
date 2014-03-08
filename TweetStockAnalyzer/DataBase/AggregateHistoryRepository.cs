@@ -27,7 +27,7 @@ namespace TweetStockAnalyzer.DataBase
             entity.StartDate = value.StartDate;
             entity.EndDate = value.EndDate;
             entity.IsDeleted = value.IsDeleted;
-            Entities.SaveChanges();
+            base.Update(entity);
         }
 
         public AggregateHistory Create(Stock stock, DateTime startDate, DateTime endDate)

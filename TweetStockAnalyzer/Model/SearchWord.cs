@@ -12,7 +12,7 @@ namespace TweetStockAnalyzer.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class SearchWord
+    public partial class SearchWord : IEntity
     {
         public SearchWord()
         {

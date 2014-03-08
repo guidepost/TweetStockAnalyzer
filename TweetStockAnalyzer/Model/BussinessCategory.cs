@@ -12,7 +12,7 @@ namespace TweetStockAnalyzer.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class BussinessCategory
+    public partial class BussinessCategory : IEntity
     {
         public BussinessCategory()
         {
