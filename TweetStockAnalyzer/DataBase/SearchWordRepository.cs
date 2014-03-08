@@ -27,6 +27,7 @@ namespace TweetStockAnalyzer.DataBase
             var entity = Read(value.SearchWordId);
             entity.Word = value.Word;
             entity.IsDeleted = value.IsDeleted;
+            entity.LastTweetId = value.LastTweetId;
             Entities.SaveChanges();
         }
 

@@ -5,22 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TweetSharp;
+using TweetStockAnalyzer.Infrastructure.Dependency;
+using Microsoft.Practices.Unity;
 
 namespace TweetStockAnalyzer.Twitter
 {
     public class TwitterServiceProvider
     {
-        public TwitterService GetAuthenticatedService()
+        public ITwitterService GetAuthenticatedService()
         {
-            string comsumerKey = ConfigurationManager.AppSettings["TwitterComsumerKey"];
-            string comsumerSecret = ConfigurationManager.AppSettings["TwitterComsumerSecret"];
-            string accessToken = ConfigurationManager.AppSettings["TwitterAccessToken"];
-            string accessTokenSecret = ConfigurationManager.AppSettings["TwitterAccessTokenSecret"];
-
-            var service = new TwitterService(comsumerKey, comsumerSecret);
-            service.AuthenticateWith(accessToken, accessTokenSecret);
-
-            return service;
+            return DependencyContainer.Instance.Resolve<ITwitterService>();
         }
     }
 }

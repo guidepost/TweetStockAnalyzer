@@ -18,12 +18,13 @@ namespace TweetStockAnalyzer.Tests.Twitter
             var provider = new TwitterServiceProvider();
             var service = provider.GetAuthenticatedService();
 
-            var result = service.Search(new SearchOptions()
+            var result = service.SearchAsync(new SearchOptions()
             {
                 Q = "ハピプリ"
             });
 
-            (result.Statuses.Count() > 0).IsTrue();
+            result.Result.Statuses.Any().IsTrue();
         }
+
     }
 }

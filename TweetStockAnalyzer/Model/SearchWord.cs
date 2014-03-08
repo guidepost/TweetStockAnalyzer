@@ -25,6 +25,7 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime RegisterDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
+        public long LastTweetId { get; set; }
     
         public virtual Product Product { get; set; }
         public virtual ICollection<SearchResult> SearchResult { get; set; }

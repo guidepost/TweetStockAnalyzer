@@ -25,7 +25,6 @@ namespace TweetStockAnalyzer.DataBase
         {
             var entity = Read(value.SearchResultId);
             entity.TweetCount = value.TweetCount;
-            entity.LastTweetId = value.LastTweetId;
             entity.SearchDate = value.SearchDate;
             entity.IsDeleted = value.IsDeleted;
             Entities.SaveChanges();
@@ -37,7 +36,6 @@ namespace TweetStockAnalyzer.DataBase
             entity.SearchWord = searchWord;
             entity.Product = product;
             entity.TweetCount = tweetCount;
-            entity.LastTweetId = lastTweetId;
             entity.SearchDate = date;
             DbSet.Add(entity);
             Entities.SaveChanges();
