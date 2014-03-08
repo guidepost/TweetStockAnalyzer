@@ -8,11 +8,11 @@ using TweetSharp;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using Microsoft.Practices.Unity;
 
-namespace TweetStockAnalyzer.Twitter
+namespace TweetStockAnalyzer.Domain.Twitter
 {
     public class TwitterServiceProvider
     {
-        public ITwitterService GetAuthenticatedService()
+        public ITwitterService GetService()
         {
             return DependencyContainer.Instance.Resolve<ITwitterService>();
         }

@@ -13,7 +13,7 @@ namespace TweetStockAnalyzeSchedule
         {
             var container = DependencyContainer.Instance;
             container.AddExtension(new AutoRegisterExtension(typeof(AutoRegistAttribute).Assembly));
-            var crower = new StockCrawler();
+            var crower = new TweetCrawler();
             crower.Start();
         }
     }

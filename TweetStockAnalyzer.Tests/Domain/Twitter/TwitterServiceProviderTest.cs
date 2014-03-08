@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TweetStockAnalyzer.Twitter;
 using TweetSharp;
+using TweetStockAnalyzer.Domain.Twitter;
 
-namespace TweetStockAnalyzer.Tests.Twitter
+namespace TweetStockAnalyzer.Tests.Domain.Twitter
 {
     [TestClass]
     public class TwitterServiceProviderTest
@@ -16,7 +12,7 @@ namespace TweetStockAnalyzer.Tests.Twitter
         public void GetAuthenticatedService()
         {
             var provider = new TwitterServiceProvider();
-            var service = provider.GetAuthenticatedService();
+            var service = provider.GetService();
 
             var result = service.SearchAsync(new SearchOptions()
             {

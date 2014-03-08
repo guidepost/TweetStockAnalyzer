@@ -8,7 +8,7 @@ using TweetStockAnalyzer.DataBase;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using Microsoft.Practices.Unity;
 using TweetStockAnalyzer.Model;
-using ITwitterService = TweetStockAnalyzer.Twitter.ITwitterService;
+using ITwitterService = TweetStockAnalyzer.Domain.Twitter.ITwitterService;
 
 namespace TweetStockAnalyzeSchedule.Test
 {
@@ -47,7 +47,7 @@ namespace TweetStockAnalyzeSchedule.Test
         [TestMethod]
         public void Start()
         {
-            var crawler = new StockCrawler();
+            var crawler = new TweetCrawler();
             crawler.Start();
 
             _mockTwitter.Verify(
