@@ -15,7 +15,7 @@
           <Property Name="EndDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
-          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="BussinessCategory">
           <Key>
@@ -46,6 +46,17 @@
           </Key>
           <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CompanyScore">
+          <Key>
+            <PropertyRef Name="CompanyScoreId" />
+          </Key>
+          <Property Name="CompanyScoreId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Score" Type="int" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
@@ -154,6 +165,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CompanyScore_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CompanyScore" Type="Self.CompanyScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="CompanyScore">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SearchResult_Product">
           <End Role="Product" Type="Self.Product" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -241,6 +266,7 @@
           <EntitySet Name="BussinessCategory" EntityType="Self.BussinessCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyProductRelation" EntityType="Self.CompanyProductRelation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompanyScore" EntityType="Self.CompanyScore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SearchResult" EntityType="Self.SearchResult" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SearchWord" EntityType="Self.SearchWord" Schema="dbo" store:Type="Tables" />
@@ -257,6 +283,10 @@
           <AssociationSet Name="FK_CompanyProductRelation_Product" Association="Self.FK_CompanyProductRelation_Product">
             <End Role="Product" EntitySet="Product" />
             <End Role="CompanyProductRelation" EntitySet="CompanyProductRelation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyScore_Company" Association="Self.FK_CompanyScore_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="CompanyScore" EntitySet="CompanyScore" />
           </AssociationSet>
           <AssociationSet Name="FK_SearchResult_Product" Association="Self.FK_SearchResult_Product">
             <End Role="Product" EntitySet="Product" />
@@ -324,6 +354,7 @@
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CompanyProductRelation" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="Company" ToRole="CompanyProductRelation" />
           <NavigationProperty Name="Stocks" Relationship="Self.FK_Stock_Company" FromRole="Company" ToRole="Stock" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
+          <NavigationProperty Name="CompanyScore" Relationship="TweetStockAnalyzerModel.FK_CompanyScore_Company" FromRole="Company" ToRole="CompanyScore" />
         </EntityType>
         <EntityType Name="CompanyProductRelation">
           <Key>
@@ -570,6 +601,11 @@
             <End Role="SearchWord" EntitySet="SearchWord" />
             <End Role="SearchResult" EntitySet="SearchResult" />
           </AssociationSet>
+          <EntitySet Name="CompanyScore" EntityType="TweetStockAnalyzerModel.CompanyScore" />
+          <AssociationSet Name="FK_CompanyScore_Company" Association="TweetStockAnalyzerModel.FK_CompanyScore_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="CompanyScore" EntitySet="CompanyScore" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_SearchResult_SearchWord">
           <End Type="TweetStockAnalyzerModel.SearchWord" Role="SearchWord" Multiplicity="1" />
@@ -580,6 +616,32 @@
             </Principal>
             <Dependent Role="SearchResult">
               <PropertyRef Name="SearchWordId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CompanyScore">
+          <Key>
+            <PropertyRef Name="CompanyScoreId" />
+          </Key>
+          <Property Name="CompanyScoreId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="TweetStockAnalyzerModel.FK_CompanyScore_Company" FromRole="CompanyScore" ToRole="Company" />
+        </EntityType>
+        <Association Name="FK_CompanyScore_Company">
+          <End Type="TweetStockAnalyzerModel.Company" Role="Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TweetStockAnalyzerModel.CompanyScore" Role="CompanyScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="CompanyScore">
+              <PropertyRef Name="CompanyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -701,6 +763,18 @@
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompanyScore">
+            <EntityTypeMapping TypeName="TweetStockAnalyzerModel.CompanyScore">
+              <MappingFragment StoreEntitySet="CompanyScore">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="CompanyScoreId" ColumnName="CompanyScoreId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
