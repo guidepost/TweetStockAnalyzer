@@ -46,6 +46,8 @@ namespace TweetStockAnalyzer.Tests.Database
             result.BussinessCategory.BussinessCategoryId.Is(category.BussinessCategoryId);
             result.StockCode.Is("123");
 
+            company = new CompanyRepository().Read(company.CompanyId);
+            company.Stock.IsNotNull();
         }
     }
 }
