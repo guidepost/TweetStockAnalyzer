@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace TweetStockAnalyzer.DataBase
         {
             return DbSet.Find(id);
         }
-        public virtual IEnumerable<T> ReadAll()
+        public virtual DbQuery<T> ReadAll()
         {
             return DbSet;
         }

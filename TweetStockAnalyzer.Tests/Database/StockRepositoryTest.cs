@@ -49,5 +49,15 @@ namespace TweetStockAnalyzer.Tests.Database
             company = new CompanyRepository().Read(company.CompanyId);
             company.Stock.IsNotNull();
         }
+
+        [TestMethod]
+        public void ReadWithInclude()
+        {
+            Create();
+            var repository = new CompanyRepository();
+            var company  = repository.ReadAll().Include(p=>p.Stock).FirstOrDefault();
+            repository.Dispose();
+            company.Stock.IsNotNull();
+        }
     }
 }

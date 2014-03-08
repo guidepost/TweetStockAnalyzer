@@ -69,17 +69,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBase\AggregateHistoryRepository.cs" />
-    <Compile Include="DataBase\BussinessCategoryRepository.cs" />
-    <Compile Include="DataBase\CompanyRepository.cs" />
-    <Compile Include="DataBase\CompanyScoreRepository.cs" />
+    <Compile Include="DataBase\Repository\AggregateHistoryRepository.cs" />
+    <Compile Include="DataBase\Repository\BussinessCategoryRepository.cs" />
+    <Compile Include="DataBase\Repository\CompanyRepository.cs" />
+    <Compile Include="DataBase\Repository\CompanyScoreRepository.cs" />
+    <Compile Include="DataBase\ObjectQuerableExtend.cs" />
     <Compile Include="DataBase\IRepository.cs" />
-    <Compile Include="DataBase\ProductRepository.cs" />
+    <Compile Include="DataBase\Repository\ProductRepository.cs" />
     <Compile Include="DataBase\RepositoryBase.cs" />
-    <Compile Include="DataBase\SearchResultRepository.cs" />
-    <Compile Include="DataBase\SearchWordRepository.cs" />
-    <Compile Include="DataBase\StockPriceRepository.cs" />
-    <Compile Include="DataBase\StockRepository.cs" />
+    <Compile Include="DataBase\Repository\SearchResultRepository.cs" />
+    <Compile Include="DataBase\Repository\SearchWordRepository.cs" />
+    <Compile Include="DataBase\Repository\StockPriceRepository.cs" />
+    <Compile Include="DataBase\Repository\StockRepository.cs" />
     <Compile Include="Domin\Stock\IStockService.cs" />
     <Compile Include="Domin\Stock\StockServiceProvider.cs" />
     <Compile Include="Domin\Stock\YahooFinanceStockService.cs" />
