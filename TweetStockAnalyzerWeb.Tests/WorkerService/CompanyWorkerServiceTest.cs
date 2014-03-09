@@ -37,14 +37,14 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
 
             var viewModel = _workerService.GetIndexViewModel();
 
-            var company1 = viewModel.Companies.ElementAt(0);
-            var company2 = viewModel.Companies.ElementAt(1);
+            var company1 = viewModel.CompanyWithScores.ElementAt(0);
+            var company2 = viewModel.CompanyWithScores.ElementAt(1);
 
-            company1.CompanyName.Is("TestCompany1");
-            company1.ParentCompanyId.IsNull();
+            company1.Company.CompanyName.Is("TestCompany1");
+            company1.Company.ParentCompanyId.IsNull();
 
-            company2.CompanyName.Is("TestCompany2");
-            company2.ParentCompanyId.Is(parentCompany.CompanyId);
+            company2.Company.CompanyName.Is("TestCompany2");
+            company2.Company.ParentCompanyId.Is(parentCompany.CompanyId);
         }
 
         [TestMethod]

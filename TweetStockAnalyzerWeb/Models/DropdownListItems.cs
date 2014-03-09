@@ -20,13 +20,14 @@ namespace TweetStockAnalyzerWeb.Models
                 var container = DependencyContainer.Instance;
                 using (var repository = container.Resolve<ICompanyRepository>())
                 {
-                    var selectItems = repository.ReadAll()
-                                                .Select(c => new SelectListItem
-                                                 {
-                                                     Value = c.CompanyId.ToString(),
-                                                     Text = c.CompanyName
-                                                 })
-                                                 .ToList();
+                    var companies = repository.ReadAll().ToArray();
+
+                    var selectItems = companies.Select(c => new SelectListItem
+                                                       {
+                                                           Value = c.CompanyId.ToString(),
+                                                           Text = c.CompanyName
+                                                       })
+                                                       .ToList();
                     selectItems.Insert(0, new SelectListItem { Value = "", Text = "" });
 
                     return selectItems.ToArray();
@@ -39,8 +40,8 @@ namespace TweetStockAnalyzerWeb.Models
             var container = DependencyContainer.Instance;
             using (var repository = container.Resolve<IBussinessCategoryRepository>())
             {
-                BussinessCategories = repository.ReadAll()
-                                                .Select(c => new SelectListItem
+                var categories = repository.ReadAll().ToArray();
+                BussinessCategories = categories.Select(c => new SelectListItem
                     {
                         Value = c.BussinessCategoryId.ToString(),
                         Text = string.Format("{0}:{1}", c.BussinessCategoryCode, c.BussinessCategoryName)

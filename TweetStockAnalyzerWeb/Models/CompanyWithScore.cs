@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using TweetStockAnalyzer.Model;
 
-namespace TweetStockAnalyzerWeb.ViewModel.Company
+namespace TweetStockAnalyzerWeb.Models
 {
-    public class CompanyDetailViewModel
+    public class CompanyWithScore
     {
         public TweetStockAnalyzer.Model.Company Company { get; set; }
 

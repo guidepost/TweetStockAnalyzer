@@ -6,6 +6,7 @@ using System.Web;
 using TweetStockAnalyzer.DataBase;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
+using TweetStockAnalyzerWeb.Models;
 using TweetStockAnalyzerWeb.Models.InputModel;
 using TweetStockAnalyzerWeb.ViewModel.Company;
 
@@ -15,7 +16,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
     {
         CompanyIndexViewModel GetIndexViewModel();
 
-        CompanyDetailViewModel GetDetailViewModel();
+        CompanyDetailViewModel GetDetailViewModel(int companyId);
 
         void CreateCompany(CompanyInputModel companyInputModel);
 
@@ -33,25 +34,24 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                viewModel.Companies = repository.ReadAll().Include(c=>c.Stock).ToArray();
+                viewModel.CompanyWithScores = repository.ReadAll().Include(c => c.Stock)
+                                                                  .ToArray()
+                                                                  .Select(c => new CompanyWithScore { Company = c })
+                                                                  .ToArray();
             }
 
             return viewModel;
         }
 
-        public CompanyDetailViewModel GetDetailViewModel()
+        public CompanyDetailViewModel GetDetailViewModel(int companyId)
         {
             var viewModel = new CompanyDetailViewModel();
 
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                viewModel.Company = new Company
-                    {
-                        CompanyId = 1,
-                        CompanyName = "companyName",
-                        RegisterDate = DateTime.Now,
-                        UpdateDate = DateTime.Now
-                    };
+                var company = repository.Read(companyId);
+
+                viewModel.Company = company;
             }
 
             return viewModel;
@@ -81,7 +81,8 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var stockRepository = _container.Resolve<IStockRepository>())
             using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
             {
-                var targetCompany = companyRepository.Read(companyInputModel.CompanyId);
+                var targetCompany = companyRepository.Read(companyInputModel.CompanyId);//TODO:ここで読み取ってきたCompanyのStockプロパティがnullになる
+
                 targetCompany.CompanyName = companyInputModel.CompanyName;
                 targetCompany.ParentCompanyId = companyInputModel.ParentCompanyId;
 
@@ -104,6 +105,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
                     {
                         var stock = targetCompany.Stock;
                         stock.StockCode = companyInputModel.StockCode;
+                        stock.BussinessCategoryId = int.Parse(companyInputModel.BussinessCategoryId);
                         stockRepository.Update(stock);
                     }
                 }

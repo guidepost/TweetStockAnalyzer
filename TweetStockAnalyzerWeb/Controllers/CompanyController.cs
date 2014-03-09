@@ -34,7 +34,7 @@ namespace TweetStockAnalyzerWeb.Controllers
 
         public ActionResult Detail(int companyId)
         {
-            var model = _workerService.GetDetailViewModel();
+            var model = _workerService.GetDetailViewModel(companyId);
             return View(model);
         }
 
