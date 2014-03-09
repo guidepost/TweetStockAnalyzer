@@ -30,7 +30,7 @@ namespace TweetStockAnalyzer.DataBase
         {
             return DbSet.Find(id);
         }
-        public virtual DbQuery<T> ReadAll()
+        public virtual IQueryable<T> ReadAll()
         {
             return DbSet;
         }

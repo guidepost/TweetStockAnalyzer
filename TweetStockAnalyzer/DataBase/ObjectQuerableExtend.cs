@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace TweetStockAnalyzer.DataBase
 {
     public static class ObjectQueryExtension
     {
-        public static ObjectQuery<T> Include<T>(this ObjectQuery<T> query, Expression<Func<T, object>> includes)
+        public static IQueryable<T> Include<T>(this IQueryable<T> query, Expression<Func<T, object>> includes)
       where T : class
         {
             return query.Include(includes.Body.GetExpressionName());
