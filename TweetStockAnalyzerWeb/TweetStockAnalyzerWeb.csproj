@@ -173,6 +173,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -187,7 +188,9 @@
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="ViewModel\Company\CompanyDetailViewModel.cs" />
     <Compile Include="ViewModel\Company\CompanyIndexViewModel.cs" />
+    <Compile Include="ViewModel\Product\ProductIndexViewModel.cs" />
     <Compile Include="WorkerService\CompanyWorkerService.cs" />
+    <Compile Include="WorkerService\ProductWorkerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -247,6 +250,9 @@
     <Content Include="Views\Company\Create.cshtml" />
     <Content Include="Views\Company\Update.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CompanyInputModel.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Product\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
