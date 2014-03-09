@@ -33,7 +33,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                viewModel.Companies = repository.ReadAll().ToArray();
+                viewModel.Companies = repository.ReadAll().Include(c=>c.Stock).ToArray();
             }
 
             return viewModel;
