@@ -1,0 +1,14 @@
+﻿@model DateTime?
+
+@{
+    var guid = Guid.NewGuid().ToString();
+
+}
+@Html.TextBoxFor(m => m, new { id = @guid,@class="form-control" })
+<script type="text/javascript">
+    $(function () {
+        $('#@guid').datepicker({
+            format:'yyyy-mm-dd'
+        });
+    });
+</script>

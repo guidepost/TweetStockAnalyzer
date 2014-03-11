@@ -183,11 +183,13 @@
     <Compile Include="Models\DropdownListItems.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InputModel\CompanyInputModel.cs" />
+    <Compile Include="Models\InputModel\ProductInputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="ViewModel\Company\CompanyDetailViewModel.cs" />
     <Compile Include="ViewModel\Company\CompanyIndexViewModel.cs" />
+    <Compile Include="ViewModel\Product\ProductDetailViewModel.cs" />
     <Compile Include="ViewModel\Product\ProductIndexViewModel.cs" />
     <Compile Include="WorkerService\CompanyWorkerService.cs" />
     <Compile Include="WorkerService\ProductWorkerService.cs" />
@@ -195,15 +197,18 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\datepicker.css" />
     <Content Include="Content\jquery.jqplot.css" />
     <Content Include="Content\jquery.jqplot.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="App_Code\ChartHelper.cshtml" />
+    <Content Include="App_Code\MessageHelper.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\excanvas.js" />
     <Content Include="Scripts\excanvas.min.js" />
@@ -253,6 +258,9 @@
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\Update.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ProductInputModel.cshtml" />
+    <Content Include="Views\Product\Detail.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DatePicker.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

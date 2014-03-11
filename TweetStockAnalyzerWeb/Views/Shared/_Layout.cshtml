@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - TweetStockAnalyzer</title>
@@ -12,6 +12,8 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqplot")
     @Styles.Render("~/jqplot/css")
+    @Styles.Render("~/datepicker/css")
+    @Scripts.Render("~/bundles/datepicker")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -26,7 +28,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Company","Index","Company")</li>
+                    <li>@Html.ActionLink("Company", "Index", "Company")</li>
                     <li>@Html.ActionLink("Product", "Index", "Product")</li>
                 </ul>
             </div>

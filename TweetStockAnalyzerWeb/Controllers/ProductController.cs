@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TweetStockAnalyzer.DataBase;
 using TweetStockAnalyzer.Infrastructure.Dependency;
+using TweetStockAnalyzer.Model;
+using TweetStockAnalyzerWeb.Models.InputModel;
 using TweetStockAnalyzerWeb.WorkerService;
 
 namespace TweetStockAnalyzerWeb.Controllers
@@ -15,9 +18,19 @@ namespace TweetStockAnalyzerWeb.Controllers
 
         private ProductWorkerService _workerService = new ProductWorkerService();
 
-        public ActionResult Index()
+        public ActionResult Index(string successMessage)
         {
-            return View();
+            var viewModel = _workerService.GetIndexViewModel();
+
+            viewModel.SuccessMessage = successMessage;
+
+            return View(viewModel);
+        }
+
+        public ActionResult Detail(int productId)
+        {
+            var viewModel = _workerService.GetDetailViewModel(productId);
+            return View(viewModel);
         }
 
         public ActionResult Create()
@@ -25,19 +38,36 @@ namespace TweetStockAnalyzerWeb.Controllers
             return View();
         }
 
-        public ActionResult Update()
+        [HttpPost]
+        public ActionResult Create(ProductInputModel productInputModel)
         {
-            return View();
+            _workerService.CreateProduct(productInputModel.ProductName, productInputModel.ServiceStartDate);
+
+            return RedirectToIndex(string.Format("{0} is created!", productInputModel.ProductName));
         }
 
-        [HttpPost]
         public ActionResult Update(int productId)
         {
             return View();
         }
 
-        public ActionResult Delete()
+        [HttpPost]
+        public ActionResult Update(ProductInputModel productInputModel)
         {
+            return RedirectToIndex(string.Format("{0} is updated!", productInputModel.ProductName));
+        }
+
+        public ActionResult Delete(int productId)
+        {
+            using (var repository = _container.Resolve<IProductRepository>())
+            {
+                var product = repository.Delete(productId);
+                if (product != null)
+                {
+                    return RedirectToIndex(string.Format("{0} is deleted!", product.ProductName));
+                }
+            }
+
             return RedirectToIndex();
         }
 
@@ -45,5 +75,5 @@ namespace TweetStockAnalyzerWeb.Controllers
         {
             return RedirectToAction("Index", new { successMessage = successMessage });
         }
-	}
+    }
 }

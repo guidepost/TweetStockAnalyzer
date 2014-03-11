@@ -69,6 +69,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
                 if (!string.IsNullOrEmpty(companyInputModel.StockCode))
                 {
                     var bussinessCategory = bussinessCategoryRepository.ReadAll()
+                                                                       .ToArray()
                                                                        .FirstOrDefault(c => c.BussinessCategoryId.ToString() == companyInputModel.BussinessCategoryId);
                     stockRepository.Create(insertedCompany, bussinessCategory, companyInputModel.StockCode);
                 }
