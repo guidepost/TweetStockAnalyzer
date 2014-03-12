@@ -41,28 +41,28 @@
 </button>
 
 @{
-    foreach (var companyWithScore in Model.CompanyWithScores)
+    foreach (var company in Model.Companies)
     {
         <div class="border-box bottom-margin">
             <p>
-                <b>@Html.ActionLink(companyWithScore.Company.CompanyName, "Detail", new { companyId = companyWithScore.Company.CompanyId })</b>
-                @if (companyWithScore.Company.Stock != null)
+                <b>@Html.ActionLink(company.CompanyName, "Detail", new { companyId = company.CompanyId })</b>
+                @if (company.Stock != null)
                 {
-                    <span>(@companyWithScore.Company.Stock.StockCode)</span>
+                    <span>(@company.Stock.StockCode)</span>
                 }
                 <span class="align-right">
-                    @Html.ActionLink("Modify", "Update", new { companyId = companyWithScore.Company.CompanyId })
+                    @Html.ActionLink("Modify", "Update", new { companyId = company.CompanyId })
                     |
                     @Html.ActionLink(
                     "Delete",
                     "Delete",
-                    new { companyId = companyWithScore.Company.CompanyId },
+                    new { companyId = company.CompanyId },
                     new { onclick = "return confirm('Are you sure you wish to delete this company?');" })
                 </span>
                 <span class="margin-left">Score:100</span>
             </p>
             <p>
-                @ChartHelper.CompanyScoreChart(companyWithScore.Company, companyWithScore.CompanyScores)
+                @ChartHelper.CompanyScoreChart(company, company.CompanyScore.ToArray())
             </p>
         </div>
     }

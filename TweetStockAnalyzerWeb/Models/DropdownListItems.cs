@@ -9,7 +9,7 @@ using Microsoft.Practices.Unity;
 
 namespace TweetStockAnalyzerWeb.Models
 {
-    public static class DropdownListItems
+    public static class DropDownListItems
     {
         public static SelectListItem[] BussinessCategories { get; set; }
 
@@ -35,7 +35,7 @@ namespace TweetStockAnalyzerWeb.Models
             }
         }
 
-        static DropdownListItems()
+        static DropDownListItems()
         {
             var container = DependencyContainer.Instance;
             using (var repository = container.Resolve<IBussinessCategoryRepository>())

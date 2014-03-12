@@ -17,6 +17,6 @@ namespace TweetStockAnalyzerWeb.Models.InputModel
         public string CompanyName { get; set; }
         public int? ParentCompanyId { get; set; }
         public string StockCode { get; set; }
-        public string BussinessCategoryId { get; set; }
+        public int BussinessCategoryId { get; set; }
     }
 }

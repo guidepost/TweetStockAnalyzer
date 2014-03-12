@@ -66,7 +66,7 @@ namespace TweetStockAnalyzerWeb.Controllers
                 {
                     model.StockCode = company.Stock.StockCode;
 
-                    model.BussinessCategoryId = company.Stock.BussinessCategoryId.ToString();
+                    model.BussinessCategoryId = company.Stock.BussinessCategoryId;
                 }
 
                 return View(model);
@@ -83,13 +83,10 @@ namespace TweetStockAnalyzerWeb.Controllers
 
         public ActionResult Delete(int companyId)
         {
-            using (var repository = _container.Resolve<ICompanyRepository>())
+            var result = _workerService.DeleteCompany(companyId);
+            if (result != null)
             {
-                var result = repository.Delete(companyId);
-                if (result != null)
-                {
-                    return RedirectToIndex("The company is deleted!");
-                }
+                return RedirectToIndex("The company is deleted!");
             }
 
             return RedirectToIndex();

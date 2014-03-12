@@ -21,6 +21,8 @@ namespace TweetStockAnalyzerWeb.WorkerService
         void CreateCompany(CompanyInputModel companyInputModel);
 
         void UpdateCompany(CompanyInputModel companyInputModel);
+
+        Company DeleteCompany(int companyId);
     }
 
     [AutoRegist(typeof(ICompanyWorkerService))]
@@ -34,10 +36,9 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                viewModel.CompanyWithScores = repository.ReadAll().Include(c => c.Stock)
-                                                                  .ToArray()
-                                                                  .Select(c => new CompanyWithScore { Company = c })
-                                                                  .ToArray();
+                viewModel.Companies = repository.ReadAll().Include(c => c.Stock)
+                                                          .Include(c=>c.CompanyScore)
+                                                          .ToArray();
             }
 
             return viewModel;
@@ -69,7 +70,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
                 if (!string.IsNullOrEmpty(companyInputModel.StockCode))
                 {
                     var bussinessCategory = bussinessCategoryRepository.ReadAll()
-                                                                       .FirstOrDefault(c => c.BussinessCategoryId.ToString() == companyInputModel.BussinessCategoryId);
+                                                                       .FirstOrDefault(c => c.BussinessCategoryId == companyInputModel.BussinessCategoryId);
                     stockRepository.Create(insertedCompany, bussinessCategory, companyInputModel.StockCode);
                 }
             }
@@ -91,7 +92,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
                     if (!string.IsNullOrEmpty(companyInputModel.StockCode))
                     {
                         var bussinessCategory = bussinessCategoryRepository.ReadAll()
-                                                                           .FirstOrDefault(c => c.BussinessCategoryId.ToString() == companyInputModel.BussinessCategoryId);
+                                                                           .FirstOrDefault(c => c.BussinessCategoryId == companyInputModel.BussinessCategoryId);
                         stockRepository.Create(targetCompany, bussinessCategory, companyInputModel.StockCode);
                     }
                 }
@@ -105,12 +106,20 @@ namespace TweetStockAnalyzerWeb.WorkerService
                     {
                         var stock = targetCompany.Stock;
                         stock.StockCode = companyInputModel.StockCode;
-                        stock.BussinessCategoryId = int.Parse(companyInputModel.BussinessCategoryId);
+                        stock.BussinessCategoryId = companyInputModel.BussinessCategoryId;
                         stockRepository.Update(stock);
                     }
                 }
 
                 companyRepository.Update(targetCompany);
+            }
+        }
+
+        public Company DeleteCompany(int companyId)
+        {
+            using (var repository = _container.Resolve<ICompanyRepository>())
+            {
+                return repository.Delete(companyId);
             }
         }
     }
