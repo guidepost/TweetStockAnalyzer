@@ -37,7 +37,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
                 viewModel.Companies = repository.ReadAll().Include(c => c.Stock)
-                                                          .Include(c=>c.CompanyScore)
+                                                          .Include(c => c.CompanyScore)
                                                           .ToArray();
             }
 
@@ -50,7 +50,9 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                var company = repository.Read(companyId);
+                var company = repository.ReadAll()
+                                        .Include(c => c.CompanyScore)
+                                        .FirstOrDefault(c => c.CompanyId == companyId);
 
                 viewModel.Company = company;
             }
@@ -69,8 +71,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
                 if (!string.IsNullOrEmpty(companyInputModel.StockCode))
                 {
-                    var bussinessCategory = bussinessCategoryRepository.ReadAll()
-                                                                       .FirstOrDefault(c => c.BussinessCategoryId == companyInputModel.BussinessCategoryId);
+                    var bussinessCategory = bussinessCategoryRepository.Read(companyInputModel.BussinessCategoryId);
                     stockRepository.Create(insertedCompany, bussinessCategory, companyInputModel.StockCode);
                 }
             }
@@ -82,7 +83,9 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var stockRepository = _container.Resolve<IStockRepository>())
             using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
             {
-                var targetCompany = companyRepository.Read(companyInputModel.CompanyId);//TODO:ここで読み取ってきたCompanyのStockプロパティがnullになる
+                var targetCompany = companyRepository.ReadAll()
+                                                     .Include(c => c.Stock)
+                                                     .FirstOrDefault(c => c.CompanyId == companyInputModel.CompanyId);
 
                 targetCompany.CompanyName = companyInputModel.CompanyName;
                 targetCompany.ParentCompanyId = companyInputModel.ParentCompanyId;
@@ -91,8 +94,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
                 {
                     if (!string.IsNullOrEmpty(companyInputModel.StockCode))
                     {
-                        var bussinessCategory = bussinessCategoryRepository.ReadAll()
-                                                                           .FirstOrDefault(c => c.BussinessCategoryId == companyInputModel.BussinessCategoryId);
+                        var bussinessCategory = bussinessCategoryRepository.Read(companyInputModel.BussinessCategoryId);
                         stockRepository.Create(targetCompany, bussinessCategory, companyInputModel.StockCode);
                     }
                 }

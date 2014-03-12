@@ -62,7 +62,7 @@ namespace TweetStockAnalyzerWeb.Controllers
                 model.CompanyId = companyId;
                 model.ParentCompanyId = company.ParentCompanyId;
                 model.CompanyName = company.CompanyName;
-                if (company.Stock != null)
+                if (company.Stock != null && !company.Stock.IsDeleted)
                 {
                     model.StockCode = company.Stock.StockCode;
 
