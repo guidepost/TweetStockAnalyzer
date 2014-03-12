@@ -11,7 +11,7 @@ namespace TweetStockAnalyzer.DataBase
 {
     public interface IStockPriceRepository : IRepository<StockPrice>
     {
-        StockPrice Create(Stock stock,DateTime date, long dealings, float closingPrice);
+        StockPrice Create(Stock stock, DateTime date, long dealings, double closingPrice);
     }
 
     [AutoRegist(typeof(IStockPriceRepository))]
@@ -30,7 +30,7 @@ namespace TweetStockAnalyzer.DataBase
             base.Update(entity);
         }
 
-        public StockPrice Create(Stock stock, DateTime date, long dealings, float closingPrice)
+        public StockPrice Create(Stock stock, DateTime date, long dealings, double closingPrice)
         {
             var entity = new StockPrice();
             entity.Date = date;

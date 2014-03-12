@@ -15,20 +15,28 @@ namespace TweetStockAnalyzeSchedule
     {
         public void Start()
         {
-            using (var stockRepository = DependencyContainer.Instance.Resolve<IStockRepository>())
+            using (var stockPriceRepository = DependencyContainer.Instance.Resolve<IStockPriceRepository>())
+            using (var aggregateHistoryRepository = DependencyContainer.Instance.Resolve<IAggregateHistoryRepository>())
             {
-                foreach (var stock in stockRepository.ReadAll())
+                foreach (var aggregateHistory in aggregateHistoryRepository.ReadAll().OrderByDescending(p=>p.EndDate).Take(150))
                 {
-                    var lastDate = stock.AggregateHistory.First
-                    
+                    var stock = aggregateHistory.Stock;
+                    var now = DateTime.Now;
+                    var result = LoadStackPrices(stock, aggregateHistory.EndDate, now);
+                    foreach (var stockPrice in result)
+                    {
+                        stockPriceRepository.Create(stock, stockPrice.Date, stockPrice.Dealings, stockPrice.ClosingPrice);
+                    }
+                    aggregateHistory.EndDate = now;
+                    aggregateHistoryRepository.Update(aggregateHistory);
                 }
             }
         }
 
-        private IEnumerable<StockPrice> LoadStackPrices(Stock stock)
+        private IEnumerable<StockPrice> LoadStackPrices(Stock stock,DateTime startDate,DateTime endDate)
         {
             var stockService = DependencyContainer.Instance.Resolve<IStockService>();
-            stockService.Load(stock,)
+            return stockService.Load(stock, startDate, endDate);
         }
     }
 }
