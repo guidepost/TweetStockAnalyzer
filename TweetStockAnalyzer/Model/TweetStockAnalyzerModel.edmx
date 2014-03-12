@@ -366,8 +366,8 @@
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Companies" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="CompanyProductRelation" ToRole="Company" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="CompanyProductRelation" ToRole="Product" />
+          <NavigationProperty Name="Company" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="CompanyProductRelation" ToRole="Company" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="CompanyProductRelation" ToRole="Product" />
         </EntityType>
         <EntityType Name="Product">
           <Key>

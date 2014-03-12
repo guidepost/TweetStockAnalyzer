@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 
 namespace TweetStockAnalyzer.Tests.Database
 {

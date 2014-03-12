@@ -20,7 +20,7 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        public virtual Company Companies { get; set; }
-        public virtual Product Products { get; set; }
+        public virtual Company Company { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

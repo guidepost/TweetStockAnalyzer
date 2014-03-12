@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TweetSharp;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using Microsoft.Practices.Unity;
 using TweetStockAnalyzer.Model;

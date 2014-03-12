@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 using TweetStockAnalyzerWeb.Models;

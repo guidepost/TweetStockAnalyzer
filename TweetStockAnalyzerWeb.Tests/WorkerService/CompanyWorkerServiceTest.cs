@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzerWeb.Models.InputModel;
 using TweetStockAnalyzerWeb.ViewModel.Company;
 using TweetStockAnalyzerWeb.WorkerService;

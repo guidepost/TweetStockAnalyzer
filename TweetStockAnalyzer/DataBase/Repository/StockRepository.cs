@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 
-namespace TweetStockAnalyzer.DataBase
+namespace TweetStockAnalyzer.DataBase.Repository
 {
     public interface IStockRepository : IRepository<Stock>
     {
