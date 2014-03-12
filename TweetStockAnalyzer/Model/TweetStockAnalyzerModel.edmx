@@ -424,7 +424,7 @@
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AggregateHistorys" Relationship="Self.FK_AggregateHistory_Stock" FromRole="Stock" ToRole="AggregateHistory" />
+          <NavigationProperty Name="AggregateHistories" Relationship="Self.FK_AggregateHistory_Stock" FromRole="Stock" ToRole="AggregateHistory" a:SetterAccess="Protected" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Protected" />
           <NavigationProperty Name="BussinessCategory" Relationship="Self.FK_Stock_BussinessCategory" FromRole="Stock" ToRole="BussinessCategory" />
           <NavigationProperty Name="Company" Relationship="Self.FK_Stock_Company" FromRole="Stock" ToRole="Company" />
           <NavigationProperty Name="StockPrices" Relationship="Self.FK_StockPrice_Stock" FromRole="Stock" ToRole="StockPrice" />

@@ -14,7 +14,7 @@ using ITwitterService = TweetStockAnalyzer.Domain.Twitter.ITwitterService;
 namespace TweetStockAnalyzeSchedule.Test
 {
     [TestClass]
-    public class StockCrawlerTest
+    public class TwitterCrawlerTest
     {
         private SearchWord _searchWord;
         private Mock<ISearchWordRepository> _mockRepository;

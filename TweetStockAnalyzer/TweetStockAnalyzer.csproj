@@ -93,6 +93,7 @@
     <Compile Include="Model\AggregateHistory.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\Stock.partial.cs" />
     <Compile Include="Model\BussinessCategory.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
@@ -118,7 +119,7 @@
     <Compile Include="Model\Stock.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Stock.partial.cs" />
+    <Compile Include="Model\Company.partial.cs" />
     <Compile Include="Model\StockPrice.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
