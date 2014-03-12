@@ -16,9 +16,9 @@ namespace TweetStockAnalyzer.Model
     {
         public Company()
         {
-            this.CompanyProductRelation = new HashSet<CompanyProductRelation>();
+            this.CompanyProductRelations = new HashSet<CompanyProductRelation>();
             this.Stocks = new HashSet<Stock>();
-            this.CompanyScore = new HashSet<CompanyScore>();
+            this.CompanyScores = new HashSet<CompanyScore>();
         }
     
         public int CompanyId { get; set; }
@@ -28,8 +28,11 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        public virtual ICollection<CompanyProductRelation> CompanyProductRelation { get; set; }
-        protected virtual ICollection<Stock> Stocks { get; set; }
-        public virtual ICollection<CompanyScore> CompanyScore { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CompanyProductRelation")]
+    	public virtual ICollection<CompanyProductRelation> CompanyProductRelations { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("Stock")]
+    	protected virtual ICollection<Stock> Stocks { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CompanyScore")]
+    	public virtual ICollection<CompanyScore> CompanyScores { get; set; }
     }
 }

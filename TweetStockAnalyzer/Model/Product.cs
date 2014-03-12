@@ -16,9 +16,9 @@ namespace TweetStockAnalyzer.Model
     {
         public Product()
         {
-            this.CompanyProductRelation = new HashSet<CompanyProductRelation>();
-            this.SearchResult = new HashSet<SearchResult>();
-            this.SearchWord = new HashSet<SearchWord>();
+            this.CompanyProductRelations = new HashSet<CompanyProductRelation>();
+            this.SearchResults = new HashSet<SearchResult>();
+            this.SearchWords = new HashSet<SearchWord>();
         }
     
         public int ProductId { get; set; }
@@ -29,8 +29,11 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        public virtual ICollection<CompanyProductRelation> CompanyProductRelation { get; set; }
-        public virtual ICollection<SearchResult> SearchResult { get; set; }
-        public virtual ICollection<SearchWord> SearchWord { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CompanyProductRelation")]
+    	public virtual ICollection<CompanyProductRelation> CompanyProductRelations { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("SearchResult")]
+    	public virtual ICollection<SearchResult> SearchResults { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("SearchWord")]
+    	public virtual ICollection<SearchWord> SearchWords { get; set; }
     }
 }

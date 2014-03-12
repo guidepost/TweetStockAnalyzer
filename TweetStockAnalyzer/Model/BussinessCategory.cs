@@ -16,7 +16,7 @@ namespace TweetStockAnalyzer.Model
     {
         public BussinessCategory()
         {
-            this.Stock = new HashSet<Stock>();
+            this.Stocks = new HashSet<Stock>();
         }
     
         public int BussinessCategoryId { get; set; }
@@ -26,6 +26,7 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        public virtual ICollection<Stock> Stock { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("Stock")]
+    	public virtual ICollection<Stock> Stocks { get; set; }
     }
 }

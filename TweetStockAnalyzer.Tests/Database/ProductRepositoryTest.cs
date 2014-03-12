@@ -47,5 +47,6 @@ namespace TweetStockAnalyzer.Tests.Database
             var result2 = repository.Read(result.ProductId);
             result2.ProductName.Is(result.ProductName);
         }
+
     }
 }
