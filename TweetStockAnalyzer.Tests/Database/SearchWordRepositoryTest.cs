@@ -40,7 +40,7 @@ namespace TweetStockAnalyzer.Tests.Database
             wordResult.Word.Is("word");
             productRepository = new ProductRepository();
             productResult = productRepository.Read(productResult.ProductId);
-            productResult.SearchWord.Any(p => p.SearchWordId == wordResult.SearchWordId).IsTrue();
+            productResult.SearchWords.Any(p => p.SearchWordId == wordResult.SearchWordId).IsTrue();
         }
     }
 }

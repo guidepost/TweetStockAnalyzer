@@ -28,7 +28,6 @@ namespace TweetStockAnalyzer.Model
         public long LastTweetId { get; set; }
     
         public virtual Product Product { get; set; }
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("SearchResult")]
-    	public virtual ICollection<SearchResult> SearchResults { get; set; }
+        public virtual ICollection<SearchResult> SearchResults { get; set; }
     }
 }

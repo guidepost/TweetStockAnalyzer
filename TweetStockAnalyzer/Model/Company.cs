@@ -28,11 +28,8 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CompanyProductRelation")]
-    	public virtual ICollection<CompanyProductRelation> CompanyProductRelations { get; set; }
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("Stock")]
-    	protected virtual ICollection<Stock> Stocks { get; set; }
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CompanyScore")]
-    	public virtual ICollection<CompanyScore> CompanyScores { get; set; }
+        public virtual ICollection<CompanyProductRelation> CompanyProductRelations { get; set; }
+        protected virtual ICollection<Stock> Stocks { get; set; }
+        public virtual ICollection<CompanyScore> CompanyScores { get; set; }
     }
 }

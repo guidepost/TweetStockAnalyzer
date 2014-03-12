@@ -37,7 +37,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
                 viewModel.Companies = repository.ReadAll().Include(c => c.Stock)
-                                                          .Include(c => c.CompanyScore)
+                                                          .Include(c => c.CompanyScores)
                                                           .ToArray();
             }
 
@@ -51,7 +51,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
                 var company = repository.ReadAll()
-                                        .Include(c => c.CompanyScore)
+                                        .Include(c => c.CompanyScores)
                                         .FirstOrDefault(c => c.CompanyId == companyId);
 
                 viewModel.Company = company;

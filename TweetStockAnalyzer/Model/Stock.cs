@@ -28,11 +28,9 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("AggregateHistory")]
-    	protected virtual ICollection<AggregateHistory> AggregateHistories { get; set; }
+        protected virtual ICollection<AggregateHistory> AggregateHistories { get; set; }
         public virtual BussinessCategory BussinessCategory { get; set; }
         public virtual Company Company { get; set; }
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("StockPrice")]
-    	public virtual ICollection<StockPrice> StockPrices { get; set; }
+        public virtual ICollection<StockPrice> StockPrices { get; set; }
     }
 }

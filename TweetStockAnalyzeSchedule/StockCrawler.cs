@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TweetStockAnalyzer.DataBase;
-using TweetStockAnalyzer.Domin.Stock;
+using TweetStockAnalyzer.Domain.Stock;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using Microsoft.Practices.Unity;
 using TweetStockAnalyzer.Model;

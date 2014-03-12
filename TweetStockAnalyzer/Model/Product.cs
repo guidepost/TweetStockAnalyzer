@@ -29,11 +29,8 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CompanyProductRelation")]
-    	public virtual ICollection<CompanyProductRelation> CompanyProductRelations { get; set; }
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("SearchResult")]
-    	public virtual ICollection<SearchResult> SearchResults { get; set; }
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("SearchWord")]
-    	public virtual ICollection<SearchWord> SearchWords { get; set; }
+        public virtual ICollection<CompanyProductRelation> CompanyProductRelations { get; set; }
+        public virtual ICollection<SearchResult> SearchResults { get; set; }
+        public virtual ICollection<SearchWord> SearchWords { get; set; }
     }
 }

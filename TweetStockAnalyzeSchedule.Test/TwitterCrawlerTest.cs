@@ -53,7 +53,7 @@ namespace TweetStockAnalyzeSchedule.Test
 
             _mockTwitter.Verify(
                 p => p.SearchAsync(
-                    It.Is<SearchOptions>(it=> it.Q == _searchWord.Word && it.SinceId == _searchWord.LastTweetId)));
+                    It.Is<SearchOptions>(it=> it.Q == _searchWord.Word && it.SinceId == 100)));
             _mockResultRepository.Verify(p => p.Create(It.IsAny<SearchWord>(), It.IsAny<Product>(), 1, It.IsAny<DateTime>()));
             _mockRepository.Verify(p => p.Update(It.IsAny<SearchWord>()));
         }

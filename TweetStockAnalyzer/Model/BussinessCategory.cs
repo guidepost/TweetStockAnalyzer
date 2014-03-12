@@ -26,7 +26,6 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("Stock")]
-    	public virtual ICollection<Stock> Stocks { get; set; }
+        public virtual ICollection<Stock> Stocks { get; set; }
     }
 }

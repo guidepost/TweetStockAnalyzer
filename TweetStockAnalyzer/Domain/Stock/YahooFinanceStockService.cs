@@ -8,7 +8,7 @@ using HtmlAgilityPack;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 
-namespace TweetStockAnalyzer.Domin.Stock
+namespace TweetStockAnalyzer.Domain.Stock
 {
     [AutoRegist(typeof(IStockService))]
     public class YahooFinanceStockService : IStockService
