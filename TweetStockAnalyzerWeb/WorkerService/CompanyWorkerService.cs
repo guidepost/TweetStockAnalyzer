@@ -6,6 +6,8 @@ using System.Web;
 using TweetStockAnalyzer.DataBase;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
+using TweetStockAnalyzerWeb.Models;
+using TweetStockAnalyzerWeb.Models.InputModel;
 using TweetStockAnalyzerWeb.ViewModel.Company;
 
 namespace TweetStockAnalyzerWeb.WorkerService
@@ -14,7 +16,13 @@ namespace TweetStockAnalyzerWeb.WorkerService
     {
         CompanyIndexViewModel GetIndexViewModel();
 
-        CompanyDetailViewModel GetDetailViewModel();
+        CompanyDetailViewModel GetDetailViewModel(int companyId);
+
+        void CreateCompany(CompanyInputModel companyInputModel);
+
+        void UpdateCompany(CompanyInputModel companyInputModel);
+
+        Company DeleteCompany(int companyId);
     }
 
     [AutoRegist(typeof(ICompanyWorkerService))]
@@ -28,28 +36,93 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                viewModel.Companies = repository.ReadAll().ToArray();
+                viewModel.Companies = repository.ReadAll().Include(c => c.Stock)
+                                                          .Include(c => c.CompanyScore)
+                                                          .ToArray();
             }
 
             return viewModel;
         }
 
-        public CompanyDetailViewModel GetDetailViewModel()
+        public CompanyDetailViewModel GetDetailViewModel(int companyId)
         {
             var viewModel = new CompanyDetailViewModel();
 
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                viewModel.Company = new Company
-                    {
-                        CompanyId = 1,
-                        CompanyName = "companyName",
-                        RegisterDate = DateTime.Now,
-                        UpdateDate = DateTime.Now
-                    };
+                var company = repository.ReadAll()
+                                        .Include(c => c.CompanyScore)
+                                        .FirstOrDefault(c => c.CompanyId == companyId);
+
+                viewModel.Company = company;
             }
 
             return viewModel;
+        }
+
+        public void CreateCompany(CompanyInputModel companyInputModel)
+        {
+            using (var companyRepository = _container.Resolve<ICompanyRepository>())
+            using (var stockRepository = _container.Resolve<IStockRepository>())
+            using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
+            {
+                var parentCompany = companyRepository.Read(companyInputModel.ParentCompanyId);
+                var insertedCompany = companyRepository.Create(companyInputModel.CompanyName, parentCompany);
+
+                if (!string.IsNullOrEmpty(companyInputModel.StockCode))
+                {
+                    var bussinessCategory = bussinessCategoryRepository.Read(companyInputModel.BussinessCategoryId);
+                    stockRepository.Create(insertedCompany, bussinessCategory, companyInputModel.StockCode);
+                }
+            }
+        }
+
+        public void UpdateCompany(CompanyInputModel companyInputModel)
+        {
+            using (var companyRepository = _container.Resolve<ICompanyRepository>())
+            using (var stockRepository = _container.Resolve<IStockRepository>())
+            using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
+            {
+                var targetCompany = companyRepository.ReadAll()
+                                                     .Include(c => c.Stock)
+                                                     .FirstOrDefault(c => c.CompanyId == companyInputModel.CompanyId);
+
+                targetCompany.CompanyName = companyInputModel.CompanyName;
+                targetCompany.ParentCompanyId = companyInputModel.ParentCompanyId;
+
+                if (targetCompany.Stock == null || targetCompany.Stock.IsDeleted)
+                {
+                    if (!string.IsNullOrEmpty(companyInputModel.StockCode))
+                    {
+                        var bussinessCategory = bussinessCategoryRepository.Read(companyInputModel.BussinessCategoryId);
+                        stockRepository.Create(targetCompany, bussinessCategory, companyInputModel.StockCode);
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(companyInputModel.StockCode))
+                    {
+                        targetCompany.Stock.IsDeleted = true;
+                    }
+                    else
+                    {
+                        var stock = targetCompany.Stock;
+                        stock.StockCode = companyInputModel.StockCode;
+                        stock.BussinessCategoryId = companyInputModel.BussinessCategoryId;
+                        stockRepository.Update(stock);
+                    }
+                }
+
+                companyRepository.Update(targetCompany);
+            }
+        }
+
+        public Company DeleteCompany(int companyId)
+        {
+            using (var repository = _container.Resolve<ICompanyRepository>())
+            {
+                return repository.Delete(companyId);
+            }
         }
     }
 }

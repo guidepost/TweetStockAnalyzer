@@ -26,6 +26,13 @@ namespace TweetStockAnalyzerWeb
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jqplot").Include(
+                        "~/Scripts/jquery.jqplot.min.js",
+                        "~/Scripts/excanvas.min.js"));
+
+            bundles.Add(new StyleBundle("~/jqplot/css").Include(
+                    "~/Content/jquery.jqplot.min.css"));
         }
     }
 }

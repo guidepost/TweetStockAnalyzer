@@ -18,9 +18,24 @@
     .align-right {
         float: right;
     }
+
+    .margin-left {
+        margin-left: 10px;
+    }
 </style>
 
 <h2>Company</h2>
+@if (!string.IsNullOrEmpty(@Model.SuccessMessage))
+{
+    <div id="successMessage" class="alert alert-success">
+        @Model.SuccessMessage
+    </div>
+    @section scripts{
+        <script type="text/javascript">
+            $("#successMessage").animate({ opacity: 0 }, 3000, function () { $("#successMessage").slideUp(1000); });
+        </script>
+    }
+}
 <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Create")'">
     <span class="glyphicon glyphicon-plus"></span>Add
 </button>
@@ -30,10 +45,13 @@
     {
         <div class="border-box bottom-margin">
             <p>
-                <b>@company.CompanyName</b>
-                <span>(9999)</span>
+                <b>@Html.ActionLink(company.CompanyName, "Detail", new { companyId = company.CompanyId })</b>
+                @if (company.Stock != null)
+                {
+                    <span>(@company.Stock.StockCode)</span>
+                }
                 <span class="align-right">
-                    @Html.ActionLink("Modify", "Update")
+                    @Html.ActionLink("Modify", "Update", new { companyId = company.CompanyId })
                     |
                     @Html.ActionLink(
                     "Delete",
@@ -41,11 +59,10 @@
                     new { companyId = company.CompanyId },
                     new { onclick = "return confirm('Are you sure you wish to delete this company?');" })
                 </span>
+                <span class="margin-left">Score:100</span>
             </p>
             <p>
-                <div>
-                    Chart
-                </div>
+                @ChartHelper.CompanyScoreChart(company, company.CompanyScore.ToArray())
             </p>
         </div>
     }
