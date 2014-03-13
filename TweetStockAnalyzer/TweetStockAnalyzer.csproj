@@ -81,18 +81,19 @@
     <Compile Include="DataBase\Repository\SearchWordRepository.cs" />
     <Compile Include="DataBase\Repository\StockPriceRepository.cs" />
     <Compile Include="DataBase\Repository\StockRepository.cs" />
-    <Compile Include="Domin\Stock\IStockService.cs" />
-    <Compile Include="Domin\Stock\StockServiceProvider.cs" />
-    <Compile Include="Domin\Stock\YahooFinanceStockService.cs" />
-    <Compile Include="Domin\Twitter\ITwitterService.cs" />
-    <Compile Include="Domin\Twitter\TwitterService.cs" />
-    <Compile Include="Domin\Twitter\TwitterServiceProvider.cs" />
+    <Compile Include="Domain\Stock\IStockService.cs" />
+    <Compile Include="Domain\Stock\StockServiceProvider.cs" />
+    <Compile Include="Domain\Stock\YahooFinanceStockService.cs" />
+    <Compile Include="Domain\Twitter\ITwitterService.cs" />
+    <Compile Include="Domain\Twitter\TwitterService.cs" />
+    <Compile Include="Domain\Twitter\TwitterServiceProvider.cs" />
     <Compile Include="Infrastructure\Dependency\AutoRegisterAttribute.cs" />
     <Compile Include="Infrastructure\Dependency\AutoRegisterExtension.cs" />
     <Compile Include="Infrastructure\Dependency\DependencyContainer.cs" />
     <Compile Include="Model\AggregateHistory.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\Stock.partial.cs" />
     <Compile Include="Model\BussinessCategory.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
@@ -118,7 +119,7 @@
     <Compile Include="Model\Stock.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Stock.partial.cs" />
+    <Compile Include="Model\Company.partial.cs" />
     <Compile Include="Model\StockPrice.cs">
       <DependentUpon>TweetStockAnalyzerModel.tt</DependentUpon>
     </Compile>

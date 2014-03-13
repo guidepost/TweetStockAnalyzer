@@ -71,6 +71,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="StockCrawlerTest.cs" />
+    <Compile Include="TwitterCrawlerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

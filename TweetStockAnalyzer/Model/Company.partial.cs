@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace TweetStockAnalyzer.Model
 {
-    public partial class Stock
+    public partial class Company
     {
-        [ForeignKey("AggregateHistories")]
-        public AggregateHistory AggregateHistory { get { return AggregateHistories.FirstOrDefault(); } }
+        [ForeignKey("Stocks")]
+        public Stock Stock { get { return Stocks.FirstOrDefault(); }  }
     }
 }

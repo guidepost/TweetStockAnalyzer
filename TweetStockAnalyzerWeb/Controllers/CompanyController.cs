@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzerWeb.Models.InputModel;
 using TweetStockAnalyzerWeb.WorkerService;
@@ -62,11 +63,11 @@ namespace TweetStockAnalyzerWeb.Controllers
                 model.CompanyId = companyId;
                 model.ParentCompanyId = company.ParentCompanyId;
                 model.CompanyName = company.CompanyName;
-                if (company.Stock != null)
+                if (company.Stock != null && !company.Stock.IsDeleted)
                 {
                     model.StockCode = company.Stock.StockCode;
 
-                    model.BussinessCategoryId = company.Stock.BussinessCategoryId.ToString();
+                    model.BussinessCategoryId = company.Stock.BussinessCategoryId;
                 }
 
                 return View(model);
@@ -85,14 +86,18 @@ namespace TweetStockAnalyzerWeb.Controllers
         {
             using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                var company = repository.Delete(companyId);
-                if (company != null)
+                var result = _workerService.DeleteCompany(companyId);
+                if (result != null)
                 {
-                    return RedirectToIndex(string.Format("{0} is deleted!", company.CompanyName));
+                    var company = repository.Delete(companyId);
+                    if (company != null)
+                    {
+                        return RedirectToIndex(string.Format("{0} is deleted!", company.CompanyName));
+                    }
                 }
-            }
 
-            return RedirectToIndex();
+                return RedirectToIndex();
+            }
         }
 
         private ActionResult RedirectToIndex(string successMessage = null)

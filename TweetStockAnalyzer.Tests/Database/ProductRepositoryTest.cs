@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 
 namespace TweetStockAnalyzer.Tests.Database
 {
@@ -47,5 +48,6 @@ namespace TweetStockAnalyzer.Tests.Database
             var result2 = repository.Read(result.ProductId);
             result2.ProductName.Is(result.ProductName);
         }
+
     }
 }

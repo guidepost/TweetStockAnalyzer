@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TweetSharp;
+using TweetStockAnalyzer.Domain.Stock;
 using TweetStockAnalyzer.Domain.Twitter;
-using TweetStockAnalyzer.Domin.Stock;
 
 namespace TweetStockAnalyzer.Tests.Domain.Stock
 {

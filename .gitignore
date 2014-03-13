@@ -155,8 +155,7 @@ $RECYCLE.BIN/
 # Mac desktop service store files
 .DS_Store
 
-*/App.config
-*/app.config
-*/Web.config
+*/[Aa]pp.[Cc]onfig
+*/[Ww]eb.[Cc]onfig
 
 packages/

@@ -1,61 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Practices.Unity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TweetSharp;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
+using TweetStockAnalyzer.Domain.Stock;
 using TweetStockAnalyzer.Infrastructure.Dependency;
-using Microsoft.Practices.Unity;
 using TweetStockAnalyzer.Model;
-using ITwitterService = TweetStockAnalyzer.Domain.Twitter.ITwitterService;
 
 namespace TweetStockAnalyzeSchedule.Test
 {
     [TestClass]
     public class StockCrawlerTest
     {
-        private SearchWord _searchWord;
-        private Mock<ISearchWordRepository> _mockRepository;
-        private Mock<ISearchResultRepository> _mockResultRepository;
-        private Mock<ITwitterService> _mockTwitter;
+        private DateTime _endDate;
+        private AggregateHistory _aggregateHistory;
+        private Mock<IAggregateHistoryRepository> _mockRepository;
+        private Mock<IStockPriceRepository> _mockPriceRepository;
+        private Mock<IStockService> _mockStockService;
         [TestInitialize]
         public void Initialize()
         {
-            _mockTwitter = new Mock<ITwitterService>();
-            _mockTwitter.Setup(p => p.SearchAsync(It.IsAny<SearchOptions>())).Returns(
-                Task.Factory.StartNew(()=>
+            _mockStockService = new Mock<IStockService>();
+            _mockStockService.Setup(p => p.Load(It.IsAny<Stock>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).
+                Returns(() =>
                 {
-                    var result = new TwitterSearchResult();
-                    result.Statuses = new List<TwitterStatus>{new TwitterStatus() };
-                    return result;
-                }));
-            _mockRepository = new Mock<ISearchWordRepository>();
-            _searchWord = new SearchWord { LastTweetId = 100, Word = Guid.NewGuid().ToString()};
-            _searchWord.Product = new Product();
+                    return new StockPrice[] { new StockPrice(), new StockPrice() };
+                });
+            _mockRepository = new Mock<IAggregateHistoryRepository>();
+            _aggregateHistory = new AggregateHistory();
+            _endDate  = new DateTime(2000, 7, 7);
+            _aggregateHistory.EndDate = _endDate;
+            _aggregateHistory.Stock = new Stock();
             _mockRepository.Setup(p => p.ReadAll()).Returns(() =>
             {
-                SearchWord[] products = {_searchWord};
-                return products.AsQueryable();
-            } );
-            _mockResultRepository = new Mock<ISearchResultRepository>();
+                AggregateHistory[] histories = { _aggregateHistory };
+                return histories.AsQueryable();
+            });
+            _mockPriceRepository = new Mock<IStockPriceRepository>();
             DependencyContainer.Instance.RegisterInstance(_mockRepository.Object);
-            DependencyContainer.Instance.RegisterInstance(_mockResultRepository.Object);
-            DependencyContainer.Instance.RegisterInstance(_mockTwitter.Object);
+            DependencyContainer.Instance.RegisterInstance(_mockPriceRepository.Object);
+            DependencyContainer.Instance.RegisterInstance(_mockStockService.Object);
         }
 
         [TestMethod]
         public void Start()
         {
-            var crawler = new TweetCrawler();
+             var crawler = new StockCrawler();
             crawler.Start();
-
-            _mockTwitter.Verify(
-                p => p.SearchAsync(
-                    It.Is<SearchOptions>(it=> it.Q == _searchWord.Word && it.SinceId == _searchWord.LastTweetId)));
-            _mockResultRepository.Verify(p => p.Create(It.IsAny<SearchWord>(), It.IsAny<Product>(), 1, It.IsAny<DateTime>()));
-            _mockRepository.Verify(p => p.Update(It.IsAny<SearchWord>()));
+            _mockStockService.Verify(p => p.Load(It.IsAny<Stock>(), _endDate, It.IsAny<DateTime>()));
+            _mockPriceRepository.Verify(p=>p.Create(It.IsAny<Stock>(),It.IsAny<DateTime>(),0,0), Times.Exactly(2));
+            _mockRepository.Verify(p => p.Update(_aggregateHistory));
         }
+
     }
 }

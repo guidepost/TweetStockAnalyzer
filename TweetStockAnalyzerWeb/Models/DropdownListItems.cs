@@ -4,12 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using Microsoft.Practices.Unity;
 
 namespace TweetStockAnalyzerWeb.Models
 {
-    public static class DropdownListItems
+    public static class DropDownListItems
     {
         public static SelectListItem[] BussinessCategories { get; set; }
 
@@ -35,7 +36,7 @@ namespace TweetStockAnalyzerWeb.Models
             }
         }
 
-        static DropdownListItems()
+        static DropDownListItems()
         {
             var container = DependencyContainer.Instance;
             using (var repository = container.Resolve<IBussinessCategoryRepository>())

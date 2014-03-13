@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TweetSharp;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using Microsoft.Practices.Unity;
 using TweetStockAnalyzer.Model;
@@ -12,7 +13,7 @@ using TweetStockAnalyzer.Domain.Twitter;
 
 namespace TweetStockAnalyzeSchedule
 {
-    public class TweetCrawler
+    public class TweetCrawler : IClawler
     {
         private readonly int _requestCount;
 
@@ -32,13 +33,17 @@ namespace TweetStockAnalyzeSchedule
             {
                 foreach (var searchWord in searchWordRepository.ReadAll().OrderByDescending(p => p.UpdateDate).Take(_requestCount))
                 {
-                    var taskCount = GetTweetCountAsync(searchWord);
-                    searchResultRepository.Create(searchWord, searchWord.Product, taskCount.Result, DateTime.Now);
-                    searchWordRepository.Update(searchWord);
+                    var tweets = GetTweetCountAsync(searchWord);
+                    if (tweets.Result.Statuses.Any())
+                    {
+                        searchResultRepository.Create(searchWord, searchWord.Product, tweets.Result.Statuses.Count(), DateTime.Now);
+                        searchWord.LastTweetId = tweets.Result.Statuses.Last().Id;
+                        searchWordRepository.Update(searchWord);
+                    }
                 }
             }
         }
-        private Task<long> GetTweetCountAsync(SearchWord searchWord)
+        private Task<TwitterSearchResult> GetTweetCountAsync(SearchWord searchWord)
         {
             var service = new TwitterServiceProvider().GetService();
             var option = new SearchOptions()
@@ -46,7 +51,7 @@ namespace TweetStockAnalyzeSchedule
                 Q = searchWord.Word,
                 SinceId = searchWord.LastTweetId
             };
-            return service.SearchAsync(option).ContinueWith(p=>(long)p.Result.Statuses.Count());
+            return service.SearchAsync(option);
         }
     }
 }

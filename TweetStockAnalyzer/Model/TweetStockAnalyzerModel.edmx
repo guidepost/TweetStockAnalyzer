@@ -340,7 +340,7 @@
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Stock" Relationship="Self.FK_Stock_BussinessCategory" FromRole="BussinessCategory" ToRole="Stock" />
+          <NavigationProperty Name="Stocks" Relationship="Self.FK_Stock_BussinessCategory" FromRole="BussinessCategory" ToRole="Stock" />
         </EntityType>
         <EntityType Name="Company">
           <Key>
@@ -352,9 +352,9 @@
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="CompanyProductRelation" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="Company" ToRole="CompanyProductRelation" />
+          <NavigationProperty Name="CompanyProductRelations" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="Company" ToRole="CompanyProductRelation" />
           <NavigationProperty Name="Stocks" Relationship="Self.FK_Stock_Company" FromRole="Company" ToRole="Stock" a:GetterAccess="Protected" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Protected" />
-          <NavigationProperty Name="CompanyScore" Relationship="TweetStockAnalyzerModel.FK_CompanyScore_Company" FromRole="Company" ToRole="CompanyScore" />
+          <NavigationProperty Name="CompanyScores" Relationship="TweetStockAnalyzerModel.FK_CompanyScore_Company" FromRole="Company" ToRole="CompanyScore" />
         </EntityType>
         <EntityType Name="CompanyProductRelation">
           <Key>
@@ -380,9 +380,9 @@
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="CompanyProductRelation" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="Product" ToRole="CompanyProductRelation" />
-          <NavigationProperty Name="SearchResult" Relationship="Self.FK_SearchResult_Product" FromRole="Product" ToRole="SearchResult" />
-          <NavigationProperty Name="SearchWord" Relationship="Self.FK_SearchWord_Product" FromRole="Product" ToRole="SearchWord" />
+          <NavigationProperty Name="CompanyProductRelations" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="Product" ToRole="CompanyProductRelation" />
+          <NavigationProperty Name="SearchResults" Relationship="Self.FK_SearchResult_Product" FromRole="Product" ToRole="SearchResult" />
+          <NavigationProperty Name="SearchWords" Relationship="Self.FK_SearchWord_Product" FromRole="Product" ToRole="SearchWord" />
         </EntityType>
         <EntityType Name="SearchResult">
           <Key>
@@ -410,7 +410,7 @@
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Product" Relationship="Self.FK_SearchWord_Product" FromRole="SearchWord" ToRole="Product" />
-          <NavigationProperty Name="SearchResult" Relationship="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" FromRole="SearchWord" ToRole="SearchResult" />
+          <NavigationProperty Name="SearchResults" Relationship="TweetStockAnalyzerModel.FK_SearchResult_SearchWord" FromRole="SearchWord" ToRole="SearchResult" />
           <Property Name="LastTweetId" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="Stock">
@@ -424,10 +424,10 @@
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AggregateHistory" Relationship="Self.FK_AggregateHistory_Stock" FromRole="Stock" ToRole="AggregateHistory" />
+          <NavigationProperty Name="AggregateHistories" Relationship="Self.FK_AggregateHistory_Stock" FromRole="Stock" ToRole="AggregateHistory" a:SetterAccess="Protected" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:GetterAccess="Protected" />
           <NavigationProperty Name="BussinessCategory" Relationship="Self.FK_Stock_BussinessCategory" FromRole="Stock" ToRole="BussinessCategory" />
           <NavigationProperty Name="Company" Relationship="Self.FK_Stock_Company" FromRole="Stock" ToRole="Company" />
-          <NavigationProperty Name="StockPrice" Relationship="Self.FK_StockPrice_Stock" FromRole="Stock" ToRole="StockPrice" />
+          <NavigationProperty Name="StockPrices" Relationship="Self.FK_StockPrice_Stock" FromRole="Stock" ToRole="StockPrice" />
         </EntityType>
         <EntityType Name="StockPrice">
           <Key>
