@@ -23,8 +23,15 @@
     <div class="form-inline">
         <input type="text" id="searchWord" class="form-control" /><button class="add-button" onclick="addSearchWord(); return false;">Add</button>
     </div>
-    <ul id="searchWordList"></ul>
-
+    <ul id="searchWordList">
+        @if (Model != null && Model.SearchWords != null )
+        {
+            foreach (var searchWord in Model.SearchWords)
+            {
+                <li>@searchWord<input type="hidden" value="@searchWord" /><a class="remove-button" onclick="return false;">remove</a></li>
+            }
+        }
+    </ul>
 </div>
 
 <script type="text/javascript">
@@ -35,6 +42,8 @@
 
             reNumber();
         });
+
+        reNumber();
     });
 
     function addSearchWord() {

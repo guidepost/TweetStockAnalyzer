@@ -34,8 +34,10 @@ namespace TweetStockAnalyzer.DataBase
         public SearchResult Create(SearchWord searchWord, Product product, long tweetCount, DateTime date)
         {
             var entity = new SearchResult();
-            entity.SearchWord = searchWord;
-            entity.Product = product;
+            //entity.SearchWord = searchWord;
+            //entity.Product = product;
+            entity.SearchWordId = searchWord.SearchWordId;
+            entity.ProductId = product.ProductId;
             entity.TweetCount = tweetCount;
             entity.SearchDate = date;
             DbSet.Add(entity);

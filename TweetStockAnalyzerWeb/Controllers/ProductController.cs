@@ -41,19 +41,35 @@ namespace TweetStockAnalyzerWeb.Controllers
         [HttpPost]
         public ActionResult Create(ProductInputModel productInputModel)
         {
-            _workerService.CreateProduct(productInputModel.ProductName, productInputModel.ServiceStartDate);
+            _workerService.CreateProduct(productInputModel);
 
             return RedirectToIndex(string.Format("{0} is created!", productInputModel.ProductName));
         }
 
         public ActionResult Update(int productId)
         {
-            return View();
+            using (var productRepository = new ProductRepository())
+            {
+                var product = productRepository.ReadAll()
+                                               .Include(p => p.SearchWord)
+                                               .FirstOrDefault(p => p.ProductId == productId);
+
+                var model = new ProductInputModel();
+                model.ProductId = product.ProductId;
+                model.ProductName = product.ProductName;
+                model.ServiceStartDate = product.ServiceStartDate;
+                model.ServiceEndDate = product.ServiceEndDate;
+                model.SearchWords = product.SearchWord.Select(s => s.Word).ToArray();
+
+                return View(model);
+            }
         }
 
         [HttpPost]
         public ActionResult Update(ProductInputModel productInputModel)
         {
+            _workerService.UpdateProduct(productInputModel);
+
             return RedirectToIndex(string.Format("{0} is updated!", productInputModel.ProductName));
         }
 

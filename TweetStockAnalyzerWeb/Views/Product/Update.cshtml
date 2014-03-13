@@ -1,7 +1,26 @@
-﻿
+﻿@using TweetStockAnalyzerWeb.Models.InputModel;
+@using TweetStockAnalyzerWeb.Models
+
+@model ProductInputModel
+
 @{
     ViewBag.Title = "Update";
 }
 
+<style type="text/css">
+    .add-button {
+        margin-left: 5px;
+    }
+
+    .remove-button {
+        margin-left: 5px;
+    }
+</style>
+
 <h2>Update</h2>
 
+@Html.ValidationSummary()
+@using (Html.BeginForm("Update", "Product"))
+{
+    @Html.EditorForModel()
+}
