@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using Microsoft.Practices.Unity;
 

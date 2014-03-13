@@ -16,8 +16,8 @@ namespace TweetStockAnalyzer.Model
     {
         public Stock()
         {
-            this.AggregateHistory = new HashSet<AggregateHistory>();
-            this.StockPrice = new HashSet<StockPrice>();
+            this.AggregateHistories = new HashSet<AggregateHistory>();
+            this.StockPrices = new HashSet<StockPrice>();
         }
     
         public int StockId { get; set; }
@@ -28,9 +28,9 @@ namespace TweetStockAnalyzer.Model
         public System.DateTime UpdateDate { get; set; }
         public bool IsDeleted { get; set; }
     
-        public virtual ICollection<AggregateHistory> AggregateHistory { get; set; }
+        protected virtual ICollection<AggregateHistory> AggregateHistories { get; set; }
         public virtual BussinessCategory BussinessCategory { get; set; }
         public virtual Company Company { get; set; }
-        public virtual ICollection<StockPrice> StockPrice { get; set; }
+        public virtual ICollection<StockPrice> StockPrices { get; set; }
     }
 }

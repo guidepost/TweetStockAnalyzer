@@ -9,7 +9,7 @@ namespace TweetStockAnalyzer.Tests.Domain.Twitter
     public class TwitterServiceProviderTest
     {
         [TestMethod]
-        [Timeout(1000)]
+        [Timeout(3000)]
         public void GetService()
         {
             var provider = new TwitterServiceProvider();

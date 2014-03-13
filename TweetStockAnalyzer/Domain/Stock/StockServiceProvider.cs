@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using Microsoft.Practices.Unity;
 
-namespace TweetStockAnalyzer.Domin.Stock
+namespace TweetStockAnalyzer.Domain.Stock
 {
     public class StockServiceProvider
     {

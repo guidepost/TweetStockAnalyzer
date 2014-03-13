@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzerWeb.Models.InputModel;
 using TweetStockAnalyzerWeb.ViewModel.Company;
 using TweetStockAnalyzerWeb.WorkerService;
@@ -96,9 +97,9 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
                 viewModel2.Company.CompanyName.Is("TestCompany2");
                 viewModel2.Company.ParentCompanyId.Is(company1.CompanyId);
 
-                viewModel1.Company.CompanyScore.Count().Is(0);
-                viewModel2.Company.CompanyScore.First().Score.Is(100);
-                viewModel2.Company.CompanyScore.ToArray()[1].Score.Is(200);
+                viewModel1.Company.CompanyScores.Count().Is(0);
+                viewModel2.Company.CompanyScores.First().Score.Is(100);
+                viewModel2.Company.CompanyScores.ToArray()[1].Score.Is(200);
             }
         }
 

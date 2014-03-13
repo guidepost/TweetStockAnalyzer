@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TweetStockAnalyzer.Model;
 
-namespace TweetStockAnalyzer.Domin.Stock
+namespace TweetStockAnalyzer.Domain.Stock
 {
     public interface IStockService
     {

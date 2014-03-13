@@ -16,7 +16,7 @@ namespace TweetStockAnalyzer.Model
     {
         public SearchWord()
         {
-            this.SearchResult = new HashSet<SearchResult>();
+            this.SearchResults = new HashSet<SearchResult>();
         }
     
         public int SearchWordId { get; set; }
@@ -28,6 +28,6 @@ namespace TweetStockAnalyzer.Model
         public long LastTweetId { get; set; }
     
         public virtual Product Product { get; set; }
-        public virtual ICollection<SearchResult> SearchResult { get; set; }
+        public virtual ICollection<SearchResult> SearchResults { get; set; }
     }
 }
