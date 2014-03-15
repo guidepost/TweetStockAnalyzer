@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using TweetStockAnalyzer.Domain.Score;
 using TweetStockAnalyzer.Model;
 
@@ -33,11 +34,11 @@ namespace TweetStockAnalyzer.Tests.Domain.Score
             searchWord.SearchResults.Add(resultIgnored);
             var product = new Product();
             product.SearchWords.Add(searchWord);
-            var company = new Company();
-            company.CompanyProductRelations.Add(new CompanyProductRelation {Product = product});
+            var company = new Mock<Company>();
+            company.Setup(p=>p.Products).Returns(new List<Product>{product});
 
             var calculator = new MaxProductTwitterCountScoreCalculator();
-            var score = calculator.GetScore(company);
+            var score = calculator.GetScore(company.Object);
             score.Is(3);
         }
     }
