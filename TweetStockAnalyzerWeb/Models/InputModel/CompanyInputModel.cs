@@ -21,5 +21,6 @@ namespace TweetStockAnalyzerWeb.Models.InputModel
         public int BussinessCategoryId { get; set; }
 
         public Product[] Products { get; set; }
+        public int[] ProductIds { get; set; }
     }
 }

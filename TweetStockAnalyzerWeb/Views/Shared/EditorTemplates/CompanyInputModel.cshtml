@@ -52,14 +52,15 @@
 
     function numbering() {
         $('#productList li input').each(function (i) {
-            $(this).attr('name', 'Products[' + i + ']');
+            $(this).attr('name', 'ProductIds[' + i + ']');
             i = i + 1;
         });
     }
 
     function addProduct() {
         var productId = $("#product-dropdown").val();
-        $("#productList").append('<li>' + productId + '<input type="hidden" value="' + productId + '"/><a class="remove-button" onclick="return false;">remove</a></li>');
+        var productName = $("#product-dropdown option:selected").text();
+        $("#productList").append('<li>' + productName + '<input type="hidden" value="' + productId + '"/><a class="remove-button" onclick="return false;">remove</a></li>');
 
         reNumber();
     }

@@ -78,6 +78,8 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
                     aggregateHistoryRepository.Create(stock, DateTime.Now, DateTime.Now);
                 }
+
+                CreateCompanyProductRelation(companyInputModel, insertedCompany);
             }
         }
 
@@ -100,7 +102,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
                     if (!string.IsNullOrEmpty(companyInputModel.StockCode))
                     {
                         var bussinessCategory = bussinessCategoryRepository.Read(companyInputModel.BussinessCategoryId);
-                        var stock =  stockRepository.Create(targetCompany, bussinessCategory, companyInputModel.StockCode);
+                        var stock = stockRepository.Create(targetCompany, bussinessCategory, companyInputModel.StockCode);
 
                         aggregateHistoryRepository.Create(stock, DateTime.Now, DateTime.Now);
                     }
@@ -124,6 +126,36 @@ namespace TweetStockAnalyzerWeb.WorkerService
                     }
                 }
 
+                //Productの関連付け
+                if (targetCompany.Products == null || targetCompany.Products.Count() == 0)
+                {
+                    CreateCompanyProductRelation(companyInputModel, targetCompany);
+                }
+                else
+                {
+                    //TODO:
+                    //using (var companyProductRelationRepository = _container.Resolve<ICompanyProductRelation>())
+                    //using (var productRepository = _container.Resolve<IProductRepository>())
+                    //{
+                    //    foreach (var product in targetCompany.Products)
+                    //    {
+                    //        if (!companyInputModel.ProductIds.Contains(product.ProductId))
+                    //        {
+                    //            companyProductRelationRepository.Delete(product.ProductId);
+                    //        }
+                    //    }
+
+                    //    foreach (var productId in companyInputModel.ProductIds)
+                    //    {
+                    //        if (!targetCompany.Products.ToList().Exists(p => p.ProductId == productId))
+                    //        {
+                    //            var product = productRepository.Read(productId);
+                    //            companyProductRelationRepository.Create(targetCompany, product);
+                    //        }
+                    //    }
+                    //}
+                }
+
                 companyRepository.Update(targetCompany);
             }
         }
@@ -135,5 +167,28 @@ namespace TweetStockAnalyzerWeb.WorkerService
                 return repository.Delete(companyId);
             }
         }
+
+        #region private methods
+
+        private void CreateCompanyProductRelation(CompanyInputModel companyInputModel, Company insertedCompany)
+        {
+            using (var companyProductRelationRepository = _container.Resolve<ICompanyProductRelation>())
+            using (var productRepository = _container.Resolve<IProductRepository>())
+            {
+                if (companyInputModel.Products != null && companyInputModel.Products.Count() > 0)
+                {
+                    foreach (var productId in companyInputModel.ProductIds)
+                    {
+                        var product = productRepository.Read(productId);
+                        if (product != null)
+                        {
+                            companyProductRelationRepository.Create(insertedCompany, product);
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }
