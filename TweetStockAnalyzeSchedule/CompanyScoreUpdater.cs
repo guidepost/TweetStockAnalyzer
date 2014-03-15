@@ -15,13 +15,13 @@ namespace TweetStockAnalyzeSchedule
         public void Update()
         {
             using (var companyRepository = DependencyContainer.Instance.Resolve<ICompanyRepository>())
-            using (var companyScorePriceRepository = DependencyContainer.Instance.Resolve<ICompanyScoreRepository>())
+            using (var companyScoreRepository = DependencyContainer.Instance.Resolve<ICompanyScoreRepository>())
             {
                 foreach (var company in companyRepository.ReadAll())
                 {
                     var calculator = DependencyContainer.Instance.Resolve<IScoreCalculator>();
                     var score = calculator.GetScore(company);
-                    companyScorePriceRepository.Create(company, score);
+                    companyScoreRepository.Create(company, score);
                 }
             }
         }

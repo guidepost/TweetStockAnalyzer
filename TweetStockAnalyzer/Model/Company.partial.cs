@@ -9,9 +9,9 @@ namespace TweetStockAnalyzer.Model
     public partial class Company
     {
         [ForeignKey("Stocks")]
-        public Stock Stock { get { return Stocks.FirstOrDefault(); }  }
+        public Stock Stock { get { return Stocks.FirstOrDefault(); } }
 
         [ForeignKey("CompanyProductRelations.Product")]
-        public IEnumerable<Product> Products { get { return CompanyProductRelations.Select(p => p.Product); } }
+        public virtual IEnumerable<Product> Products { get { return CompanyProductRelations.Select(p => p.Product); } }
     }
 }
