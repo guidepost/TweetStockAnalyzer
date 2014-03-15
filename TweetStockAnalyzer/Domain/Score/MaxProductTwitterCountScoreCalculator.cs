@@ -16,10 +16,10 @@ namespace TweetStockAnalyzer.Domain.Score
         private int GetProductSocre(Product product)
         {
             return product.SearchWords.Max(
-                searchWord => GetLastSearchResultScore(searchWord));
+                searchWord => GetLastSearchResult(searchWord));
         }
 
-        private int GetLastSearchResultScore(SearchWord searchWord)
+        private int GetLastSearchResult(SearchWord searchWord)
         {
             // Tweet数をそのまま使うと数字が大きくなりそうなので、桁を減らす
             return (int)searchWord.SearchResults

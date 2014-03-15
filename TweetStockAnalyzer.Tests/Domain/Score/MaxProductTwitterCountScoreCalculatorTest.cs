@@ -27,10 +27,10 @@ namespace TweetStockAnalyzer.Tests.Domain.Score
             result2.TweetCount = 200;
             searchWord.SearchResults.Add(result2);
 
-            var result3 = new SearchResult();
-            result3.UpdateDate = new DateTime(1500, 1, 1);
-            result3.TweetCount = 10000;
-            searchWord.SearchResults.Add(result3);
+            var resultIgnored = new SearchResult();
+            resultIgnored.UpdateDate = new DateTime(1500, 1, 1);
+            resultIgnored.TweetCount = 10000;
+            searchWord.SearchResults.Add(resultIgnored);
             var product = new Product();
             product.SearchWords.Add(searchWord);
             var company = new Company();
