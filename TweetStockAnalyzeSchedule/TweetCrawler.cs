@@ -31,7 +31,7 @@ namespace TweetStockAnalyzeSchedule
             using (var searchResultRepository = DependencyContainer.Instance.Resolve<ISearchResultRepository>())
             using (var searchWordRepository = DependencyContainer.Instance.Resolve<ISearchWordRepository>())
             {
-                foreach (var searchWord in searchWordRepository.ReadAll().OrderByDescending(p => p.UpdateDate).Take(_requestCount))
+                foreach (var searchWord in searchWordRepository.ReadAll().OrderBy(p => p.UpdateDate).Take(_requestCount))
                 {
                     var tweets = GetTweetCountAsync(searchWord);
                     if (tweets.Result.Statuses.Any())
