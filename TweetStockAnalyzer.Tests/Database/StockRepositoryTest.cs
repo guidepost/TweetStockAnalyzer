@@ -46,9 +46,9 @@ namespace TweetStockAnalyzer.Tests.Database
             result.Company.CompanyId.Is( company.CompanyId);
             result.BussinessCategory.BussinessCategoryId.Is(category.BussinessCategoryId);
             result.StockCode.Is("123");
-
             company = new CompanyRepository().Read(company.CompanyId);
             company.Stock.IsNotNull();
+
         }
 
         [TestMethod]

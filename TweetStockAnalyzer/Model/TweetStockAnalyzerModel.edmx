@@ -352,7 +352,7 @@
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="CompanyProductRelations" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="Company" ToRole="CompanyProductRelation" />
+          <NavigationProperty Name="CompanyProductRelations" Relationship="Self.FK_CompanyProductRelation_Company" FromRole="Company" ToRole="CompanyProductRelation" a:GetterAccess="Protected" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Protected" />
           <NavigationProperty Name="Stocks" Relationship="Self.FK_Stock_Company" FromRole="Company" ToRole="Stock" a:GetterAccess="Protected" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Protected" />
           <NavigationProperty Name="CompanyScores" Relationship="TweetStockAnalyzerModel.FK_CompanyScore_Company" FromRole="Company" ToRole="CompanyScore" />
         </EntityType>
@@ -380,7 +380,7 @@
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="CompanyProductRelations" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="Product" ToRole="CompanyProductRelation" />
+          <NavigationProperty Name="CompanyProductRelations" Relationship="Self.FK_CompanyProductRelation_Product" FromRole="Product" ToRole="CompanyProductRelation" a:GetterAccess="Protected" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Protected" />
           <NavigationProperty Name="SearchResults" Relationship="Self.FK_SearchResult_Product" FromRole="Product" ToRole="SearchResult" />
           <NavigationProperty Name="SearchWords" Relationship="Self.FK_SearchWord_Product" FromRole="Product" ToRole="SearchWord" />
         </EntityType>

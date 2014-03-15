@@ -14,12 +14,23 @@ namespace TweetStockAnalyzeSchedule
 {
     public class StockCrawler : IClawler
     {
+        private int _requestCount;
+
+        public StockCrawler() : this(150)
+        {
+        }
+
+        public StockCrawler(int requestCount)
+        {
+            _requestCount = requestCount;
+        }
+
         public void Start()
         {
             using (var stockPriceRepository = DependencyContainer.Instance.Resolve<IStockPriceRepository>())
             using (var aggregateHistoryRepository = DependencyContainer.Instance.Resolve<IAggregateHistoryRepository>())
             {
-                foreach (var aggregateHistory in aggregateHistoryRepository.ReadAll().OrderByDescending(p=>p.EndDate).Take(150))
+                foreach (var aggregateHistory in aggregateHistoryRepository.ReadAll().OrderBy(p=>p.EndDate).Take(_requestCount))
                 {
                     var stock = aggregateHistory.Stock;
                     var now = DateTime.Now;
