@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using TweetStockAnalyzer.DataBase;
 using TweetStockAnalyzer.Infrastructure.Dependency;
+using TweetStockAnalyzer.Model;
 
 namespace TweetStockAnalyzerWeb.Models.InputModel
 {
@@ -18,5 +19,8 @@ namespace TweetStockAnalyzerWeb.Models.InputModel
         public int? ParentCompanyId { get; set; }
         public string StockCode { get; set; }
         public int BussinessCategoryId { get; set; }
+
+        public Product[] Products { get; set; }
+        public int[] ProductIds { get; set; }
     }
 }

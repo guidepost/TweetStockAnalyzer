@@ -6,20 +6,4 @@
 
 <h2>Detail</h2>
 
-<p><b>@Model.Company.CompanyName</b><span>(9999)</span></p>
-<p>親会社名</p>
-<p>
-    サービス一覧
-    <ul>
-        <li></li>
-        <li></li>
-        <li></li>
-    </ul>
-</p>
-<p>
-    会社のスコア
-</p>
-<p>
-    時系列情報
-</p>
-@ChartHelper.CompanyScoreChart(Model.Company, Model.CompanyScores)
+@Html.DisplayFor(m => m.Company)

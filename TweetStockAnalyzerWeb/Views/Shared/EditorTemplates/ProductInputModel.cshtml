@@ -1,0 +1,64 @@
+﻿@using TweetStockAnalyzerWeb.Models.InputModel;
+@using TweetStockAnalyzerWeb.Models
+
+@model ProductInputModel
+
+@Html.HiddenFor(m => m.ProductId)
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ProductName)
+    @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.ProductName)
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.ServiceStartDate)
+    @Html.EditorFor(m => m.ServiceStartDate, "DatePicker")
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.ServiceEndDate)
+    @Html.EditorFor(m => m.ServiceEndDate, "DatePicker")
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.SearchWords)
+    <div class="form-inline">
+        <input type="text" id="searchWord" class="form-control" /><button class="add-button" onclick="addSearchWord(); return false;">Add</button>
+    </div>
+    <ul id="searchWordList">
+        @if (Model != null && Model.SearchWords != null)
+        {
+            foreach (var searchWord in Model.SearchWords)
+            {
+                <li>@searchWord<input type="hidden" value="@searchWord" /><a class="remove-button" onclick="return false;">remove</a></li>
+            }
+        }
+    </ul>
+</div>
+
+<input type="submit" value="OK" />
+
+<script type="text/javascript">
+    $(function () {
+        $('#searchWordList').on('click', '.remove-button', function () {
+            var parentLi = $(this).parent();
+            parentLi.remove();
+
+            reNumber();
+        });
+
+        reNumber();
+    });
+
+    function addSearchWord() {
+        var searchWord = $("#searchWord").val();
+        $("#searchWordList").append('<li>' + searchWord + '<input type="hidden" value="' + searchWord + '"/><a class="remove-button" onclick="return false;">remove</a></li>');
+
+        reNumber();
+    }
+
+    function reNumber() {
+        $('#searchWordList li input').each(function (i) {
+            $(this).attr('name', 'SearchWords[' + i + ']');
+            i = i + 1;
+        });
+    }
+</script>

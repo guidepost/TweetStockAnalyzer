@@ -26,17 +26,17 @@ namespace TweetStockAnalyzerWeb.Controllers
 
         public ActionResult Index(string successMessage)
         {
-            var model = _workerService.GetIndexViewModel();
+            var viewModel = _workerService.GetIndexViewModel();
 
-            model.SuccessMessage = successMessage;
+            viewModel.SuccessMessage = successMessage;
 
-            return View(model);
+            return View(viewModel);
         }
 
         public ActionResult Detail(int companyId)
         {
-            var model = _workerService.GetDetailViewModel(companyId);
-            return View(model);
+            var viewModel = _workerService.GetDetailViewModel(companyId);
+            return View(viewModel);
         }
 
         public ActionResult Create()
@@ -84,13 +84,20 @@ namespace TweetStockAnalyzerWeb.Controllers
 
         public ActionResult Delete(int companyId)
         {
-            var result = _workerService.DeleteCompany(companyId);
-            if (result != null)
+            using (var repository = _container.Resolve<ICompanyRepository>())
             {
-                return RedirectToIndex("The company is deleted!");
-            }
+                var result = _workerService.DeleteCompany(companyId);
+                if (result != null)
+                {
+                    var company = repository.Delete(companyId);
+                    if (company != null)
+                    {
+                        return RedirectToIndex(string.Format("{0} is deleted!", company.CompanyName));
+                    }
+                }
 
-            return RedirectToIndex();
+                return RedirectToIndex();
+            }
         }
 
         private ActionResult RedirectToIndex(string successMessage = null)

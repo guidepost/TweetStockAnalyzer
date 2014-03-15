@@ -1,0 +1,18 @@
+﻿@using TweetStockAnalyzer.Model;
+@using TweetStockAnalyzerWeb.Models;
+@using TweetStockAnalyzerWeb;
+@using System.Web.Mvc;
+
+@helper SuccessMessage(string successMessage)
+{
+    if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div id="successMessage" class="alert alert-success">
+            @successMessage
+        </div>
+
+        <script type="text/javascript">
+            $("#successMessage").delay(2000).animate({ opacity: 0 }, 3000, function () { $("#successMessage").slideUp(1000); });
+        </script>
+    }
+}

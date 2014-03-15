@@ -1,0 +1,52 @@
+﻿@model TweetStockAnalyzerWeb.ViewModel.Product.ProductIndexViewModel
+
+@{
+    ViewBag.Title = "Product";
+}
+
+<style type="text/css">
+    .bottom-margin {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+
+    .border-box {
+        border: 1px solid #ddd;
+    }
+
+    .align-right {
+        float: right;
+    }
+
+    .margin-left {
+        margin-left: 10px;
+    }
+</style>
+
+<h2>Product</h2>
+@MessageHelper.SuccessMessage(Model.SuccessMessage)
+
+<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Create")'">
+    <span class="glyphicon glyphicon-plus"></span>Add
+</button>
+
+@{
+    foreach (var product in @Model.Products)
+    {
+        <div class="border-box bottom-margin">
+            <p>
+                <b>@Html.ActionLink(product.ProductName, "Detail", new { productId = product.ProductId })</b>
+                <span class="align-right">
+                    @Html.ActionLink("Modify", "Update", new { productId = product.ProductId })
+                    |
+                    @Html.ActionLink(
+                    "Delete",
+                    "Delete",
+                    new { productId = product.ProductId },
+                    new { onclick = "return confirm('Are you sure you wish to delete this product?');" })
+                </span>
+            </p>
+        </div>
+    }
+}

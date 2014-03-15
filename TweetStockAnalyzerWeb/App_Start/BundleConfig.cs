@@ -33,6 +33,12 @@ namespace TweetStockAnalyzerWeb
 
             bundles.Add(new StyleBundle("~/jqplot/css").Include(
                     "~/Content/jquery.jqplot.min.css"));
+
+            bundles.Add(new StyleBundle("~/datepicker/css").Include(
+                      "~/Content/datepicker.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/datepicker").Include(
+                      "~/Scripts/bootstrap-datepicker.js"));
         }
     }
 }

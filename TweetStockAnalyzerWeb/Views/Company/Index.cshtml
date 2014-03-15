@@ -25,21 +25,12 @@
 </style>
 
 <h2>Company</h2>
-@if (!string.IsNullOrEmpty(@Model.SuccessMessage))
-{
-    <div id="successMessage" class="alert alert-success">
-        @Model.SuccessMessage
-    </div>
-    @section scripts{
-        <script type="text/javascript">
-            $("#successMessage").animate({ opacity: 0 }, 3000, function () { $("#successMessage").slideUp(1000); });
-        </script>
-    }
-}
+@MessageHelper.SuccessMessage(Model.SuccessMessage)
+
 <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Create")'">
     <span class="glyphicon glyphicon-plus"></span>Add
 </button>
-
+<span style="float:right">このへんにフィルターとかソートをつける</span>
 @{
     foreach (var company in Model.Companies)
     {
@@ -62,7 +53,7 @@
                 <span class="margin-left">Score:100</span>
             </p>
             <p>
-                @ChartHelper.CompanyScoreChart(company, company.CompanyScore.ToArray())
+                @ChartHelper.ScoreChart(new Dictionary<DateTime, int> { { new DateTime(2000, 1, 1), 100 }, { new DateTime(2000, 1, 2), 200 } })
             </p>
         </div>
     }
