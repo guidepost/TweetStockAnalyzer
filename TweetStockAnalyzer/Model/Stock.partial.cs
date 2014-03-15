@@ -10,6 +10,6 @@ namespace TweetStockAnalyzer.Model
     public partial class Stock
     {
         [ForeignKey("AggregateHistories")]
-        public AggregateHistory AggregateHistory { get { return AggregateHistories.FirstOrDefault(p => p.IsDeleted == false); } }
+        public AggregateHistory AggregateHistory { get { return AggregateHistories.FirstOrDefault(); } }
     }
 }
