@@ -66,6 +66,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var companyRepository = _container.Resolve<ICompanyRepository>())
             using (var stockRepository = _container.Resolve<IStockRepository>())
             using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
+            using (var aggregateHistoryRepository = _container.Resolve<IAggregateHistoryRepository>())
             {
                 var parentCompany = companyRepository.Read(companyInputModel.ParentCompanyId);
                 var insertedCompany = companyRepository.Create(companyInputModel.CompanyName, parentCompany);
@@ -73,7 +74,9 @@ namespace TweetStockAnalyzerWeb.WorkerService
                 if (!string.IsNullOrEmpty(companyInputModel.StockCode))
                 {
                     var bussinessCategory = bussinessCategoryRepository.Read(companyInputModel.BussinessCategoryId);
-                    stockRepository.Create(insertedCompany, bussinessCategory, companyInputModel.StockCode);
+                    var stock = stockRepository.Create(insertedCompany, bussinessCategory, companyInputModel.StockCode);
+
+                    aggregateHistoryRepository.Create(stock, DateTime.Now, DateTime.Now);
                 }
             }
         }
@@ -83,6 +86,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var companyRepository = _container.Resolve<ICompanyRepository>())
             using (var stockRepository = _container.Resolve<IStockRepository>())
             using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
+            using (var aggregateHistoryRepository = _container.Resolve<IAggregateHistoryRepository>())
             {
                 var targetCompany = companyRepository.ReadAll()
                                                      .Include(c => c.Stock)
@@ -96,14 +100,20 @@ namespace TweetStockAnalyzerWeb.WorkerService
                     if (!string.IsNullOrEmpty(companyInputModel.StockCode))
                     {
                         var bussinessCategory = bussinessCategoryRepository.Read(companyInputModel.BussinessCategoryId);
-                        stockRepository.Create(targetCompany, bussinessCategory, companyInputModel.StockCode);
+                        var stock =  stockRepository.Create(targetCompany, bussinessCategory, companyInputModel.StockCode);
+
+                        aggregateHistoryRepository.Create(stock, DateTime.Now, DateTime.Now);
                     }
                 }
                 else
                 {
                     if (string.IsNullOrEmpty(companyInputModel.StockCode))
                     {
-                        targetCompany.Stock.IsDeleted = true;
+                        aggregateHistoryRepository.Delete(targetCompany.Stock.AggregateHistory.AggregateHistoryId);
+
+                        stockRepository.Delete(targetCompany.Stock.StockId);
+
+                        aggregateHistoryRepository.Update(targetCompany.Stock.AggregateHistory);
                     }
                     else
                     {

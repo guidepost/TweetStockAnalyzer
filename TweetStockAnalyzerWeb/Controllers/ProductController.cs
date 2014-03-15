@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 using TweetStockAnalyzerWeb.Models.InputModel;
@@ -30,6 +31,7 @@ namespace TweetStockAnalyzerWeb.Controllers
         public ActionResult Detail(int productId)
         {
             var viewModel = _workerService.GetDetailViewModel(productId);
+
             return View(viewModel);
         }
 
@@ -51,7 +53,7 @@ namespace TweetStockAnalyzerWeb.Controllers
             using (var productRepository = new ProductRepository())
             {
                 var product = productRepository.ReadAll()
-                                               .Include(p => p.SearchWord)
+                                               .Include(p => p.SearchWords)
                                                .FirstOrDefault(p => p.ProductId == productId);
 
                 var model = new ProductInputModel();
@@ -59,7 +61,7 @@ namespace TweetStockAnalyzerWeb.Controllers
                 model.ProductName = product.ProductName;
                 model.ServiceStartDate = product.ServiceStartDate;
                 model.ServiceEndDate = product.ServiceEndDate;
-                model.SearchWords = product.SearchWord.Select(s => s.Word).ToArray();
+                model.SearchWords = product.SearchWords.Select(s => s.Word).ToArray();
 
                 return View(model);
             }

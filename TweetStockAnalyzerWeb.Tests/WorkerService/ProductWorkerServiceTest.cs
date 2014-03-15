@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 using TweetStockAnalyzerWeb.Models.InputModel;
@@ -59,7 +60,7 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
             viewModel.Products[0].ProductName.Is("TestProduct1");
             viewModel.Products[1].ProductName.Is("TestProduct2");
 
-            var searchResults = viewModel.Products[1].SearchResult.ToArray();
+            var searchResults = viewModel.Products[1].SearchResults.ToArray();
 
             searchResults[0].SearchWord.Word.Is("SearchWord1");
             searchResults[0].TweetCount.Is(100);
@@ -84,8 +85,8 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
 
                 viewModel1.Product.ProductName.Is("TestProduct1");
                 viewModel2.Product.ProductName.Is("TestProduct2");
-                viewModel2.Product.SearchResult.ToArray()[0].TweetCount.Is(100);
-                viewModel2.Product.SearchResult.ToArray()[1].TweetCount.Is(200);
+                viewModel2.Product.SearchResults.ToArray()[0].TweetCount.Is(100);
+                viewModel2.Product.SearchResults.ToArray()[1].TweetCount.Is(200);
             }
         }
 
@@ -107,8 +108,8 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
 
                 product4.ProductName.Is("TestProduct4");
                 product4.ServiceStartDate.Is(new DateTime(2004, 4, 4));
-                product4.SearchWord.ElementAt(0).Word.Is("SearchWord4_1");
-                product4.SearchWord.ElementAt(1).Word.Is("SearchWord4_2");
+                product4.SearchWords.ElementAt(0).Word.Is("SearchWord4_1");
+                product4.SearchWords.ElementAt(1).Word.Is("SearchWord4_2");
 
 
                 var productInputModel5 = new ProductInputModel();
@@ -122,7 +123,7 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
 
                 product5.ProductName.Is("TestProduct5");
                 product5.ServiceStartDate.Is(new DateTime(2005, 5, 5));
-                product5.SearchWord.Count().Is(0);
+                product5.SearchWords.Count().Is(0);
             }
         }
 

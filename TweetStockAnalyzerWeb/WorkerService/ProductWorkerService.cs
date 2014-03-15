@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using TweetStockAnalyzer.DataBase;
+using TweetStockAnalyzer.DataBase.Repository;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 using TweetStockAnalyzerWeb.Models.InputModel;
@@ -22,7 +23,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var repository = _container.Resolve<IProductRepository>())
             {
                 viewModel.Products = repository.ReadAll()
-                                               .Include(p => p.SearchResult.First().SearchWord)
+                                               .Include(p => p.SearchResults.First().SearchWord)
                                                .ToArray();
             }
 
@@ -36,7 +37,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var repository = _container.Resolve<IProductRepository>())
             {
                 var product = repository.ReadAll()
-                                        .Include(p => p.SearchResult)
+                                        .Include(p => p.SearchResults)
                                         .FirstOrDefault(p=>p.ProductId == productId);
                 viewModel.Product = product;
             }
@@ -73,7 +74,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
                 productRepository.Update(product);
 
-                if (product.SearchWord == null || product.SearchWord.Count() == 0)
+                if (product.SearchWords == null || product.SearchWords.Count() == 0)
                 {
                     foreach (var searchWord in productInputModel.SearchWords)
                     {
@@ -82,14 +83,14 @@ namespace TweetStockAnalyzerWeb.WorkerService
                 }
                 else if (productInputModel.SearchWords == null || productInputModel.SearchWords.Count() == 0)
                 {
-                    foreach (var searchWord in product.SearchWord)
+                    foreach (var searchWord in product.SearchWords)
                     {
                         searchWordRepository.Delete(searchWord.SearchWordId);
                     }
                 }
                 else
                 {
-                    foreach (var existingSearchWord in product.SearchWord)
+                    foreach (var existingSearchWord in product.SearchWords)
                     {
                         if (!productInputModel.SearchWords.Any(s => s == existingSearchWord.Word))
                         {
@@ -98,7 +99,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
                     }
                     foreach (var inputSearchWord in productInputModel.SearchWords)
                     {
-                        if (!product.SearchWord.Any(s => s.Word == inputSearchWord))
+                        if (!product.SearchWords.Any(s => s.Word == inputSearchWord))
                         {
                             searchWordRepository.Create(product, inputSearchWord);
                         }

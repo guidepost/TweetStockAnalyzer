@@ -12,14 +12,29 @@ namespace TweetStockAnalyzerWeb.Models
 {
     public static class DropDownListItems
     {
+        private static IUnityContainer _container = DependencyContainer.Instance;
+
+        static DropDownListItems()
+        {
+            using (var repository = _container.Resolve<IBussinessCategoryRepository>())
+            {
+                var categories = repository.ReadAll().ToArray();
+                BussinessCategories = categories.Select(c => new SelectListItem
+                {
+                    Value = c.BussinessCategoryId.ToString(),
+                    Text = string.Format("{0}:{1}", c.BussinessCategoryCode, c.BussinessCategoryName)
+                })
+                    .ToArray();
+            }
+        }
+
         public static SelectListItem[] BussinessCategories { get; set; }
 
         public static SelectListItem[] Companies
         {
             get
             {
-                var container = DependencyContainer.Instance;
-                using (var repository = container.Resolve<ICompanyRepository>())
+                using (var repository = _container.Resolve<ICompanyRepository>())
                 {
                     var companies = repository.ReadAll().ToArray();
 
@@ -36,18 +51,23 @@ namespace TweetStockAnalyzerWeb.Models
             }
         }
 
-        static DropDownListItems()
+        public static SelectListItem[] Products
         {
-            var container = DependencyContainer.Instance;
-            using (var repository = container.Resolve<IBussinessCategoryRepository>())
+            get
             {
-                var categories = repository.ReadAll().ToArray();
-                BussinessCategories = categories.Select(c => new SelectListItem
-                    {
-                        Value = c.BussinessCategoryId.ToString(),
-                        Text = string.Format("{0}:{1}", c.BussinessCategoryCode, c.BussinessCategoryName)
-                    })
-                    .ToArray();
+                using (var repository = _container.Resolve<IProductRepository>())
+                {
+                    var products = repository.ReadAll().ToArray();
+
+                    var selectItems = products.Select(p => new SelectListItem
+                                                      {
+                                                          Value = p.ProductId.ToString(),
+                                                          Text = p.ProductName
+                                                      })
+                                                      .ToList();
+
+                    return selectItems.ToArray();
+                }
             }
         }
     }

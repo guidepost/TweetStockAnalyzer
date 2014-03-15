@@ -24,7 +24,7 @@
         <input type="text" id="searchWord" class="form-control" /><button class="add-button" onclick="addSearchWord(); return false;">Add</button>
     </div>
     <ul id="searchWordList">
-        @if (Model != null && Model.SearchWords != null )
+        @if (Model != null && Model.SearchWords != null)
         {
             foreach (var searchWord in Model.SearchWords)
             {
@@ -34,9 +34,11 @@
     </ul>
 </div>
 
+<input type="submit" value="OK" />
+
 <script type="text/javascript">
     $(function () {
-        $('#searchWordList').delegate('.remove-button', 'click', function () {
+        $('#searchWordList').on('click', '.remove-button', function () {
             var parentLi = $(this).parent();
             parentLi.remove();
 
@@ -60,5 +62,3 @@
         });
     }
 </script>
-
-<input type="submit" value="OK" />

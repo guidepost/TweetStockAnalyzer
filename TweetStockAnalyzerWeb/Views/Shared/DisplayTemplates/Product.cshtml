@@ -1,0 +1,21 @@
+﻿@model TweetStockAnalyzer.Model.Product
+
+<p><b>@Model.ProductName</b></p>
+
+<p>@Model.ServiceStartDate</p>
+<p>@Model.ServiceEndDate</p>
+<p>
+    サービス一覧
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</p>
+<p>
+    会社のスコア
+</p>
+<p>
+    時系列情報
+</p>
+@ChartHelper.ScoreChart(Model.SearchResults.GroupBy(r => r.RegisterDate.Date).ToDictionary(g => g.Key, g => g.Sum(r => r.TweetCount)))

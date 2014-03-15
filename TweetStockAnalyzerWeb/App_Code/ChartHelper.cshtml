@@ -1,19 +1,36 @@
 ﻿@using TweetStockAnalyzer.Model;
 @using TweetStockAnalyzerWeb.Models;
 
-@helper CompanyScoreChart(Company company, CompanyScore[] CompanyScores)
+@helper ScoreChart(params Dictionary<DateTime, int>[] dateAndScores)
 {
+    ScoreChart(dateAndScores.Select(dict => dict.ToDictionary(d => d.Key, d => (long)d.Value)).ToArray());
+}
+
+@helper ScoreChart(params Dictionary<DateTime, long>[] dateAndScores)
+{
+    var guid = Guid.NewGuid();
+
     <div style="padding:30px">
-        <div id='chart_@company.CompanyId'>
+        <div id='chart_@guid'>
 
         </div>
     </div>
     <script type="text/javascript">
-        $.jqplot('chart_@company.CompanyId',
+        $.jqplot('chart_@guid',
             [
-                [1, 2],
-                [2, 5],
-                [3, 4],
+                @foreach (var aaa in dateAndScores)
+                {
+                    @:[
+                        foreach (var bbb in aaa)
+	{
+                            @:[
+                            @bbb.Key.ToString("hhhh-mm-dd")
+                                @:,
+                                @bbb.Value
+@:],
+	}
+                    @:],
+                }
             ]
             )
     </script>
