@@ -159,3 +159,6 @@ $RECYCLE.BIN/
 */[Ww]eb.[Cc]onfig
 
 packages/
+
+*.mdf
+*.ldf
