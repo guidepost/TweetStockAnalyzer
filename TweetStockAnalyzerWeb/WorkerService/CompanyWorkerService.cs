@@ -27,166 +27,204 @@ namespace TweetStockAnalyzerWeb.WorkerService
     }
 
     [AutoRegist(typeof(ICompanyWorkerService))]
-    public class CompanyWorkerService : ICompanyWorkerService
+    public class CompanyWorkerService : ICompanyWorkerService, IDisposable
     {
-        private IUnityContainer _container = DependencyContainer.Instance;
+        #region Fields
+
+        private IUnityContainer _container;
+        private ICompanyRepository _companyRepository;
+        private IProductRepository _productRepository;
+        private IStockRepository _stockRepository;
+        private IStockPriceRepository _stockPriceRepository;
+        private IBussinessCategoryRepository _bussinessCategoryRepository;
+        private IAggregateHistoryRepository _aggregateHistoryRepository;
+        private ICompanyProductRelationRepository _companyProductRelationRepository;
+
+        #endregion
+
+        #region Constructor
+
+        public CompanyWorkerService()
+        {
+            _container = DependencyContainer.Instance;
+            _companyRepository = _container.Resolve<ICompanyRepository>();
+            _productRepository = _container.Resolve<IProductRepository>();
+            _stockRepository = _container.Resolve<IStockRepository>();
+            _stockPriceRepository = _container.Resolve<IStockPriceRepository>();
+            _bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>();
+            _aggregateHistoryRepository = _container.Resolve<IAggregateHistoryRepository>();
+            _companyProductRelationRepository = _container.Resolve<ICompanyProductRelationRepository>();
+        }
+
+        #endregion
 
         public CompanyIndexViewModel GetIndexViewModel()
         {
-            var viewModel = new CompanyIndexViewModel();
-
-            using (var repository = _container.Resolve<ICompanyRepository>())
+            return new CompanyIndexViewModel()
             {
-                viewModel.Companies = repository.ReadAll().Include(c => c.Stock)
-                                                          .Include(c => c.CompanyScores)
-                                                          .ToArray();
-            }
-
-            return viewModel;
+                Companies = _companyRepository.ReadAll()
+                                             .Include(c => c.Stock)
+                                             .Include(c => c.CompanyScores)
+                                             .ToArray()
+            };
         }
 
         public CompanyDetailViewModel GetDetailViewModel(int companyId)
         {
-            var viewModel = new CompanyDetailViewModel();
-
-            using (var repository = _container.Resolve<ICompanyRepository>())
+            return new CompanyDetailViewModel()
             {
-                var company = repository.ReadAll()
-                                        .Include(c => c.CompanyScores)
-                                        .FirstOrDefault(c => c.CompanyId == companyId);
-
-                viewModel.Company = company;
-            }
-
-            return viewModel;
+                Company = _companyRepository.ReadAll()
+                                            .Include(c => c.CompanyScores)
+                                            .FirstOrDefault(c => c.CompanyId == companyId)
+            };
         }
 
         public void CreateCompany(CompanyInputModel companyInputModel)
         {
-            using (var companyRepository = _container.Resolve<ICompanyRepository>())
-            using (var stockRepository = _container.Resolve<IStockRepository>())
-            using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
-            using (var aggregateHistoryRepository = _container.Resolve<IAggregateHistoryRepository>())
-            {
-                var parentCompany = companyRepository.Read(companyInputModel.ParentCompanyId);
-                var insertedCompany = companyRepository.Create(companyInputModel.CompanyName, parentCompany);
+            var createdCompany = InsertCompany(companyInputModel.CompanyName, companyInputModel.ParentCompanyId);
 
-                if (!string.IsNullOrEmpty(companyInputModel.StockCode))
-                {
-                    var bussinessCategory = bussinessCategoryRepository.Read(companyInputModel.BussinessCategoryId);
-                    var stock = stockRepository.Create(insertedCompany, bussinessCategory, companyInputModel.StockCode);
+            InsertStock(createdCompany, companyInputModel.StockCode, companyInputModel.BussinessCategoryId);
 
-                    aggregateHistoryRepository.Create(stock, DateTime.Now, DateTime.Now);
-                }
-
-                CreateCompanyProductRelation(companyInputModel, insertedCompany);
-            }
+            InsertCompanyProductRelation(companyInputModel.ProductIds, createdCompany);
         }
 
         public void UpdateCompany(CompanyInputModel companyInputModel)
         {
-            using (var companyRepository = _container.Resolve<ICompanyRepository>())
-            using (var stockRepository = _container.Resolve<IStockRepository>())
-            using (var bussinessCategoryRepository = _container.Resolve<IBussinessCategoryRepository>())
-            using (var aggregateHistoryRepository = _container.Resolve<IAggregateHistoryRepository>())
-            {
-                var targetCompany = companyRepository.ReadAll()
-                                                     .Include(c => c.Stock)
-                                                     .FirstOrDefault(c => c.CompanyId == companyInputModel.CompanyId);
+            var targetCompany = _companyRepository.ReadAll()
+                                                  .Include(c => c.Stock)
+                                                  .SingleOrDefault(c => c.CompanyId == companyInputModel.CompanyId);
 
-                targetCompany.CompanyName = companyInputModel.CompanyName;
-                targetCompany.ParentCompanyId = companyInputModel.ParentCompanyId;
+            targetCompany.CompanyName = companyInputModel.CompanyName;
+            targetCompany.ParentCompanyId = companyInputModel.ParentCompanyId;
 
-                if (targetCompany.Stock == null || targetCompany.Stock.IsDeleted)
-                {
-                    if (!string.IsNullOrEmpty(companyInputModel.StockCode))
-                    {
-                        var bussinessCategory = bussinessCategoryRepository.Read(companyInputModel.BussinessCategoryId);
-                        var stock = stockRepository.Create(targetCompany, bussinessCategory, companyInputModel.StockCode);
+            _companyRepository.Update(targetCompany);
 
-                        aggregateHistoryRepository.Create(stock, DateTime.Now, DateTime.Now);
-                    }
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(companyInputModel.StockCode))
-                    {
-                        aggregateHistoryRepository.Delete(targetCompany.Stock.AggregateHistory.AggregateHistoryId);
+            ManipulateStock(targetCompany, companyInputModel.StockCode, companyInputModel.BussinessCategoryId);
 
-                        stockRepository.Delete(targetCompany.Stock.StockId);
+            ManipulateCompanyProductRelation(targetCompany, companyInputModel.ProductIds);
 
-                        aggregateHistoryRepository.Update(targetCompany.Stock.AggregateHistory);
-                    }
-                    else
-                    {
-                        var stock = targetCompany.Stock;
-                        stock.StockCode = companyInputModel.StockCode;
-                        stock.BussinessCategoryId = companyInputModel.BussinessCategoryId;
-                        stockRepository.Update(stock);
-                    }
-                }
-
-                //Productの関連付け
-                if (targetCompany.Products == null || targetCompany.Products.Count() == 0)
-                {
-                    CreateCompanyProductRelation(companyInputModel, targetCompany);
-                }
-                else
-                {
-                    //TODO:
-                    //using (var companyProductRelationRepository = _container.Resolve<ICompanyProductRelation>())
-                    //using (var productRepository = _container.Resolve<IProductRepository>())
-                    //{
-                    //    foreach (var product in targetCompany.Products)
-                    //    {
-                    //        if (!companyInputModel.ProductIds.Contains(product.ProductId))
-                    //        {
-                    //            companyProductRelationRepository.Delete(product.ProductId);
-                    //        }
-                    //    }
-
-                    //    foreach (var productId in companyInputModel.ProductIds)
-                    //    {
-                    //        if (!targetCompany.Products.ToList().Exists(p => p.ProductId == productId))
-                    //        {
-                    //            var product = productRepository.Read(productId);
-                    //            companyProductRelationRepository.Create(targetCompany, product);
-                    //        }
-                    //    }
-                    //}
-                }
-
-                companyRepository.Update(targetCompany);
-            }
         }
 
         public Company DeleteCompany(int companyId)
         {
-            using (var repository = _container.Resolve<ICompanyRepository>())
+            return _companyRepository.Delete(companyId);
+        }
+
+        #region Private Methods
+
+        private Company InsertCompany(string companyName, int? parentCompanyId)
+        {
+            var parentCompany = _companyRepository.Read(parentCompanyId);
+            return _companyRepository.Create(companyName, parentCompany);
+        }
+
+        private void InsertStock(Company createdCompany, string stockCode, int bussinessCategoryId)
+        {
+            if (!string.IsNullOrEmpty(stockCode))
             {
-                return repository.Delete(companyId);
+                var bussinessCategory = _bussinessCategoryRepository.Read(bussinessCategoryId);
+                var stock = _stockRepository.Create(createdCompany, bussinessCategory, stockCode);
+
+                _aggregateHistoryRepository.Create(stock, DateTime.Now, DateTime.Now);
             }
         }
 
-        #region private methods
-
-        private void CreateCompanyProductRelation(CompanyInputModel companyInputModel, Company insertedCompany)
+        private void InsertCompanyProductRelation(int[] productIds, Company insertedCompany)
         {
-            using (var companyProductRelationRepository = _container.Resolve<ICompanyProductRelation>())
-            using (var productRepository = _container.Resolve<IProductRepository>())
+            if (productIds != null)
             {
-                if (companyInputModel.Products != null && companyInputModel.Products.Count() > 0)
+                foreach (var productId in productIds)
                 {
-                    foreach (var productId in companyInputModel.ProductIds)
+                    var product = _productRepository.Read(productId);
+                    if (product != null)
                     {
-                        var product = productRepository.Read(productId);
-                        if (product != null)
-                        {
-                            companyProductRelationRepository.Create(insertedCompany, product);
-                        }
+                        _companyProductRelationRepository.Create(insertedCompany, product);
                     }
                 }
             }
+        }
+
+        private void ManipulateStock(Company targetCompany, string stockCode, int bussinessCategoryId)
+        {
+            if (targetCompany.Stock == null || targetCompany.Stock.IsDeleted)
+            {
+                InsertStock(targetCompany, stockCode, bussinessCategoryId);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(stockCode))
+                {
+                    DeleteStock(targetCompany);
+                }
+                else
+                {
+                    UpdateStock(targetCompany.Stock, stockCode, bussinessCategoryId);
+                }
+            }
+        }
+
+        private void ManipulateCompanyProductRelation(Company targetCompany, int[] productIds)
+        {
+            var products = _companyRepository.ReadAll()
+                                              .Include(c => c.Products)
+                                              .SingleOrDefault(c => c.CompanyId == targetCompany.CompanyId);
+
+            if (targetCompany.Products == null || targetCompany.Products.Count() == 0)
+            {
+                InsertCompanyProductRelation(productIds, targetCompany);
+            }
+            else
+            {
+                UpdateCompanyProductRelation(targetCompany, productIds);
+            }
+        }
+
+        private void UpdateCompanyProductRelation(Company targetCompany, int[] productIds)
+        {
+            foreach (var product in targetCompany.Products)
+            {
+                if (!productIds.Contains(product.ProductId))
+                {
+                    _companyProductRelationRepository.Delete(product.ProductId);
+                }
+            }
+
+            foreach (var productId in productIds)
+            {
+                if (!targetCompany.Products.ToList().Exists(p => p.ProductId == productId))
+                {
+                    var product = _productRepository.Read(productId);
+                    _companyProductRelationRepository.Create(targetCompany, product);
+                }
+            }
+        }
+
+        private void UpdateStock(Stock stock, string stockCode, int bussinessCategoryId)
+        {
+            stock.StockCode = stockCode;
+            stock.BussinessCategoryId = bussinessCategoryId;
+            _stockRepository.Update(stock);
+        }
+
+        private void DeleteStock(Company targetCompany)
+        {
+            _aggregateHistoryRepository.Delete(targetCompany.Stock.AggregateHistory.AggregateHistoryId);
+
+            _stockRepository.Delete(targetCompany.Stock.StockId);
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            _companyRepository.Dispose();
+            _productRepository.Dispose();
+            _stockRepository.Dispose();
+            _stockPriceRepository.Dispose();
+            _bussinessCategoryRepository.Dispose();
+            _aggregateHistoryRepository.Dispose();
         }
 
         #endregion

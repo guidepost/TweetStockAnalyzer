@@ -9,12 +9,12 @@ using TweetStockAnalyzer.Model;
 
 namespace TweetStockAnalyzer.DataBase.Repository
 {
-    public interface ICompanyProductRelation : IRepository<CompanyProductRelation>
+    public interface ICompanyProductRelationRepository : IRepository<CompanyProductRelation>
     {
         CompanyProductRelation Create(Company company, Product product);
     }
-    [AutoRegist(typeof(ICompanyProductRelation))]
-    public class CompanyProductRelationRepository : RepositoryBase<CompanyProductRelation>, ICompanyProductRelation
+    [AutoRegist(typeof(ICompanyProductRelationRepository))]
+    public class CompanyProductRelationRepository : RepositoryBase<CompanyProductRelation>, ICompanyProductRelationRepository
     {
         protected override DbSet<CompanyProductRelation> DbSet
         {
