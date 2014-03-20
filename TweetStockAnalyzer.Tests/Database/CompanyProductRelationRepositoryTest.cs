@@ -39,6 +39,10 @@ namespace TweetStockAnalyzer.Tests.Database
             companyRepository = new CompanyRepository();
             var result = companyRepository.Read(company.CompanyId);
             result.Products.First().ProductId.Is(product.ProductId);
+
+            repository = new CompanyProductRelationRepository();
+            var relation = repository.Read(company.CompanyId, product.ProductId);
+            relation.IsNotNull();
         }
     }
 }
