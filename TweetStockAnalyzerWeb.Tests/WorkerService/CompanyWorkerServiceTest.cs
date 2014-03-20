@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TweetStockAnalyzer.DataBase;
 using TweetStockAnalyzer.DataBase.Repository;
+using TweetStockAnalyzer.Model;
 using TweetStockAnalyzerWeb.Models.InputModel;
 using TweetStockAnalyzerWeb.ViewModel.Company;
 using TweetStockAnalyzerWeb.WorkerService;
@@ -15,207 +16,156 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
     [TestClass]
     public class CompanyWorkerServiceTest
     {
-        private CompanyWorkerService _workerService = new CompanyWorkerService();
+        #region Fields
+
+        private static CompanyWorkerService _workerService = new CompanyWorkerService();
+
+        private static CompanyRepository _companyRepository = new CompanyRepository();
+        private static ProductRepository _productRepository = new ProductRepository();
+        private static StockRepository _stockRepository = new StockRepository();
+        private static StockPriceRepository _stockPriceRepository = new StockPriceRepository();
+        private static BussinessCategoryRepository _bussinessCategoryRepository = new BussinessCategoryRepository();
+        private static AggregateHistoryRepository _aggregateHistoryRepository = new AggregateHistoryRepository();
+        private static CompanyProductRelationRepository _companyProductRelationRepository = new CompanyProductRelationRepository();
+        private static CompanyScoreRepository _companyScoreRepository = new CompanyScoreRepository();
+
+        #endregion
+
+        #region Initialize and Cleanup
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            using (var categoryRepository = new BussinessCategoryRepository())
+            foreach (var category in _bussinessCategoryRepository.ReadAll().ToArray())
             {
-                foreach (var category in categoryRepository.ReadAll().ToArray())
-                {
-                    categoryRepository.Delete(category.BussinessCategoryId);
-                }
-
-                categoryRepository.Create("テストカテゴリー１", "1");
-                categoryRepository.Create("テストカテゴリー２", "2");
+                _bussinessCategoryRepository.Delete(category.BussinessCategoryId);
             }
+
+            _bussinessCategoryRepository.Create("TestCategory1", "1");
         }
 
         [TestInitialize]
         public void Initialize()
         {
-            CleanupCompany();
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            CleanupCompany();
-        }
-
-        private void CleanupCompany()
-        {
-            using (var repository = new CompanyRepository())
+            foreach (var company in _companyRepository.ReadAll().ToArray())
             {
-                foreach (var company in repository.ReadAll().ToList())
-                {
-                    repository.Delete(company.CompanyId);
-                }
+                _companyRepository.Delete(company.CompanyId);
             }
         }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            _companyRepository.Dispose();
+            _productRepository.Dispose();
+            _stockRepository.Dispose();
+            _stockPriceRepository.Dispose();
+            _bussinessCategoryRepository.Dispose();
+            _aggregateHistoryRepository.Dispose();
+            _companyProductRelationRepository.Dispose();
+        }
+
+        #endregion
 
         [TestMethod]
         public void GetIndexViewModel()
         {
-            using (var companyRepository = new CompanyRepository())
-            {
-                companyRepository.Create("TestCompany1", null);
-                var parentCompany = companyRepository.ReadAll().First();
-                companyRepository.Create("TestCompany2", parentCompany);
+            var parentCompany = _companyRepository.Create("ParentCompany", null);
+            var childCompany = _companyRepository.Create("ChildCompany", parentCompany);
 
-                var viewModel = _workerService.GetIndexViewModel();
+            var resultViewModel = _workerService.GetIndexViewModel();
 
-                var company1 = viewModel.Companies.ElementAt(0);
-                var company2 = viewModel.Companies.ElementAt(1);
+            var resultCompany = resultViewModel.Companies.ElementAt(1);
 
-                company1.CompanyName.Is("TestCompany1");
-                company1.ParentCompanyId.IsNull();
-
-                company2.CompanyName.Is("TestCompany2");
-                company2.ParentCompanyId.Is(parentCompany.CompanyId);
-            }
+            resultCompany.CompanyName.Is("ChildCompany");
+            resultCompany.ParentCompanyId.Is(parentCompany.CompanyId);
         }
 
         [TestMethod]
         public void GetDetailViewModel()
         {
-            using (var companyRepository = new CompanyRepository())
-            using (var scoreRepository = new CompanyScoreRepository())
-            {
-                var company1 = companyRepository.Create("TestCompany1", null);
-                var company2 = companyRepository.Create("TestCompany2", company1);
+            var parentCompany = _companyRepository.Create("TestCompany1", null);
+            var childCompany = _companyRepository.Create("TestCompany2", parentCompany);
 
-                scoreRepository.Create(company2, 100);
-                scoreRepository.Create(company2, 200);
+            _companyScoreRepository.Create(childCompany, 100);
+            _companyScoreRepository.Create(childCompany, 200);
 
-                var viewModel1 = _workerService.GetDetailViewModel(company1.CompanyId);
-                var viewModel2 = _workerService.GetDetailViewModel(company2.CompanyId);
+            var resultViewModel = _workerService.GetDetailViewModel(childCompany.CompanyId);
 
-                viewModel1.Company.CompanyName.Is("TestCompany1");
+            resultViewModel.Company.CompanyName.Is("TestCompany2");
+            resultViewModel.Company.ParentCompanyId.Is(parentCompany.CompanyId);
 
-                viewModel2.Company.CompanyName.Is("TestCompany2");
-                viewModel2.Company.ParentCompanyId.Is(company1.CompanyId);
-
-                viewModel1.Company.CompanyScores.Count().Is(0);
-                viewModel2.Company.CompanyScores.First().Score.Is(100);
-                viewModel2.Company.CompanyScores.ToArray()[1].Score.Is(200);
-            }
+            resultViewModel.Company.CompanyScores.ToArray()[0].Score.Is(100);
+            resultViewModel.Company.CompanyScores.ToArray()[1].Score.Is(200);
         }
 
         [TestMethod]
         public void CreateCompany()
         {
-            using (var companyRepository = new CompanyRepository())
-            using (var categoryRepository = new BussinessCategoryRepository())
-            {
-                var companyInputModel1 = new CompanyInputModel();
+            var testCompanies = PrepareCompanies();
 
-                companyInputModel1.CompanyName = "TestCompany1";
+            testCompanies[0].CompanyName.Is("TestCompany1");
 
-                _workerService.CreateCompany(companyInputModel1);
+            testCompanies[1].CompanyName.Is("TestCompany2");
+            testCompanies[1].ParentCompanyId.Is(testCompanies[0].CompanyId);
+            testCompanies[1].Stock.StockCode.Is("100");
+            testCompanies[1].Stock.BussinessCategory.BussinessCategoryCode.Is("1");
+            testCompanies[1].Stock.BussinessCategory.BussinessCategoryName.Is("TestCategory1");
 
-                var company1 = companyRepository.ReadAll().First();
-                company1.CompanyName.Is("TestCompany1");
-
-                var companyInputModel2 = new CompanyInputModel();
-
-                companyInputModel2.CompanyName = "TestCompany2";
-                companyInputModel2.ParentCompanyId = company1.CompanyId;
-                companyInputModel2.StockCode = "100";
-                var bussinessCategory = categoryRepository.ReadAll().First();
-                companyInputModel2.BussinessCategoryId = bussinessCategory.BussinessCategoryId;
-
-                _workerService.CreateCompany(companyInputModel2);
-
-                var company2 = companyRepository.ReadAll().ToArray()[1];
-                company2.CompanyName.Is("TestCompany2");
-                company2.ParentCompanyId.Is(company1.CompanyId);
-                company2.Stock.StockCode.Is("100");
-                company2.Stock.BussinessCategory.BussinessCategoryCode.Is("1");
-                company2.Stock.BussinessCategory.BussinessCategoryName.Is("テストカテゴリー１");
-
-                var companyInputModel3 = new CompanyInputModel();
-                companyInputModel3.CompanyName = "TestCompany3";
-                companyInputModel3.BussinessCategoryId = bussinessCategory.BussinessCategoryId;
-
-                _workerService.CreateCompany(companyInputModel3);
-
-                var company3 = companyRepository.ReadAll().ToArray()[2];
-                company3.CompanyName.Is("TestCompany3");
-                company3.Stock.IsNull();
-            }
+            testCompanies[2].CompanyName.Is("TestCompany3");
+            testCompanies[2].Stock.IsNull();
         }
 
         [TestMethod]
         public void UpdateCompany()
         {
-            CreateCompany();
+            var companies = PrepareCompanies();
 
-            using (var companyRepository = new CompanyRepository())
-            using (var categoryRepository = new BussinessCategoryRepository())
-            using (var nextCompanyRepository = new CompanyRepository())
-            using (var lastCompanyRepository = new CompanyRepository())
-            {
-                var bussinessCategories = categoryRepository.ReadAll().ToArray();
+            var beforeCompanies = _companyRepository.ReadAll().ToArray();
 
-                var beforeCompanies = companyRepository.ReadAll().ToArray();
+            var beforeCompanyInputModels = PrepareInputModel(beforeCompanies);
 
-                //①：親なし、株なし
-                //②：親あり、株あり
-                //③：親なし、株なし
-                var beforeCompany1 = beforeCompanies[0];
-                var beforeCompany2 = beforeCompanies[1];
-                var beforeCompany3 = beforeCompanies[2];
+            _workerService.UpdateCompany(beforeCompanyInputModels[0]);
+            _workerService.UpdateCompany(beforeCompanyInputModels[1]);
+            _workerService.UpdateCompany(beforeCompanyInputModels[2]);
 
-                var beforeCompanyInputModel1 = ConvertCompanyToInputModel(beforeCompany1);
-                var beforeCompanyInputModel2 = ConvertCompanyToInputModel(beforeCompany2);
-                var beforeCompanyInputModel3 = ConvertCompanyToInputModel(beforeCompany3);
+            ResetCompanyRepository();
 
-                beforeCompanyInputModel1.CompanyName = "AfterCompany1";
-                beforeCompanyInputModel1.ParentCompanyId = beforeCompany3.CompanyId;
+            var afterCompanies = _companyRepository.ReadAll().ToArray();
 
-                beforeCompanyInputModel2.CompanyName = "AfterCompany2";
-                beforeCompanyInputModel2.ParentCompanyId = beforeCompany3.CompanyId;
-                beforeCompanyInputModel2.StockCode = "200";
-                beforeCompanyInputModel2.BussinessCategoryId = bussinessCategories[1].BussinessCategoryId;
+            afterCompanies[0].CompanyName.Is("AfterCompany1");
+            afterCompanies[0].ParentCompanyId.Is(beforeCompanies[2].CompanyId);
+            afterCompanies[0].Stock.StockCode.Is("100");
+            afterCompanies[0].Stock.BussinessCategory.BussinessCategoryCode.Is("1");
+            afterCompanies[0].Stock.BussinessCategory.BussinessCategoryName.Is("TestCategory1");
 
-                beforeCompanyInputModel3.CompanyName = "AfterCompany3";
-                beforeCompanyInputModel3.StockCode = string.Empty;
-                beforeCompanyInputModel3.BussinessCategoryId = bussinessCategories[1].BussinessCategoryId;
+            afterCompanies[1].CompanyName.Is("AfterCompany2");
+            afterCompanies[1].Stock.IsNull();
 
-                _workerService.UpdateCompany(beforeCompanyInputModel1);
-                _workerService.UpdateCompany(beforeCompanyInputModel2);
-                _workerService.UpdateCompany(beforeCompanyInputModel3);
+            beforeCompanyInputModels[2].ParentCompanyId = null;
+            beforeCompanyInputModels[2].StockCode = string.Empty;
 
-                var afterCompanies = nextCompanyRepository.ReadAll().ToArray();
+            _workerService.UpdateCompany(beforeCompanyInputModels[2]);
 
-                var afterCompany1 = afterCompanies[0];
-                var afterCompany2 = afterCompanies[1];
-                var afterCompany3 = afterCompanies[2];
+            ResetCompanyRepository();
 
-                afterCompany1.CompanyName.Is("AfterCompany1");
-                afterCompany1.ParentCompanyId.Is(beforeCompany3.CompanyId);
+            afterCompanies = _companyRepository.ReadAll().ToArray();
 
-                afterCompany2.CompanyName.Is("AfterCompany2");
-                afterCompany2.ParentCompanyId.Is(beforeCompany3.CompanyId);
-                afterCompany2.Stock.StockCode.Is("200");
-                afterCompany2.Stock.BussinessCategory.BussinessCategoryCode.Is("2");
-                afterCompany2.Stock.BussinessCategory.BussinessCategoryName.Is("テストカテゴリー２");
-
-                afterCompany3.CompanyName.Is("AfterCompany3");
-                afterCompany3.Stock.IsNull();
-
-                beforeCompanyInputModel2.ParentCompanyId = null;
-                beforeCompanyInputModel2.StockCode = string.Empty;
-
-                _workerService.UpdateCompany(beforeCompanyInputModel2);
-
-                var lastCompany2 = lastCompanyRepository.Read(beforeCompany2.CompanyId);
-                lastCompany2.ParentCompanyId.IsNull();
-                lastCompany2.Stock.IsDeleted.IsTrue();
-            }
+            afterCompanies[2].ParentCompanyId.IsNull();
+            afterCompanies[2].Stock.IsNull();
         }
+
+        [TestMethod]
+        public void DeleteCompany()
+        {
+            var company = _companyRepository.Create("TestCompany", null);
+
+            _workerService.DeleteCompany(company.CompanyId);
+
+            _companyRepository.ReadAll().Count().Is(0);
+        }
+
+        #region Private Methods
 
         private CompanyInputModel ConvertCompanyToInputModel(TweetStockAnalyzer.Model.Company company)
         {
@@ -233,21 +183,69 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
             return companyInputModel;
         }
 
-        [TestMethod]
-        public void DeleteCompany()
+        private static void ResetCompanyRepository()
         {
-            CreateCompany();
-
-            using (var companyRepository = new CompanyRepository())
-            {
-                var companies = companyRepository.ReadAll().ToArray();
-
-                _workerService.DeleteCompany(companies[0].CompanyId);
-                _workerService.DeleteCompany(companies[1].CompanyId);
-                _workerService.DeleteCompany(companies[2].CompanyId);
-
-                companyRepository.ReadAll().Count().Is(0);
-            }
+            _companyRepository.Dispose();
+            _companyRepository = new CompanyRepository();
         }
+
+        private Company[] PrepareCompanies()
+        {
+            var companyInputModel1 = new CompanyInputModel
+            {
+                CompanyName = "TestCompany1"
+            };
+
+            _workerService.CreateCompany(companyInputModel1);
+            var company1 = _companyRepository.ReadAll().First();
+
+            var companyInputModel2 = new CompanyInputModel
+            {
+                CompanyName = "TestCompany2",
+                ParentCompanyId = company1.CompanyId,
+                StockCode = "100",
+                BussinessCategoryId = _bussinessCategoryRepository.ReadAll().First().BussinessCategoryId
+            };
+
+            _workerService.CreateCompany(companyInputModel2);
+            var company2 = _companyRepository.ReadAll().ToArray()[1];
+
+            var companyInputModel3 = new CompanyInputModel
+            {
+                CompanyName = "TestCompany3",
+                BussinessCategoryId = _bussinessCategoryRepository.ReadAll().First().BussinessCategoryId
+            };
+
+            _workerService.CreateCompany(companyInputModel3);
+            var company3 = _companyRepository.ReadAll().ToArray()[2];
+
+            return new Company[] { company1, company2, company3 };
+        }
+
+        private CompanyInputModel[] PrepareInputModel(Company[] beforeCompanies)
+        {
+            var beforeCompanyInputModel1 = ConvertCompanyToInputModel(beforeCompanies[0]);
+            var beforeCompanyInputModel2 = ConvertCompanyToInputModel(beforeCompanies[1]);
+            var beforeCompanyInputModel3 = ConvertCompanyToInputModel(beforeCompanies[2]);
+
+            beforeCompanyInputModel1.CompanyName = "AfterCompany1";
+            beforeCompanyInputModel1.ParentCompanyId = beforeCompanies[2].CompanyId;
+            beforeCompanyInputModel1.StockCode = "100";
+            beforeCompanyInputModel1.BussinessCategoryId = _bussinessCategoryRepository.ReadAll().First().BussinessCategoryId;
+
+            beforeCompanyInputModel2.CompanyName = "AfterCompany2";
+            beforeCompanyInputModel2.StockCode = string.Empty;
+            beforeCompanyInputModel2.BussinessCategoryId = _bussinessCategoryRepository.ReadAll().First().BussinessCategoryId;
+
+            beforeCompanyInputModel3.CompanyName = "AfterCompany3";
+            beforeCompanyInputModel3.ParentCompanyId = beforeCompanies[2].CompanyId;
+            beforeCompanyInputModel3.StockCode = "200";
+            beforeCompanyInputModel3.BussinessCategoryId = _bussinessCategoryRepository.ReadAll().First().BussinessCategoryId;
+
+            return new CompanyInputModel[] { beforeCompanyInputModel1, beforeCompanyInputModel2, beforeCompanyInputModel3 };
+        }
+
+        #endregion
+
     }
 }
