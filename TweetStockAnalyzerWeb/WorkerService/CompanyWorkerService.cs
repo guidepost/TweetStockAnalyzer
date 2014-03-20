@@ -85,7 +85,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
             InsertStock(createdCompany, companyInputModel.StockCode, companyInputModel.BussinessCategoryId);
 
-            InsertCompanyProductRelation(companyInputModel.Products, companyInputModel.ProductIds, createdCompany);
+            InsertCompanyProductRelation(companyInputModel.ProductIds, createdCompany);
         }
 
         public void UpdateCompany(CompanyInputModel companyInputModel)
@@ -101,10 +101,10 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
             ManipulateStock(targetCompany, companyInputModel.StockCode, companyInputModel.BussinessCategoryId);
 
-            ManipulateCompanyProductRelation(targetCompany, companyInputModel.Products, companyInputModel.ProductIds);
+            ManipulateCompanyProductRelation(targetCompany, companyInputModel.ProductIds);
 
         }
-        
+
         public Company DeleteCompany(int companyId)
         {
             return _companyRepository.Delete(companyId);
@@ -129,9 +129,9 @@ namespace TweetStockAnalyzerWeb.WorkerService
             }
         }
 
-        private void InsertCompanyProductRelation(Product[] products, int[] productIds, Company insertedCompany)
+        private void InsertCompanyProductRelation(int[] productIds, Company insertedCompany)
         {
-            if (products != null && products.Count() > 0)
+            if (productIds != null)
             {
                 foreach (var productId in productIds)
                 {
@@ -163,11 +163,15 @@ namespace TweetStockAnalyzerWeb.WorkerService
             }
         }
 
-        private void ManipulateCompanyProductRelation(Company targetCompany, Product[] products, int[] productIds)
+        private void ManipulateCompanyProductRelation(Company targetCompany, int[] productIds)
         {
+            var products = _companyRepository.ReadAll()
+                                              .Include(c => c.Products)
+                                              .SingleOrDefault(c => c.CompanyId == targetCompany.CompanyId);
+
             if (targetCompany.Products == null || targetCompany.Products.Count() == 0)
             {
-                InsertCompanyProductRelation(products, productIds, targetCompany);
+                InsertCompanyProductRelation(productIds, targetCompany);
             }
             else
             {
