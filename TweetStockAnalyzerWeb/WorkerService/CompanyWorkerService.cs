@@ -71,12 +71,16 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
         public CompanyDetailViewModel GetDetailViewModel(int companyId)
         {
-            return new CompanyDetailViewModel()
+            var viewModel = new CompanyDetailViewModel();
+            viewModel.Company = _companyRepository.ReadAll()
+                                                  .Include(c => c.CompanyScores)
+                                                  .FirstOrDefault(c => c.CompanyId == companyId);
+            if (viewModel.Company.ParentCompanyId.HasValue)
             {
-                Company = _companyRepository.ReadAll()
-                                            .Include(c => c.CompanyScores)
-                                            .FirstOrDefault(c => c.CompanyId == companyId)
-            };
+                viewModel.ParentCompanyName = _companyRepository.Read(viewModel.Company.ParentCompanyId.Value).CompanyName;
+            }
+
+            return viewModel;
         }
 
         public void CreateCompany(CompanyInputModel companyInputModel)

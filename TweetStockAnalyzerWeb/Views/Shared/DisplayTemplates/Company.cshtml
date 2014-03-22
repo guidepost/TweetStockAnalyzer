@@ -1,19 +1,38 @@
 ﻿@model TweetStockAnalyzer.Model.Company
 
-<p><b>@Model.CompanyName</b><span>(9999)</span></p>
-<p>親会社名</p>
 <p>
-    サービス一覧
-    <ul>
-        <li></li>
-        <li></li>
-        <li></li>
-    </ul>
-</p>
-<p>
-    会社のスコア
-</p>
-<p>
-    時系列情報
-</p>
-@ChartHelper.ScoreChart(Model.CompanyScores.ToDictionary(s => s.RegisterDate.Date, s => s.Score))
+    <b>@Model.CompanyName</b>
+    @if (Model.Stock != null)
+    {
+        <span><a href='@string.Format("http://stocks.finance.yahoo.co.jp/stocks/detail/?code={0}",Model.Stock.StockCode)'>@Model.Stock.StockCode</a></span>
+    }
+    @if (ViewData["ParentCompanyName"] != null)
+    {
+    <p>ParentCompanyName:@ViewData["ParentCompanyName"]</p>
+    }
+    <p>
+        Products
+        <ul>
+            @foreach (var product in Model.Products)
+            {
+                <li><a href="@Url.Action("Detail", "Product", new { productId = @product.ProductId })">@product.ProductName</a></li>
+            }
+        </ul>
+    </p>
+    @if (Model.CompanyScores != null && Model.CompanyScores.Count() > 0)
+    {
+        <p>
+            Score:@Model.CompanyScores.OrderBy(s => s.RegisterDate).Last().Score;
+        </p>
+    }
+    else
+    {
+        <p>
+            Score is not evaluated yet.
+        </p>
+    }
+
+    <p>
+        Historical Scores
+    </p>
+    @ChartHelper.ScoreChart(Model.CompanyScores.ToDictionary(s => s.RegisterDate.Date, s => s.Score))
