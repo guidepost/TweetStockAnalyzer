@@ -4,25 +4,6 @@
     ViewBag.Title = "CompanyList";
 }
 
-<style type="text/css">
-    .bottom-margin {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        padding: 10px;
-    }
-
-    .border-box {
-        border: 1px solid #ddd;
-    }
-
-    .align-right {
-        float: right;
-    }
-
-    .margin-left {
-        margin-left: 10px;
-    }
-</style>
 
 <h2>Company</h2>
 @MessageHelper.SuccessMessage(Model.SuccessMessage)
@@ -39,7 +20,7 @@
                 <b>@Html.ActionLink(company.CompanyName, "Detail", new { companyId = company.CompanyId })</b>
                 @if (company.Stock != null)
                 {
-                    <span>(@company.Stock.StockCode)</span>
+                    <span><a href='@string.Format("http://stocks.finance.yahoo.co.jp/stocks/detail/?code={0}",company.Stock.StockCode)'>(@company.Stock.StockCode)</a></span>
                 }
                 <span class="align-right">
                     @Html.ActionLink("Modify", "Update", new { companyId = company.CompanyId })
@@ -50,11 +31,17 @@
                     new { companyId = company.CompanyId },
                     new { onclick = "return confirm('Are you sure you wish to delete this company?');" })
                 </span>
-                <span class="margin-left">Score:100</span>
+                @if (company.CompanyScores != null && company.CompanyScores.Count > 0)
+                {
+                    <span class="margin-left">Score:@company.CompanyScores.OrderBy(s => s.RegisterDate).Last().Score</span>
+                }
             </p>
-            <p>
-                @ChartHelper.ScoreChart(new Dictionary<DateTime, int> { { new DateTime(2000, 1, 1), 100 }, { new DateTime(2000, 1, 2), 200 } })
-            </p>
+            @if (company.CompanyScores != null && company.CompanyScores.Count > 0)
+            {
+                <p>
+                    @ChartHelper.ScoreChart("Score Chart", company.CompanyScores.ToDictionary(c => c.RegisterDate, c => (double)c.Score))
+                </p>
+            }
         </div>
     }
 }

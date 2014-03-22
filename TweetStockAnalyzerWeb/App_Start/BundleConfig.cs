@@ -28,8 +28,9 @@ namespace TweetStockAnalyzerWeb
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqplot").Include(
-                        "~/Scripts/jquery.jqplot.min.js",
-                        "~/Scripts/excanvas.min.js"));
+                        "~/Scripts/jquery.jqplot.js",
+                        "~/Scripts/excanvas.js",
+                        "~/Scripts/jqplot.dateAxisRenderer.js"));
 
             bundles.Add(new StyleBundle("~/jqplot/css").Include(
                     "~/Content/jquery.jqplot.min.css"));
