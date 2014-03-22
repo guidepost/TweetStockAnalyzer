@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
+using System.Linq.Expressions;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 
@@ -25,6 +27,11 @@ namespace TweetStockAnalyzer.DataBase.Repository
             entity.IsDeleted = value.IsDeleted;
 
             base.Update(entity);
+        }
+
+        public override SearchResult Read(Expression<Func<SearchResult, object>> include, params object[] id)
+        {
+            return ReadAll().Include(include).FirstOrDefault(p => p.SearchResultId == (int) id[0]);
         }
 
         public SearchResult Create(SearchWord searchWord, Product product, long tweetCount, DateTime date)

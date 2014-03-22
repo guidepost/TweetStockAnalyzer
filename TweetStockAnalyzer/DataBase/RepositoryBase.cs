@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TweetStockAnalyzer.Model;
@@ -26,10 +27,13 @@ namespace TweetStockAnalyzer.DataBase
             Entities.SaveChanges();
         }
         
-        public virtual T Read(object id)
+        public virtual T Read(params object[] id)
         {
             return DbSet.Find(id);
         }
+
+        public abstract T Read(Expression<Func<T, object>> include, params object[] id);
+
         public virtual IQueryable<T> ReadAll()
         {
             return DbSet;
@@ -37,7 +41,7 @@ namespace TweetStockAnalyzer.DataBase
 
 
 
-        public virtual T Delete(int id)
+        public virtual T Delete(params object[] id)
         {
             var entity = Read(id);
             if (entity != null)

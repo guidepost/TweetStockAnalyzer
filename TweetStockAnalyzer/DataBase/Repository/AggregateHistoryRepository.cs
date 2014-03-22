@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
+using System.Linq.Expressions;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 
@@ -24,6 +26,11 @@ namespace TweetStockAnalyzer.DataBase.Repository
             entity.EndDate = value.EndDate;
             entity.IsDeleted = value.IsDeleted;
             base.Update(entity);
+        }
+
+        public override AggregateHistory Read(Expression<Func<AggregateHistory, object>> include, params object[] id)
+        {
+            return ReadAll().Include(include).FirstOrDefault(p=>p.AggregateHistoryId == (int)id[0]);
         }
 
         public AggregateHistory Create(Stock stock, DateTime startDate, DateTime endDate)

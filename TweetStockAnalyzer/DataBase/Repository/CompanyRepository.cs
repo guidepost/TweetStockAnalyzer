@@ -1,4 +1,7 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Linq.Expressions;
 using TweetStockAnalyzer.Infrastructure.Dependency;
 using TweetStockAnalyzer.Model;
 
@@ -23,6 +26,11 @@ namespace TweetStockAnalyzer.DataBase.Repository
             entity.ParentCompanyId = value.ParentCompanyId;
             entity.IsDeleted = value.IsDeleted;
             base.Update(entity);
+        }
+
+        public override Company Read(Expression<Func<Company, object>> include, params object[] id)
+        {
+            return ReadAll().Include(include).FirstOrDefault(p => p.CompanyId == (int) id[0]);
         }
 
         public Company Create(string name,  Company parentCompany)
