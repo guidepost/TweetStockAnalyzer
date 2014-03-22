@@ -13,7 +13,7 @@ using TweetStockAnalyzerWeb.ViewModel.Company;
 
 namespace TweetStockAnalyzerWeb.WorkerService
 {
-    public interface ICompanyWorkerService
+    public interface ICompanyWorkerService : IDisposable
     {
         CompanyIndexViewModel GetIndexViewModel();
 
@@ -27,7 +27,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
     }
 
     [AutoRegist(typeof(ICompanyWorkerService))]
-    public class CompanyWorkerService : ICompanyWorkerService, IDisposable
+    public class CompanyWorkerService : ICompanyWorkerService
     {
         #region Fields
 

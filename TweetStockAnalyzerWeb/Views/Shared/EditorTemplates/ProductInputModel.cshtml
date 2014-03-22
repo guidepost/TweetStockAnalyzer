@@ -21,14 +21,14 @@
 <div class="form-group">
     @Html.LabelFor(m => m.SearchWords)
     <div class="form-inline">
-        <input type="text" id="searchWord" class="form-control" /><button class="add-button" onclick="addSearchWord(); return false;">Add</button>
+        <input type="text" id="searchWord" class="form-control" /><button class="add-button">Add</button>
     </div>
     <ul id="searchWordList">
         @if (Model != null && Model.SearchWords != null)
         {
             foreach (var searchWord in Model.SearchWords)
             {
-                <li>@searchWord<input type="hidden" value="@searchWord" /><a class="remove-button" onclick="return false;">remove</a></li>
+                <li>@searchWord<input type="hidden" value="@searchWord" /><a class="remove-button">remove</a></li>
             }
         }
     </ul>
@@ -38,24 +38,32 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#searchWordList').on('click', '.remove-button', function () {
+        $('#searchWordList').on('click', '.remove-button', function (event) {
+            event.preventDefault();
+
             var parentLi = $(this).parent();
             parentLi.remove();
 
-            reNumber();
+            numbering();
         });
 
-        reNumber();
+        numbering();
+
+        $('.add-button').click(function (event) {
+            event.preventDefault();
+
+            addSearchWord();
+        });
     });
 
     function addSearchWord() {
         var searchWord = $("#searchWord").val();
         $("#searchWordList").append('<li>' + searchWord + '<input type="hidden" value="' + searchWord + '"/><a class="remove-button" onclick="return false;">remove</a></li>');
 
-        reNumber();
+        numbering();
     }
 
-    function reNumber() {
+    function numbering() {
         $('#searchWordList li input').each(function (i) {
             $(this).attr('name', 'SearchWords[' + i + ']');
             i = i + 1;

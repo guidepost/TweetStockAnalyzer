@@ -23,15 +23,15 @@
     @Html.DropDownListFor(m => m.BussinessCategoryId, DropDownListItems.BussinessCategories, new { @class = "form-control" })
 </div>
 <div class="form-group">
-    @Html.LabelFor(m    => m.Products)
-    @Html.DropDownList("product-dropdown",DropDownListItems.Products,new {@class = "form-control"})
-    <button class="add-button" onclick="addProduct(); return false;">Add</button>
+    @Html.LabelFor(m => m.Products)
+    @Html.DropDownList("product-dropdown", DropDownListItems.Products, new { @class = "form-control" })
+    <button class="add-button">Add</button>
     <ul id="productList">
-        @if (Model != null && Model.Products != null )
+        @if (Model != null && Model.Products != null)
         {
             foreach (var product in Model.Products)
             {
-        <li>@product.ProductName<input type="hidden" value="@product.ProductId" /><a class="remove-button" onclick="return false;">remove</a></li>
+                <li>@product.ProductName<input type="hidden" value="@product.ProductId" /><a class="remove-button" onclick="return false;">remove</a></li>
             }
         }
     </ul>
@@ -48,6 +48,11 @@
         });
 
         numbering();
+
+        $('.add-button').click(function (event) {
+            event.preventDefault();
+            addProduct();
+        });
     });
 
     function numbering() {
@@ -62,6 +67,6 @@
         var productName = $("#product-dropdown option:selected").text();
         $("#productList").append('<li>' + productName + '<input type="hidden" value="' + productId + '"/><a class="remove-button" onclick="return false;">remove</a></li>');
 
-        reNumber();
+        numbering();
     }
 </script>

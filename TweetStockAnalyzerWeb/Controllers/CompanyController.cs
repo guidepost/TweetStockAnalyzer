@@ -69,6 +69,7 @@ namespace TweetStockAnalyzerWeb.Controllers
 
                     model.BussinessCategoryId = company.Stock.BussinessCategoryId;
                 }
+                model.Products = company.Products.ToArray();
 
                 return View(model);
             }
@@ -103,6 +104,19 @@ namespace TweetStockAnalyzerWeb.Controllers
         private ActionResult RedirectToIndex(string successMessage = null)
         {
             return RedirectToAction("Index", new { successMessage = successMessage });
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_workerService != null)
+                {
+                    _workerService.Dispose();
+                }
+            }
+
+            base.Dispose(disposing);
         }
     }
 }
