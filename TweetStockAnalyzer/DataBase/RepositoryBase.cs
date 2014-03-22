@@ -28,6 +28,7 @@ namespace TweetStockAnalyzer.DataBase
         }
         public virtual T Create(T entity)
         {
+            entity.UpdateDate = DateTime.Now;
             entity.RegisterDate = DateTime.Now;
             DbSet.Add(entity);
             Entities.SaveChanges();
