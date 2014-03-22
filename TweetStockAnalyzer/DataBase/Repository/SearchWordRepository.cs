@@ -39,9 +39,7 @@ namespace TweetStockAnalyzer.DataBase.Repository
             var entity = new SearchWord();
             entity.Word = word;
             entity.ProductId = product.ProductId;
-            DbSet.Add(entity);
-            Entities.SaveChanges();
-            return entity;
+            return base.Create(entity);
         }
     }
 }

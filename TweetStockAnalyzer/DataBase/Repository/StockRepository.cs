@@ -39,9 +39,9 @@ namespace TweetStockAnalyzer.DataBase.Repository
             entity.StockCode = stockCode;
             entity.CompanyId = company.CompanyId;
             entity.BussinessCategoryId = category.BussinessCategoryId;
-            DbSet.Add(entity);
-            Entities.SaveChanges();
-            return entity;
+            return base.Create(entity);
         }
+
+
     }
 }

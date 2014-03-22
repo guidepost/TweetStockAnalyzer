@@ -39,9 +39,7 @@ namespace TweetStockAnalyzer.DataBase.Repository
             entity.StockId = stock.StockId;
             entity.StartDate = startDate;
             entity.EndDate = endDate;
-            DbSet.Add(entity);
-            Entities.SaveChanges();
-            return entity;
+            return base.Create(entity);
         }
     }
 }

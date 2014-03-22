@@ -37,9 +37,7 @@ namespace TweetStockAnalyzer.DataBase.Repository
             var entity = new CompanyScore();
             entity.Score = score;
             entity.CompanyId = company.CompanyId;
-            DbSet.Add(entity);
-            Entities.SaveChanges();
-            return entity;
+            return base.Create(entity);
         }
 
     }
