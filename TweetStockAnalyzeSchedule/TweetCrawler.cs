@@ -31,13 +31,13 @@ namespace TweetStockAnalyzeSchedule
             using (var searchResultRepository = DependencyContainer.Instance.Resolve<ISearchResultRepository>())
             using (var searchWordRepository = DependencyContainer.Instance.Resolve<ISearchWordRepository>())
             {
-                foreach (var searchWord in searchWordRepository.ReadAll().OrderBy(p => p.UpdateDate).Take(_requestCount))
+                foreach (var searchWord in searchWordRepository.ReadAll().OrderBy(p => p.UpdateDate).Take(_requestCount).ToList())
                 {
                     var tweets = GetTweetCountAsync(searchWord);
                     if (tweets.Result.Statuses.Any())
                     {
                         searchResultRepository.Create(searchWord, searchWord.Product, tweets.Result.Statuses.Count(), DateTime.Now);
-                        searchWord.LastTweetId = tweets.Result.Statuses.Last().Id;
+                        searchWord.LastTweetId = tweets.Result.Statuses.First().Id;
                         searchWordRepository.Update(searchWord);
                     }
                 }
@@ -48,6 +48,7 @@ namespace TweetStockAnalyzeSchedule
             var service = new TwitterServiceProvider().GetService();
             var option = new SearchOptions()
             {
+                Count = 100,
                 Q = searchWord.Word,
                 SinceId = searchWord.LastTweetId
             };

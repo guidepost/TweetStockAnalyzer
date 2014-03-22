@@ -30,7 +30,7 @@ namespace TweetStockAnalyzeSchedule
             using (var stockPriceRepository = DependencyContainer.Instance.Resolve<IStockPriceRepository>())
             using (var aggregateHistoryRepository = DependencyContainer.Instance.Resolve<IAggregateHistoryRepository>())
             {
-                foreach (var aggregateHistory in aggregateHistoryRepository.ReadAll().OrderBy(p=>p.EndDate).Take(_requestCount))
+                foreach (var aggregateHistory in aggregateHistoryRepository.ReadAll().OrderBy(p=>p.EndDate).Take(_requestCount).ToList())
                 {
                     var stock = aggregateHistory.Stock;
                     var now = DateTime.Now;

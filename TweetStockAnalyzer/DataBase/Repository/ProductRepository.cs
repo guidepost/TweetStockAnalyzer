@@ -38,9 +38,7 @@ namespace TweetStockAnalyzer.DataBase.Repository
             var entity = new Product();
             entity.ProductName = name;
             entity.ServiceStartDate = serviceStartDate;
-            DbSet.Add(entity);
-            Entities.SaveChanges();
-            return entity;
+            return base.Create(entity);
         }
     }
 }

@@ -43,9 +43,7 @@ namespace TweetStockAnalyzer.DataBase.Repository
             entity.ProductId = product.ProductId;
             entity.TweetCount = tweetCount;
             entity.SearchDate = date;
-            DbSet.Add(entity);
-            Entities.SaveChanges();
-            return entity;
+            return base.Create(entity);
         }
     }
 }

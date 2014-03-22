@@ -41,9 +41,7 @@ namespace TweetStockAnalyzer.DataBase.Repository
             {
                 entity.ParentCompanyId = parentCompany.CompanyId;
             }
-            DbSet.Add(entity);
-            Entities.SaveChanges();
-            return entity;
+            return base.Create(entity);
         }
     }
 }

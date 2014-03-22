@@ -40,8 +40,7 @@ namespace TweetStockAnalyzer.DataBase.Repository
             entity.Dealings = dealings;
             entity.ClosingPrice = closingPrice;
             entity.StockId = stock.StockId;
-            DbSet.Add(entity);
-            return entity;
+            return base.Create(entity);
         }
     }
 }

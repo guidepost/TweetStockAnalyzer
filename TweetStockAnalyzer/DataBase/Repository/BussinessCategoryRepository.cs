@@ -38,9 +38,7 @@ namespace TweetStockAnalyzer.DataBase.Repository
             var entity = new BussinessCategory();
             entity.BussinessCategoryName = name;
             entity.BussinessCategoryCode = code;
-            DbSet.Add(entity);
-            Entities.SaveChanges();
-            return entity;
+            return base.Create(entity);
         }
     }
 }
