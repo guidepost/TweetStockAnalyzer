@@ -33,13 +33,21 @@ namespace TweetStockAnalyzeSchedule
             {
                 foreach (var searchWord in searchWordRepository.ReadAll().OrderBy(p => p.UpdateDate).Take(_requestCount).ToList())
                 {
-                    var tweets = GetTweetCountAsync(searchWord);
-                    if (tweets.Result.Statuses.Any())
+                    try
                     {
-                        searchResultRepository.Create(searchWord, searchWord.Product, tweets.Result.Statuses.Count(), DateTime.Now);
-                        searchWord.LastTweetId = tweets.Result.Statuses.First().Id;
-                        searchWordRepository.Update(searchWord);
+                        var tweets = GetTweetCountAsync(searchWord);
+                        if (tweets.Result.Statuses.Any())
+                        {
+                            searchResultRepository.Create(searchWord, searchWord.Product, tweets.Result.Statuses.Count(), DateTime.Now);
+                            searchWord.LastTweetId = tweets.Result.Statuses.First().Id;
+                            searchWordRepository.Update(searchWord);
+                        }
                     }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.EventLog.WriteEntry(GetType().Assembly.FullName,e.ToString());
+                    }
+                    
                 }
             }
         }
