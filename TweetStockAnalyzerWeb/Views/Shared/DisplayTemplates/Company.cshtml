@@ -10,6 +10,7 @@
     {
     <p>ParentCompanyName:@ViewData["ParentCompanyName"]</p>
     }
+    <hr />
     <p>
         Products
         <ul>
@@ -19,11 +20,15 @@
             }
         </ul>
     </p>
+    <hr />
     @if (Model.CompanyScores != null && Model.CompanyScores.Count() > 0)
     {
         <p>
-            Score:@Model.CompanyScores.OrderBy(s => s.RegisterDate).Last().Score;
+            Score
         </p>
+        <span class="margin-left">
+            @Model.CompanyScores.OrderBy(s => s.RegisterDate).Last().Score
+        </span>
     }
     else
     {
@@ -31,8 +36,23 @@
             Score is not evaluated yet.
         </p>
     }
-
-    <p>
-        Historical Scores
-    </p>
-    @ChartHelper.ScoreChart(Model.CompanyScores.ToDictionary(s => s.RegisterDate.Date, s => s.Score))
+    <hr />
+    @if (Model.CompanyScores != null && Model.Stock != null)
+    {
+        <p>
+            Chart
+        </p>
+        @ChartHelper.ScoreChart("Score and StockPrice Chart",
+                                Model.CompanyScores.ToDictionary(s => s.RegisterDate.Date, s => (double)s.Score),
+                                Model.Stock.StockPrices.ToDictionary(p => p.RegisterDate, p => p.ClosingPrice))
+        <hr />
+    }
+    @if (Model.CompanyScores != null)
+    {
+        @HistoricalDataHelper.Table("Historical Scores", Model.CompanyScores.ToDictionary(s => s.RegisterDate, s => s.Score))
+        <hr />
+    }
+    @if (Model.Stock != null)
+    {
+        @HistoricalDataHelper.Table("Historical StockPrices", Model.Stock.StockPrices.ToDictionary(p => p.RegisterDate, p => p.ClosingPrice))
+    }

@@ -1,7 +1,36 @@
 ﻿@using TweetStockAnalyzer.Model;
 @using TweetStockAnalyzerWeb.Models;
 
-@helper Table(Dictionary<DateTime,int> historicalData)
+@helper Table(string title, Dictionary<DateTime, int> historicalData)
 {
+    @Table(title, historicalData.ToDictionary(d => d.Key, d => (double)d.Value));
+}
 
+@helper Table(string title, Dictionary<DateTime, double> historicalData)
+{
+    if (historicalData != null && historicalData.Count > 0)
+    {
+        <p>@title</p>
+        <table class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var data in historicalData.OrderByDescending(d => d.Key))
+                {
+                    <tr>
+                        <td>@data.Key.ToShortDateString()</td>
+                        <td>@data.Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Historical data is not existing.</p>
+    }
 }

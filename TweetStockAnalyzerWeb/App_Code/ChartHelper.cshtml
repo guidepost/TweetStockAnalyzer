@@ -1,37 +1,72 @@
 ﻿@using TweetStockAnalyzer.Model;
 @using TweetStockAnalyzerWeb.Models;
 
-@helper ScoreChart(params Dictionary<DateTime, int>[] dateAndScores)
+@helper ScoreChart(string title, params Dictionary<DateTime, double>[] kvpCollections)
 {
-    ScoreChart(dateAndScores.Select(dict => dict.ToDictionary(d => d.Key, d => (long)d.Value)).ToArray());
-}
+    if (kvpCollections != null && kvpCollections.Count() > 0 && kvpCollections.All(c => c.Count > 0))
+    {
+        var guid = Guid.NewGuid();
 
-@helper ScoreChart(params Dictionary<DateTime, long>[] dateAndScores)
-{
-    var guid = Guid.NewGuid();
+        int outerCount = 1;
+        int innerCount = 1;
 
-    <div style="padding:30px">
-        <div id='chart_@guid'>
-
+        <div style="padding:30px">
+            <div id='chart_@guid'>
+            </div>
         </div>
-    </div>
-    <script type="text/javascript">
-        $.jqplot('chart_@guid',
-            [
-                @foreach (var aaa in dateAndScores)
+        <script type="text/javascript">
+            $.jqplot('chart_@guid',
+                [
+                    @foreach (var kvpCollection in kvpCollections)
                 {
                     @:[
-                        foreach (var bbb in aaa)
-	{
+                            foreach (var kvp in kvpCollection)
+                        {
                             @:[
-                            @bbb.Key.ToString("hhhh-mm-dd")
+                                    @(new HtmlString(string.Format("new Date('{0}'),{1}",kvp.Key.ToString("yyyy-MM-dd"),kvp.Value)))
+                            @:]
+                                if (innerCount != kvpCollection.Count())
+	                        {
                                 @:,
-                                @bbb.Value
-@:],
-	}
-                    @:],
+    	                        }
+                            innerCount++;
+                        }
+                    @:]
+                        if (outerCount != kvpCollections.Count())
+	                {
+                        @:,
+    	                }
+                    outerCount++;
+	            }
+                ],
+            {
+                title: '@title'
+                , series: [
+                    {
+                        label: 'Score',
+                        yaxis:'yaxis'
+                    },
+                    {
+                        label: 'StockPrice',
+                        yaxis:'y2axis'
+                    }
+                ]
+                , axes: {
+                    xaxis: {
+                        renderer: $.jqplot.DateAxisRenderer,
+                        label: "Date",
+                        tickOptions: {formatString:"%y/%#m/%#d"}
+                    },
+                    yaxis: {
+                        label: "Score",
+                        min: 0,
+                    },
+                    y2axis: {
+                        label: "Price",
+                        min:0
+                    }
                 }
-            ]
-            )
-    </script>
+            })
+        </script>
+    }
 }

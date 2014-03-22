@@ -40,3 +40,33 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.bottom-margin {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.border-box {
+    border: 1px solid #ddd;
+}
+
+.align-right {
+    float: right;
+}
+
+.margin-left {
+    margin-left: 10px;
+}
+
+.add-button {
+    margin-left: 5px;
+}
+
+.remove-button {
+    margin-left: 5px;
+}
+
+.border-box {
+    border: 1px solid #ddd;
+}
