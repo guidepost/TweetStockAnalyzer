@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TweetStockAnalyzeSchedule
 {
-    public interface IClawler
+    public interface ISchedule
     {
         void Start();
     }

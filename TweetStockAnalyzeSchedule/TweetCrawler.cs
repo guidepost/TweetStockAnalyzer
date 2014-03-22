@@ -13,7 +13,7 @@ using TweetStockAnalyzer.Domain.Twitter;
 
 namespace TweetStockAnalyzeSchedule
 {
-    public class TweetCrawler : IClawler
+    public class TweetCrawler : ISchedule
     {
         private readonly int _requestCount;
 

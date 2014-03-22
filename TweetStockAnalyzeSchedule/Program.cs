@@ -25,6 +25,12 @@ namespace TweetStockAnalyzeSchedule
                 crowler.Start();
                 return;
             }
+            if(args[0] == "score")
+            {
+                var updator = new ScoreUpdator();
+                updator.Start();
+                return;
+            }
         }
     }
 }

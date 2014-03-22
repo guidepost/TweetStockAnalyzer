@@ -12,7 +12,7 @@ using TweetStockAnalyzer.Model;
 
 namespace TweetStockAnalyzeSchedule
 {
-    public class StockCrawler : IClawler
+    public class StockCrawler : ISchedule
     {
         private int _requestCount;
 
