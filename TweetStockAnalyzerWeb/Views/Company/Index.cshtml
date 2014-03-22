@@ -38,9 +38,6 @@
             </p>
             @if (company.CompanyScores != null && company.CompanyScores.Count > 0)
             {
-                <p>
-                    Chart
-                </p>
                 if (company.Stock != null && company.Stock.StockPrices.Count > 0)
                 {
                     @ChartHelper.ScoreChart("Score and StockPrice Chart",
