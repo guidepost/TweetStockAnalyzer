@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using TweetSharp;
@@ -33,6 +34,11 @@ namespace TweetStockAnalyzer.Domain.Twitter
          
             _service.Search(option, new Action<TwitterSearchResult, TwitterResponse>((result, reponse) =>
             {
+                if(result == null)
+                {
+                    taskSource.SetException(new WebException("can't get twitter result. query="+ option.Q));
+                    return;
+                }
                 taskSource.SetResult(result);
             }));
             return taskSource.Task;
