@@ -13,7 +13,7 @@ using TweetStockAnalyzerWeb.ViewModel.Company;
 
 namespace TweetStockAnalyzerWeb.WorkerService
 {
-    public interface ICompanyWorkerService
+    public interface ICompanyWorkerService : IDisposable
     {
         CompanyIndexViewModel GetIndexViewModel();
 
@@ -27,7 +27,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
     }
 
     [AutoRegist(typeof(ICompanyWorkerService))]
-    public class CompanyWorkerService : ICompanyWorkerService, IDisposable
+    public class CompanyWorkerService : ICompanyWorkerService
     {
         #region Fields
 
@@ -71,12 +71,16 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
         public CompanyDetailViewModel GetDetailViewModel(int companyId)
         {
-            return new CompanyDetailViewModel()
+            var viewModel = new CompanyDetailViewModel();
+            viewModel.Company = _companyRepository.ReadAll()
+                                                  .Include(c => c.CompanyScores)
+                                                  .FirstOrDefault(c => c.CompanyId == companyId);
+            if (viewModel.Company.ParentCompanyId.HasValue)
             {
-                Company = _companyRepository.ReadAll()
-                                            .Include(c => c.CompanyScores)
-                                            .FirstOrDefault(c => c.CompanyId == companyId)
-            };
+                viewModel.ParentCompanyName = _companyRepository.Read(viewModel.Company.ParentCompanyId.Value).CompanyName;
+            }
+
+            return viewModel;
         }
 
         public void CreateCompany(CompanyInputModel companyInputModel)

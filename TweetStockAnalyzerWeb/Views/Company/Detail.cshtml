@@ -6,4 +6,4 @@
 
 <h2>Detail</h2>
 
-@Html.DisplayFor(m => m.Company)
+@Html.DisplayFor(m => m.Company, new { ParentCompanyName = Model.ParentCompanyName })

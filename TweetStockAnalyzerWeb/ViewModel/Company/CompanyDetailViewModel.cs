@@ -10,6 +10,8 @@ namespace TweetStockAnalyzerWeb.ViewModel.Company
     {
         public TweetStockAnalyzer.Model.Company Company { get; set; }
 
+        public string ParentCompanyName { get; set; }
+
         public CompanyScore[] CompanyScores { get; set; }
     }
 }
