@@ -39,8 +39,20 @@
             @if (company.CompanyScores != null && company.CompanyScores.Count > 0)
             {
                 <p>
-                    @ChartHelper.ScoreChart("Score Chart", company.CompanyScores.ToDictionary(c => c.RegisterDate, c => (double)c.Score))
+                    Chart
                 </p>
+                if (company.Stock != null && company.Stock.StockPrices.Count > 0)
+                {
+                    @ChartHelper.ScoreChart("Score and StockPrice Chart",
+                                company.CompanyScores.ToDictionary(s => s.RegisterDate.Date, s => (double)s.Score),
+                                company.Stock.StockPrices.ToDictionary(p => p.RegisterDate, p => p.ClosingPrice))
+                }
+                else
+                {
+                    @ChartHelper.ScoreChart("Score and StockPrice Chart",
+                                company.CompanyScores.ToDictionary(s => s.RegisterDate.Date, s => (double)s.Score))
+                }
+                <hr />
             }
         </div>
     }
