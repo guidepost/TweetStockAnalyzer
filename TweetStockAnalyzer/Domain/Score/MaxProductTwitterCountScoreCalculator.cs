@@ -15,6 +15,10 @@ namespace TweetStockAnalyzer.Domain.Score
 
         private int GetProductSocre(Product product)
         {
+            if(product.SearchWords.Any() == false)
+            {
+                return 0;
+            }
             return product.SearchWords.Max(
                 searchWord => GetLastSearchResult(searchWord));
         }

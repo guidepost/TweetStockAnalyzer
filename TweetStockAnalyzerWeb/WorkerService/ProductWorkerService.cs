@@ -37,6 +37,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
             using (var repository = _container.Resolve<IProductRepository>())
             {
                 var product = repository.ReadAll()
+                                        .Include(p=>p.Companies)
                                         .Include(p => p.SearchResults)
                                         .FirstOrDefault(p=>p.ProductId == productId);
                 viewModel.Product = product;

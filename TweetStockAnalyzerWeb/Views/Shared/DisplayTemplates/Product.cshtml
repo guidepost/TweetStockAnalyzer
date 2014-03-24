@@ -5,17 +5,18 @@
 <p>@Model.ServiceStartDate</p>
 <p>@Model.ServiceEndDate</p>
 <p>
-    サービス一覧
+</p>
+<p>
+    Companies
     <ul>
-        <li></li>
-        <li></li>
-        <li></li>
+        @foreach (var company in Model.Companies)
+        {
+            <li><a href="@Url.Action("Detail", "Company", new { companyId = @company.CompanyId })">@company.CompanyName</a></li>
+        }
     </ul>
+
 </p>
 <p>
-    会社のスコア
+    Chart
 </p>
-<p>
-    時系列情報
-</p>
-@ChartHelper.ScoreChart(Model.SearchResults.GroupBy(r => r.RegisterDate.Date).ToDictionary(g => g.Key, g => g.Sum(r => r.TweetCount)))
+@ChartHelper.ScoreChart("SearchResult", Model.SearchResults.GroupBy(r => r.RegisterDate.Date).ToDictionary(g => g.Key, g => (double)g.Sum(r => r.TweetCount)))
