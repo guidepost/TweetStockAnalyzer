@@ -40,6 +40,36 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
+            _testBussinessCategory = _bussinessCategoryRepository.Create("TestCategory", "1");
+            _testProduct1 = _productRepository.Create("TestProduct1", new DateTime(2000, 1, 1));
+            _testProduct2 = _productRepository.Create("TestProduct2", new DateTime(2000, 2, 2));
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            foreach (var company in _companyRepository.ReadAll().ToArray())
+            {
+                _companyRepository.Delete(company.CompanyId);
+            }
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            DeleteEntities();
+
+            _companyRepository.Dispose();
+            _productRepository.Dispose();
+            _stockRepository.Dispose();
+            _stockPriceRepository.Dispose();
+            _bussinessCategoryRepository.Dispose();
+            _aggregateHistoryRepository.Dispose();
+            _companyProductRelationRepository.Dispose();
+        }
+
+        private static void DeleteEntities()
+        {
             foreach (var category in _bussinessCategoryRepository.ReadAll().ToArray())
             {
                 _bussinessCategoryRepository.Delete(category.BussinessCategoryId);
@@ -59,32 +89,6 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
             {
                 _companyProductRelationRepository.Delete(companyProductRelation.CompanyId);
             }
-
-            _testBussinessCategory = _bussinessCategoryRepository.Create("TestCategory", "1");
-
-            _testProduct1 = _productRepository.Create("TestProduct1", new DateTime(2000, 1, 1));
-            _testProduct2 = _productRepository.Create("TestProduct2", new DateTime(2000, 2, 2));
-        }
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            foreach (var company in _companyRepository.ReadAll().ToArray())
-            {
-                _companyRepository.Delete(company.CompanyId);
-            }
-        }
-
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            _companyRepository.Dispose();
-            _productRepository.Dispose();
-            _stockRepository.Dispose();
-            _stockPriceRepository.Dispose();
-            _bussinessCategoryRepository.Dispose();
-            _aggregateHistoryRepository.Dispose();
-            _companyProductRelationRepository.Dispose();
         }
 
         #endregion
@@ -94,7 +98,8 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
         {
             var parentCompany = _companyRepository.Create("ParentCompany", null);
             var childCompany = _companyRepository.Create("ChildCompany", parentCompany);
-
+            _stockRepository.Create(parentCompany, _testBussinessCategory, "1234");
+            _stockRepository.Create(childCompany, _testBussinessCategory, "1235");
             var resultViewModel = _workerService.GetIndexViewModel();
 
             var resultCompany = resultViewModel.Companies.ElementAt(1);
@@ -117,9 +122,24 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
             resultViewModel.Company.CompanyName.Is("TestCompany2");
             resultViewModel.Company.ParentCompanyId.Is(parentCompany.CompanyId);
 
-            resultViewModel.Company.CompanyScores.ToArray()[0].Score.Is(100);
-            resultViewModel.Company.CompanyScores.ToArray()[1].Score.Is(200);
+            resultViewModel.Company.CompanyScores.ToArray()[0].Score.Is(200);
+            resultViewModel.Company.CompanyScores.ToArray()[1].Score.Is(100);
         }
+
+        [TestMethod]
+        public void GetDetailViewModelMoreThan7Score()
+        {
+            var company = _companyRepository.Create("TestCompany1", null);
+
+            for (int i = 0; i < 10; i++)
+            {
+                _companyScoreRepository.Create(company, 100);
+            }
+
+            var resultViewModel = _workerService.GetDetailViewModel(company.CompanyId);
+            resultViewModel.Company.CompanyScores.ToArray().Count().Is(7);
+        }
+
 
         [TestMethod]
         public void CreateCompany()
