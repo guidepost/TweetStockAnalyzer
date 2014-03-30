@@ -4,7 +4,7 @@ using TweetStockAnalyzer.Model;
 
 namespace TweetStockAnalyzer.Domain.Score
 {
-    [AutoRegist(typeof(IScoreCalculator))]
+    // プロダクトのうち最もツイート数が多いものの1/100をスコアとする
     public class MaxProductTwitterCountScoreCalculator : IScoreCalculator
     {
         public int GetScore(Company company)

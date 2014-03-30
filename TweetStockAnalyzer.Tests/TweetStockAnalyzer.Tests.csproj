@@ -77,6 +77,7 @@
     <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="Database\CompanyProductRelationRepositoryTest.cs" />
     <Compile Include="Database\CompanyRepositoryTest.cs" />
+    <Compile Include="Domain\Score\IncreaseTweetRateScoreCalculatorTest.cs" />
     <Compile Include="Domain\Score\MaxProductTwitterCountScoreCalculatorTest.cs" />
     <Compile Include="Domain\Stock\StockServiceProviderTest.cs" />
     <Compile Include="TestHost.cs" />
