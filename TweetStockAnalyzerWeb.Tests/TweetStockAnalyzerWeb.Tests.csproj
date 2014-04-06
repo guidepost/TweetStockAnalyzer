@@ -67,6 +67,7 @@
     <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="Controller\CompanyControllerTest.cs" />
     <Compile Include="Controller\ProductControllerTest.cs" />
+    <Compile Include="DatabaseTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHost.cs" />
     <Compile Include="WorkerService\CompanyWorkerServiceTest.cs" />

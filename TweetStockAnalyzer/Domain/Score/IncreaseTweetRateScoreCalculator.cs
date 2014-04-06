@@ -50,8 +50,13 @@ namespace TweetStockAnalyzer.Domain.Score
         private double GetAverageTweetCount(SearchWord searchWord)
         {
             var lastSunday = GetLastSunday(searchWord.UpdateDate);
-            return searchWord.SearchResults.Where(p => p.RegisterDate >= lastSunday.AddDays(-7) && p.RegisterDate < lastSunday)
-                .GroupBy(p => p.RegisterDate.Date).Select(p => GetSumOrDefault(p)).Average();
+            var counts = searchWord.SearchResults.Where(p => p.RegisterDate >= lastSunday.AddDays(-7) && p.RegisterDate < lastSunday)
+                .GroupBy(p => p.RegisterDate.Date).Select(p => GetSumOrDefault(p));
+            if (counts.Any() == false)
+            {
+                return 0;
+            }
+            return counts.Average();
         }
         private double GetSumOrDefault(IEnumerable<SearchResult> results)
         {
