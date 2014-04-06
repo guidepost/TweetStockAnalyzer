@@ -15,15 +15,14 @@ using TweetStockAnalyzerWeb.WorkerService;
 namespace TweetStockAnalyzerWeb.Tests.WorkerService
 {
     [TestClass]
-    public class ProductWorkerServiceTest
+    public class ProductWorkerServiceTest : DatabaseTestBase
     {
         private ProductWorkerService _workerService = new ProductWorkerService();
 
         [TestInitialize]
-        public void Initialize()
+        public override void Initialize()
         {
-            Cleanup();
-
+            base.Initialize();
             using (var productRepository = new ProductRepository())
             using (var searchResultRepository = new SearchResultRepository())
             using (var searchWordRepository = new SearchWordRepository())
@@ -37,18 +36,6 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
                 searchResultRepository.Create(searchWord2, product2, 200, new DateTime(2010, 1, 2));
 
                 var product3 = productRepository.Create("TestProduct3", new DateTime(2003, 3, 3));
-            }
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            using (var productRepository = new ProductRepository())
-            {
-                foreach (var product in productRepository.ReadAll().ToArray())
-                {
-                    productRepository.Delete(product.ProductId);
-                }
             }
         }
 

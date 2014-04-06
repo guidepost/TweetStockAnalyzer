@@ -15,7 +15,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
 {
     public interface ICompanyWorkerService : IDisposable
     {
-        CompanyIndexViewModel GetIndexViewModel();
+        CompanyIndexViewModel GetIndexViewModel(int page = 0);
 
         CompanyDetailViewModel GetDetailViewModel(int companyId);
 
@@ -29,10 +29,16 @@ namespace TweetStockAnalyzerWeb.WorkerService
     [AutoRegist(typeof(ICompanyWorkerService))]
     public class CompanyWorkerService : ICompanyWorkerService
     {
+
+
         #region Fields
+
+        private const int ItemCountPerPage = 30;
+        private const int WeekDayCount = 7;
 
         private IUnityContainer _container;
         private ICompanyRepository _companyRepository;
+        private ICompanyScoreRepository _companyScoreRepository;
         private IProductRepository _productRepository;
         private IStockRepository _stockRepository;
         private IStockPriceRepository _stockPriceRepository;
@@ -48,6 +54,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
         {
             _container = DependencyContainer.Instance;
             _companyRepository = _container.Resolve<ICompanyRepository>();
+            _companyScoreRepository = _container.Resolve<ICompanyScoreRepository>();
             _productRepository = _container.Resolve<IProductRepository>();
             _stockRepository = _container.Resolve<IStockRepository>();
             _stockPriceRepository = _container.Resolve<IStockPriceRepository>();
@@ -58,23 +65,27 @@ namespace TweetStockAnalyzerWeb.WorkerService
 
         #endregion
 
-        public CompanyIndexViewModel GetIndexViewModel()
+
+        public CompanyIndexViewModel GetIndexViewModel(int page = 0)
         {
+            var companies = _companyRepository.ReadAll().OrderBy(p=>p.UpdateDate).Skip(ItemCountPerPage * page).Take(ItemCountPerPage).ToArray();
+            foreach (var company in companies)
+            {
+                company.CompanyScores = GetLastWeekCompanyScores(company).ToArray();
+                company.Stock.StockPrices = GetLastWeekStockPrices(company).ToArray();
+            }
             return new CompanyIndexViewModel()
             {
-                Companies = _companyRepository.ReadAll()
-                                             .Include(c => c.Stock)
-                                             .Include(c => c.CompanyScores)
-                                             .ToArray()
+                Companies = companies
             };
         }
 
         public CompanyDetailViewModel GetDetailViewModel(int companyId)
         {
             var viewModel = new CompanyDetailViewModel();
-            viewModel.Company = _companyRepository.ReadAll()
-                                                  .Include(c => c.CompanyScores)
-                                                  .FirstOrDefault(c => c.CompanyId == companyId);
+            var company = _companyRepository.Read(companyId);
+            company.CompanyScores = GetLastWeekCompanyScores(company).ToArray();
+            viewModel.Company = company;
             if (viewModel.Company.ParentCompanyId.HasValue)
             {
                 viewModel.ParentCompanyName = _companyRepository.Read(viewModel.Company.ParentCompanyId.Value).CompanyName;
@@ -115,6 +126,18 @@ namespace TweetStockAnalyzerWeb.WorkerService
         }
 
         #region Private Methods
+
+        private IEnumerable<StockPrice> GetLastWeekStockPrices(Company company)
+        {
+            return company.Stock.StockPrices
+                .OrderByDescending(p => p.UpdateDate).Take(WeekDayCount);
+        }
+
+        private IEnumerable<CompanyScore> GetLastWeekCompanyScores(Company company)
+        {
+            return company.CompanyScores
+                .OrderByDescending(p => p.UpdateDate).Take(WeekDayCount);
+        }
 
         private Company InsertCompany(string companyName, int? parentCompanyId)
         {
@@ -224,6 +247,7 @@ namespace TweetStockAnalyzerWeb.WorkerService
         public void Dispose()
         {
             _companyRepository.Dispose();
+            _companyScoreRepository.Dispose();
             _productRepository.Dispose();
             _stockRepository.Dispose();
             _stockPriceRepository.Dispose();

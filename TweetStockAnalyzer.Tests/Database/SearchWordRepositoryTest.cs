@@ -10,23 +10,8 @@ using TweetStockAnalyzer.DataBase.Repository;
 namespace TweetStockAnalyzer.Tests.Database
 {
     [TestClass]
-    public class SearchWordRepositoryTest
+    public class SearchWordRepositoryTest : DatabaseTestBase
     {
-        [TestCleanup]
-        public void Cleanup()
-        {
-            var repository = new ProductRepository();
-            foreach (var product in repository.ReadAll().ToList())
-            {
-                repository.Delete(product.ProductId);
-            }
-            var wordRepository = new SearchWordRepository();
-            foreach (var word in wordRepository.ReadAll().ToList())
-            {
-                wordRepository.Delete(word.ProductId);
-            }
-        }
-
         [TestMethod]
         public void Create()
         {

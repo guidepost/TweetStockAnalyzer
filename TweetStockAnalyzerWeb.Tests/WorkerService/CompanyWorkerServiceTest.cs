@@ -14,20 +14,20 @@ using TweetStockAnalyzerWeb.WorkerService;
 namespace TweetStockAnalyzerWeb.Tests.WorkerService
 {
     [TestClass]
-    public class CompanyWorkerServiceTest
+    public class CompanyWorkerServiceTest : DatabaseTestBase
     {
         #region Fields
 
-        private static CompanyWorkerService _workerService = new CompanyWorkerService();
+        private CompanyWorkerService _workerService = new CompanyWorkerService();
 
-        private static CompanyRepository _companyRepository = new CompanyRepository();
-        private static ProductRepository _productRepository = new ProductRepository();
-        private static StockRepository _stockRepository = new StockRepository();
-        private static StockPriceRepository _stockPriceRepository = new StockPriceRepository();
-        private static BussinessCategoryRepository _bussinessCategoryRepository = new BussinessCategoryRepository();
-        private static AggregateHistoryRepository _aggregateHistoryRepository = new AggregateHistoryRepository();
-        private static CompanyProductRelationRepository _companyProductRelationRepository = new CompanyProductRelationRepository();
-        private static CompanyScoreRepository _companyScoreRepository = new CompanyScoreRepository();
+        private CompanyRepository _companyRepository = new CompanyRepository();
+        private ProductRepository _productRepository = new ProductRepository();
+        private StockRepository _stockRepository = new StockRepository();
+        private StockPriceRepository _stockPriceRepository = new StockPriceRepository();
+        private BussinessCategoryRepository _bussinessCategoryRepository = new BussinessCategoryRepository();
+        private AggregateHistoryRepository _aggregateHistoryRepository = new AggregateHistoryRepository();
+        private CompanyProductRelationRepository _companyProductRelationRepository = new CompanyProductRelationRepository();
+        private CompanyScoreRepository _companyScoreRepository = new CompanyScoreRepository();
 
         private static BussinessCategory _testBussinessCategory;
         private static Product _testProduct1;
@@ -37,46 +37,18 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
 
         #region Initialize and Cleanup
 
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
+        [TestInitialize]
+        public override void Initialize()
         {
-            foreach (var category in _bussinessCategoryRepository.ReadAll().ToArray())
-            {
-                _bussinessCategoryRepository.Delete(category.BussinessCategoryId);
-            }
-
-            foreach (var product in _productRepository.ReadAll().ToArray())
-            {
-                _productRepository.Delete(product.ProductId);
-            }
-
-            foreach (var score in _companyScoreRepository.ReadAll().ToArray())
-            {
-                _companyScoreRepository.Delete(score.CompanyScoreId);
-            }
-
-            foreach (var companyProductRelation in _companyProductRelationRepository.ReadAll().ToArray())
-            {
-                _companyProductRelationRepository.Delete(companyProductRelation.CompanyId);
-            }
-
+            base.Initialize();
             _testBussinessCategory = _bussinessCategoryRepository.Create("TestCategory", "1");
-
             _testProduct1 = _productRepository.Create("TestProduct1", new DateTime(2000, 1, 1));
             _testProduct2 = _productRepository.Create("TestProduct2", new DateTime(2000, 2, 2));
         }
 
-        [TestInitialize]
-        public void Initialize()
-        {
-            foreach (var company in _companyRepository.ReadAll().ToArray())
-            {
-                _companyRepository.Delete(company.CompanyId);
-            }
-        }
 
-        [ClassCleanup]
-        public static void ClassCleanup()
+        [TestCleanup]
+        public void Cleanup()
         {
             _companyRepository.Dispose();
             _productRepository.Dispose();
@@ -94,7 +66,8 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
         {
             var parentCompany = _companyRepository.Create("ParentCompany", null);
             var childCompany = _companyRepository.Create("ChildCompany", parentCompany);
-
+            _stockRepository.Create(parentCompany, _testBussinessCategory, "1234");
+            _stockRepository.Create(childCompany, _testBussinessCategory, "1235");
             var resultViewModel = _workerService.GetIndexViewModel();
 
             var resultCompany = resultViewModel.Companies.ElementAt(1);
@@ -117,9 +90,24 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
             resultViewModel.Company.CompanyName.Is("TestCompany2");
             resultViewModel.Company.ParentCompanyId.Is(parentCompany.CompanyId);
 
-            resultViewModel.Company.CompanyScores.ToArray()[0].Score.Is(100);
-            resultViewModel.Company.CompanyScores.ToArray()[1].Score.Is(200);
+            resultViewModel.Company.CompanyScores.ToArray()[0].Score.Is(200);
+            resultViewModel.Company.CompanyScores.ToArray()[1].Score.Is(100);
         }
+
+        [TestMethod]
+        public void GetDetailViewModelMoreThan7Score()
+        {
+            var company = _companyRepository.Create("TestCompany1", null);
+
+            for (int i = 0; i < 10; i++)
+            {
+                _companyScoreRepository.Create(company, 100);
+            }
+
+            var resultViewModel = _workerService.GetDetailViewModel(company.CompanyId);
+            resultViewModel.Company.CompanyScores.ToArray().Count().Is(7);
+        }
+
 
         [TestMethod]
         public void CreateCompany()
@@ -208,12 +196,6 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
             }
 
             return companyInputModel;
-        }
-
-        private static void ResetCompanyRepository()
-        {
-            _companyRepository.Dispose();
-            _companyRepository = new CompanyRepository();
         }
 
         private Company[] PrepareCompanies()
