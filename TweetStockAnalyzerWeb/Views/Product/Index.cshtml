@@ -27,6 +27,10 @@
                     new { onclick = "return confirm('Are you sure you wish to delete this product?');" })
                 </span>
             </p>
+            @if (product.SearchResults != null && product.SearchResults.Count != 0)
+            {
+                @ChartHelper.ScoreChart("TweetCount Chart", product.SearchResults.GroupBy(r => r.SearchDate.Date).ToDictionary(g => g.Key, g => (double)g.Sum(r => r.TweetCount)))
+            }
         </div>
     }
 }

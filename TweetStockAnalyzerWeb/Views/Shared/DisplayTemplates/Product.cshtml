@@ -1,22 +1,21 @@
-﻿@model TweetStockAnalyzer.Model.Product
+﻿﻿@model TweetStockAnalyzer.Model.Product
 
 <p><b>@Model.ProductName</b></p>
 
 <p>@Model.ServiceStartDate</p>
 <p>@Model.ServiceEndDate</p>
 <p>
-</p>
-<p>
-    Companies
+    サービス一覧
     <ul>
-        @foreach (var company in Model.Companies)
-        {
-            <li><a href="@Url.Action("Detail", "Company", new { companyId = @company.CompanyId })">@company.CompanyName</a></li>
-        }
+        <li></li>
+        <li></li>
+        <li></li>
     </ul>
-
 </p>
 <p>
-    Chart
+    会社のスコア
 </p>
-@ChartHelper.ScoreChart("SearchResult", Model.SearchResults.GroupBy(r => r.RegisterDate.Date).ToDictionary(g => g.Key, g => (double)g.Sum(r => r.TweetCount)))
+<p>
+    時系列情報
+</p>
+@ChartHelper.ScoreChart("TweetCount Chart", Model.SearchResults.GroupBy(r => r.RegisterDate.Date).ToDictionary(g => g.Key, g => (double)g.Sum(r => r.TweetCount)))

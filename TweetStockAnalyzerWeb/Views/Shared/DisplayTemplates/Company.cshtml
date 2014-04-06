@@ -49,7 +49,7 @@
     }
     @if (Model.CompanyScores != null)
     {
-        @HistoricalDataHelper.Table("Historical Scores", Model.CompanyScores.ToDictionary(s => s.RegisterDate, s => s.Score))
+        @HistoricalDataHelper.Table("Historical Scores", Model.CompanyScores.ToDictionary(s => s.RegisterDate, s => (double)s.Score))
         <hr />
     }
     @if (Model.Stock != null)
