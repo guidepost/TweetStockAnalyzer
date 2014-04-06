@@ -34,7 +34,7 @@ namespace TweetStockAnalyzeSchedule
                 {
                     var stock = aggregateHistory.Stock;
                     var now = DateTime.Now;
-                    var result = LoadStackPrices(stock, aggregateHistory.EndDate, now);
+                    var result = LoadStackPrices(stock, aggregateHistory.EndDate.AddDays(1), now);
                     foreach (var stockPrice in result)
                     {
                         stockPriceRepository.Create(stock, stockPrice.Date, stockPrice.Dealings, stockPrice.ClosingPrice);

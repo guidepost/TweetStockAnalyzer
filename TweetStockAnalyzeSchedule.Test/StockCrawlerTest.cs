@@ -53,7 +53,7 @@ namespace TweetStockAnalyzeSchedule.Test
         {
              var crawler = new StockCrawler();
             crawler.Start();
-            _mockStockService.Verify(p => p.Load(It.IsAny<Stock>(), _endDate, It.IsAny<DateTime>()));
+            _mockStockService.Verify(p => p.Load(It.IsAny<Stock>(), _endDate.AddDays(1), It.IsAny<DateTime>()));
             _mockPriceRepository.Verify(p=>p.Create(It.IsAny<Stock>(),It.IsAny<DateTime>(),0,0), Times.Exactly(2));
             _mockRepository.Verify(p => p.Update(_aggregateHistory));
         }
