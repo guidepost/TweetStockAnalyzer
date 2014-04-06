@@ -10,17 +10,8 @@ using TweetStockAnalyzer.DataBase.Repository;
 namespace TweetStockAnalyzer.Tests.Database
 {
     [TestClass]
-    public class StockRepositoryTest
+    public class StockRepositoryTest : DatabaseTestBase
     {
-        [TestCleanup]
-        public void Cleanup()
-        {
-            var repository = new CompanyRepository();
-            foreach (var product in repository.ReadAll().ToList())
-            {
-                repository.Delete(product.CompanyId);
-            }
-        }
         [TestMethod]
         public void Get()
         {

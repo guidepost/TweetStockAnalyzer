@@ -85,6 +85,7 @@
     <Compile Include="DataBase\Repository\SearchWordRepository.cs" />
     <Compile Include="DataBase\Repository\StockPriceRepository.cs" />
     <Compile Include="DataBase\Repository\StockRepository.cs" />
+    <Compile Include="Domain\Score\IncreaseTweetRateScoreCalculator.cs" />
     <Compile Include="Domain\Score\IScoreCalculator.cs" />
     <Compile Include="Domain\Score\MaxProductTwitterCountScoreCalculator.cs" />
     <Compile Include="Domain\Stock\IStockService.cs" />
