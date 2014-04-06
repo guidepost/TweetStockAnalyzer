@@ -29,9 +29,9 @@ namespace TweetStockAnalyzerWeb.Tests.WorkerService
         private CompanyProductRelationRepository _companyProductRelationRepository = new CompanyProductRelationRepository();
         private CompanyScoreRepository _companyScoreRepository = new CompanyScoreRepository();
 
-        private static BussinessCategory _testBussinessCategory;
-        private static Product _testProduct1;
-        private static Product _testProduct2;
+        private BussinessCategory _testBussinessCategory;
+        private Product _testProduct1;
+        private Product _testProduct2;
 
         #endregion
 
